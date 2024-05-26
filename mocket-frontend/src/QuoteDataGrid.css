@@ -1,0 +1,45 @@
+.quote-data-grid {
+    display: grid;
+}
+
+.quote-data-grid-item {
+    display: flex;
+}
+
+.quote-data-grid-left {
+    float: left;
+    margin: 10px 13%;
+    width: 25%
+}
+
+.quote-data-grid-right {
+    float: right;
+    margin: 10px 13%;
+    width: 25%
+}
+
+.quote-data-grid-vdivider {
+    width: 2px;
+    height: 100px;
+    background-color: #1c1c1c;
+}
+
+.quote-data-grid-hdivider {
+    display: flex;
+}
+
+.quote-data-grid-hdivider-left {
+    float: left;
+    width: 24%;
+    height: 2px;
+    margin: -6px 13%;
+    background-color: #1c1c1c;
+}
+
+.quote-data-grid-hdivider-right {
+    float: right;
+    width: 24%;
+    height: 2px;
+    margin: -6px 13%;
+    background-color: #1c1c1c;
+}

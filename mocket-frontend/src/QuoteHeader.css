@@ -1,0 +1,26 @@
+.quote-header {
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+.quote-header-stock {
+    display: grid;
+}
+
+.quote-header-stock-name {
+    float: left;
+    margin: 3rem 13% 0;
+}
+
+.quote-header-stock-symbol {
+    float: right;
+    color: #cccccc;
+    opacity: 50%;
+    font-size: 24px;
+    margin: 4rem 13% 0 3rem;
+}
+
+.quote-header-price {
+    margin: 0 13% 4rem;
+}

@@ -1,0 +1,14 @@
+.result-item:hover {
+    background-color: #222222;
+}
+
+.result-item-name {
+    float: left;
+    color: #dbdbdb;
+}
+
+.result-item-sym {
+    float: right;
+    color: #cccccc;
+    opacity: 50%;
+}

@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { parsePrice } from "./Utils";
 import QuoteDataGrid from "./QuoteDataGrid";
-import QuoteHeader from "./QuoteHeader";
+import PriceChart from "./PriceChart";
 import './App.css';
 
 const SymbolDashboard = () => {
-    const liveEndpoint = "http://localhost:8080/trade-service/live/price?symbol=";
-    const restEndpoint = "http://localhost:8080/trade-service/quote";
+    const liveEndpoint = "http://19.26.28.37:8080/trade-service/live/price?symbol=";
+    const restEndpoint = "http://19.26.28.37:8080/trade-service/quote";
     const { symbol } = useParams();
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
@@ -36,13 +36,16 @@ const SymbolDashboard = () => {
                 source.close();
             };
         }
+        else if(marketOpen === false) {
+            console.log("LivePriceData: Market is closed");
+        }
 
     }, [marketOpen]);
 
     const callRestApi = async () => {
-        const body = {symbol}
+        const body = {symbol};
         return fetch(restEndpoint, {
-            method:'POST', 
+            method: 'POST', 
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
             body: JSON.stringify(body)
         })
@@ -51,9 +54,7 @@ const SymbolDashboard = () => {
             console.log(responseJson);
             setQuoteData(responseJson);
             setMarketOpen(responseJson.is_market_open);
-            if(!responseJson.is_market_open) {
-                setLiveData(parsePrice(responseJson.close));
-            }
+            setLiveData(parsePrice(responseJson.close));
         })
     }
 
@@ -62,8 +63,9 @@ const SymbolDashboard = () => {
             <header className="App-header">
                 {quoteData ? (
                     <div>
-                        <QuoteHeader live={liveData} data={quoteData}/>
+                        <PriceChart liveData={liveData} quoteData={quoteData}/>
                         <QuoteDataGrid data={quoteData}/>
+                        
                     </div>
                 ) : (
                     <div/>

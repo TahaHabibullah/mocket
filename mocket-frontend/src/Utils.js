@@ -40,3 +40,38 @@ export function checkInput(text) {
     else
         return text;
 }
+
+export function parseTimeSeriesData(data) {
+    var result = [];
+    for(var i in data) {
+        result.push(parsePrice(data[i].close))
+    }
+    return result.reverse();
+}
+
+export function parseTimeSeriesLabels(data) {
+    var result = [];
+    for(var i in data) {
+        result.push(data[i].datetime);
+    }
+    return result.reverse();
+}
+
+export function getPriceDiff(previous_close, currPrice) {
+    const diff = (parseFloat(currPrice) - parseFloat(previous_close));
+    var res = "";
+    if(diff >= 0) {
+        res += "+$" + diff.toFixed(2);
+    }
+    else {
+        res += "-$" + (diff * -1).toFixed(2);
+    }
+    const diffPercent = (diff / parseFloat(previous_close)) * 100;
+    if(diffPercent >= 0) {
+        res += " (+" + diffPercent.toFixed(2) + "%)";
+    }
+    else {
+        res += " (" + diffPercent.toFixed(2) + "%)";
+    }
+    return res;
+}

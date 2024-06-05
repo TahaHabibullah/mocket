@@ -9,7 +9,7 @@
 
 .nav-bar-brand {
     text-decoration: none;
-    padding: 0px 20px 10px 20px;
+    margin: 15px 100px;
     float: left;
     color: #dddddd;
 }
@@ -20,9 +20,10 @@
 
 .nav-bar-repo {
     text-decoration: none;
-    padding: 0px 20px 10px 20px;
+    margin: 15px 20px 0px -15vw;
     float: right;
     color: #dddddd;
+    font-size: 30px;
 }
 
 .nav-bar-repo:hover {
@@ -31,5 +32,5 @@
 
 .nav-bar-search {
     width: 100%;
-    padding-top: 5px;
+    padding-top: 15px;
 }

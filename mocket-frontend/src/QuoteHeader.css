@@ -10,7 +10,7 @@
 
 .quote-header-stock-name {
     float: left;
-    margin: 3rem 13% 0;
+    margin: 3rem 20% 0;
 }
 
 .quote-header-stock-symbol {
@@ -18,9 +18,9 @@
     color: #cccccc;
     opacity: 50%;
     font-size: 24px;
-    margin: 4rem 13% 0 3rem;
+    margin: 4rem 20% 0 3rem;
 }
 
 .quote-header-price {
-    margin: 0 13% 4rem;
+    margin: 0px 20%;
 }

@@ -238,7 +238,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                     color: 'rgba(255, 255, 255, 0.8)',
                     pointerEvents: 'none',
                     transform: 'translateX(-50%)',
-                    font: '12px Arial'
+                    font: 'calc(4px + 1vmin) Arial'
                 }}
             />
 

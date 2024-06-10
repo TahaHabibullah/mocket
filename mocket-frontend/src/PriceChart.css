@@ -1,10 +1,10 @@
 .price-chart {
-    margin: 0px 20% 30px;
+    margin: 0px max(5vw, calc((100vw - 1600px) / 2)) 30px;
     height: 500px;
 }
 
 .price-chart-interval {
-    margin: 10px 20%;
+    margin: 10px max(5vw, calc((100vw - 1600px) / 2));
     display: flex;
 }
 
@@ -45,32 +45,32 @@
 }
 
 .price-chart-divider {
-    margin: 20px 20% 40px 20%;
-    width: 60%;
+    margin: 20px max(5vw, calc((100vw - 1600px) / 2)) 40px;
+    width: 100vw - 1600px;
     height: 2px;
     background-color: #1c1c1c;
 }
 
 .quote-header-diff-green {
-    margin: 0px 20% 4rem;
+    margin: 0px max(5vw, calc((100vw - 1600px) / 2)) 4rem;
     font-size: calc(6px + 1vmin);
     color: rgb(0, 185, 0);
 }
 
 .quote-header-diff-red {
-    margin: 0px 20% 4rem;
+    margin: 0px max(5vw, calc((100vw - 1600px) / 2)) 4rem;
     font-size: calc(6px + 1vmin);
     color: red;
 }
 
 @media (max-width: 1223px) {
     .price-chart {
-        margin: 0px 10% 20px;
+        margin: 0px 5% 20px;
         height: 400px;
     }
     
     .price-chart-interval {
-        margin: 0px 10%;
+        margin: 0px 5%;
     }
 
     .price-chart-interval-divider {
@@ -79,8 +79,8 @@
     }
 
     .price-chart-divider {
-        margin: 20px 10% 20px 10%;
-        width: 80%;
+        margin: 20px 5% 20px 5%;
+        width: 90%;
         height: 1px;
     }
 
@@ -97,12 +97,12 @@
     }
 
     .quote-header-diff-green {
-        margin: 0px 10% 20px;
+        margin: 0px 5% 20px;
         font-size: calc(4px + 1vmin);
     }
     
     .quote-header-diff-red {
-        margin: 0px 10% 20px;
+        margin: 0px 5% 20px;
         font-size: calc(4px + 1vmin);
     }
 }
@@ -142,11 +142,11 @@
 
     .quote-header-diff-green {
         margin: 0px 5% 20px;
-        font-size: calc(2px + 2vmin);
+        font-size: calc(4px + 1vmin);
     }
     
     .quote-header-diff-red {
         margin: 0px 5% 20px;
-        font-size: calc(2px + 2vmin);
+        font-size: calc(4px + 1vmin);
     }
 }

@@ -1,6 +1,7 @@
 .price-chart {
-    margin: 0px 20%;
+    margin: 0px 20% 30px;
     height: 500px;
+    min-width: 1200px;
 }
 
 .price-chart-interval {
@@ -53,12 +54,100 @@
 
 .quote-header-diff-green {
     margin: 0px 20% 4rem;
-    font-size: 18px;
-    color: green;
+    font-size: calc(6px + 1vmin);
+    color: rgb(0, 185, 0);
 }
 
 .quote-header-diff-red {
     margin: 0px 20% 4rem;
-    font-size: 18px;
+    font-size: calc(6px + 1vmin);
     color: red;
+}
+
+@media (max-width: 1223px) {
+    .price-chart {
+        margin: 0px 10% 20px;
+        height: 400px;
+    }
+    
+    .price-chart-interval {
+        margin: 0px 10%;
+    }
+
+    .price-chart-interval-divider {
+        margin: 0px 10px;
+        height: 40px;
+    }
+
+    .price-chart-divider {
+        margin: 20px 10% 20px 10%;
+        width: 80%;
+        height: 1px;
+    }
+
+    .price-chart-interval-button-untoggled {
+        width: 80px;
+        border-radius: 9px;
+        font-size: 10px;
+    }
+
+    .price-chart-interval-button-toggled {
+        width: 80px;
+        border-radius: 9px;
+        font-size: 10px;
+    }
+
+    .quote-header-diff-green {
+        margin: 0px 10% 20px;
+        font-size: calc(4px + 1vmin);
+    }
+    
+    .quote-header-diff-red {
+        margin: 0px 10% 20px;
+        font-size: calc(4px + 1vmin);
+    }
+}
+
+@media (max-width: 767px) {
+    .price-chart {
+        margin: 0px 0% 20px;
+        height: 300px;
+    }
+    
+    .price-chart-interval {
+        margin: 0px 5%;
+    }
+
+    .price-chart-interval-divider {
+        margin: 0px 5px;
+        height: 30px;
+    }
+
+    .price-chart-divider {
+        margin: 20px 5% 20px 5%;
+        width: 90%;
+        height: 1px;
+    }
+
+    .price-chart-interval-button-untoggled {
+        width: 60px;
+        border-radius: 9px;
+        font-size: 10px;
+    }
+
+    .price-chart-interval-button-toggled {
+        width: 60px;
+        border-radius: 9px;
+        font-size: 10px;
+    }
+
+    .quote-header-diff-green {
+        margin: 0px 5% 20px;
+        font-size: calc(2px + 2vmin);
+    }
+    
+    .quote-header-diff-red {
+        margin: 0px 5% 20px;
+        font-size: calc(2px + 2vmin);
+    }
 }

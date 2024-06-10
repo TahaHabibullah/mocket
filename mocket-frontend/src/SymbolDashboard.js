@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { parsePrice } from "./Utils";
 import QuoteDataGrid from "./QuoteDataGrid";
 import PriceChart from "./PriceChart";
+import MocketNavBar from "./MocketNavBar";
 import './App.css';
 
 const SymbolDashboard = () => {
@@ -63,9 +64,9 @@ const SymbolDashboard = () => {
             <header className="App-header">
                 {quoteData ? (
                     <div>
+                        <MocketNavBar/>
                         <PriceChart liveData={liveData} quoteData={quoteData}/>
                         <QuoteDataGrid data={quoteData}/>
-                        
                     </div>
                 ) : (
                     <div/>

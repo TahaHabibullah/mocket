@@ -9,7 +9,7 @@ const SymbolResultsList = ({ results }) => {
             if(!data.instrument_name)
                 return null;
             return <SymbolResultsItem name={data.instrument_name} symbol={data.symbol} key={index}/>
-        })}
+            })}
     </div>
 }
 

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
+import { useMediaQuery } from 'react-responsive';
 import { parseTimeSeriesData, parseTimeSeriesLabels, getPriceDiff } from "./Utils";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
@@ -28,12 +29,16 @@ const PriceChart = ({ liveData, quoteData }) => {
     const getDataRef = useRef();
     const getToggledIndexRef = useRef();
     const getLabelsRef = useRef();
+    const drawLabelRef = useRef();
     const buttons = [
         { text: '1D' },
         { text: '1W' },
         { text: '1M' },
         { text: '1Y' }
     ];
+    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1223 });
+    const isMobile = useMediaQuery({ maxWidth: 767 });
+
     setMouseOnRef.current = setMouseOn;
     setCurrDataRef.current = setCurrData;
     setCurrDiffRef.current = setCurrDiff;
@@ -54,6 +59,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             const data = chart.config.options.getDataRef.current;
             const toggledIndex = chart.config.options.getToggledIndexRef.current;
             const labels = chart.config.options.getLabelsRef.current;
+            const drawLabel = chart.config.options.drawLabelRef.current;
             if (chart.tooltip._active && chart.tooltip._active.length) {
                 if(setMouseOn) {
                     setMouseOn(true);
@@ -66,25 +72,24 @@ const PriceChart = ({ liveData, quoteData }) => {
     
                 const dataX = activePoint.element.$context.parsed.x;
                 const dataY = activePoint.element.$context.parsed.y;
-                setCurrData(dataY);
+                setCurrData(dataY.toFixed(2));
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], dataY));
                 
                 ctx.save();
                 ctx.beginPath();
                 ctx.setLineDash([5, 5]);
-                ctx.moveTo(x, topY);
-                ctx.lineTo(x, bottomY-20);
+                ctx.moveTo(x, bottomY);
+                ctx.lineTo(x, topY);
                 ctx.lineWidth = 2;
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)';
                 ctx.stroke();
                 ctx.restore();
     
-                ctx.save();
-                ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-                ctx.textAlign = 'center';
-                ctx.font = '12px Arial';
-                ctx.fillText(labels ? labels[dataX] : dataX, x, bottomY-8);
-                ctx.restore();
+                const chartRect = chart.canvas.getBoundingClientRect();
+                drawLabel.style.left = `${chartRect.left + x}px`;
+                drawLabel.style.top = `${chartRect.top-12}px`;
+                drawLabel.textContent = labels[dataX];
+                drawLabel.style.display = 'block';
     
                 activePoint.element.options.pointStyle = 'circle';
                 activePoint.element.options.borderWidth = 2;
@@ -94,6 +99,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                 setMouseOn(false);
                 setCurrData(liveData);
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], liveData));
+                drawLabel.style.display = 'none';
             }
         }
     };
@@ -150,7 +156,8 @@ const PriceChart = ({ liveData, quoteData }) => {
             getQuoteDataRef,
             getDataRef,
             getToggledIndexRef,
-            getLabelsRef
+            getLabelsRef,
+            drawLabelRef,
         }
     };
 
@@ -207,8 +214,33 @@ const PriceChart = ({ liveData, quoteData }) => {
             <QuoteHeader live={currData} data={quoteData}/>
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">
-                <Line options={config.options} data={{labels: labels, datasets: [{data: data}]}}/>
+                <Line 
+                    options={config.options} 
+                    data=
+                    {
+                        {
+                            labels: labels, 
+                            datasets: 
+                            [{
+                                data: data,
+                                borderWidth: isMobile ? 1 : isTablet ? 2 : 3,
+                                borderColor: 'rgb(35, 138, 255)'
+                            }]
+                        }
+                    }
+                />
             </div>
+            <div 
+                ref={drawLabelRef} 
+                style={{
+                    position: 'absolute',
+                    display: 'none',
+                    color: 'rgba(255, 255, 255, 0.8)',
+                    pointerEvents: 'none',
+                    transform: 'translateX(-50%)',
+                    font: '12px Arial'
+                }}
+            />
 
             <div className="price-chart-interval">
                 {buttons.map((b, i) => (

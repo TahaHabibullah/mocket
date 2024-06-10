@@ -15,10 +15,6 @@ const QuoteDataGrid = ({ data }) => {
                     <QuoteDataTile title="Average Volume" data={parseVolume(data.average_volume)}/>
                 </div>
             </div>
-            <div className="quote-data-grid-hdivider">
-                <div className="quote-data-grid-hdivider-left"></div>
-                <div className="quote-data-grid-hdivider-right"></div>
-            </div>
             <div className="quote-data-grid-item">
                 <div className="quote-data-grid-left">
                     <QuoteDataTile title="Today's High" data={parsePrice(data.high)}/>
@@ -28,10 +24,6 @@ const QuoteDataGrid = ({ data }) => {
                     <QuoteDataTile title="Today's Low" data={parsePrice(data.low)}/>
                 </div>
             </div>
-            <div className="quote-data-grid-hdivider">
-                <div className="quote-data-grid-hdivider-left"></div>
-                <div className="quote-data-grid-hdivider-right"></div>
-            </div>
             <div className="quote-data-grid-item">
                 <div className="quote-data-grid-left">
                     <QuoteDataTile title="Today's Open" data={parsePrice(data.open)}/>
@@ -40,10 +32,6 @@ const QuoteDataGrid = ({ data }) => {
                 <div className="quote-data-grid-right">
                     <QuoteDataTile title="Today's Close" data={parsePrice(data.close)}/>
                 </div>
-            </div>
-            <div className="quote-data-grid-hdivider">
-                <div className="quote-data-grid-hdivider-left"></div>
-                <div className="quote-data-grid-hdivider-right"></div>
             </div>
             <div className="quote-data-grid-item">
                 <div className="quote-data-grid-left">

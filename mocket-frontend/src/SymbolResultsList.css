@@ -9,4 +9,15 @@
     max-height: 250px;
     overflow-y: scroll;
     width: 50%;
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 1223px) {
+    .results-list {
+        margin-top: 5px;
+        border-radius: 9px;
+        max-height: 120px;
+        width: 80%;
+    }    
 }

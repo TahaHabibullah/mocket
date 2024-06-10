@@ -10,17 +10,47 @@
 
 .quote-header-stock-name {
     float: left;
-    margin: 3rem 20% 0;
+    margin: 3rem 0px 0px 20%;
 }
 
 .quote-header-stock-symbol {
     float: right;
     color: #cccccc;
     opacity: 50%;
-    font-size: 24px;
-    margin: 4rem 20% 0 3rem;
+    font-size: calc(6px + 1vmin);
+    margin: calc(3rem + 1vmin) 20% 0px 0px;
 }
 
 .quote-header-price {
     margin: 0px 20%;
+}
+
+@media (max-width: 1223px) {
+    .quote-header-stock-name {
+        margin: 3rem 10% 0px;
+    }
+    
+    .quote-header-stock-symbol {
+        font-size: calc(2px + 2vmin);
+        margin: calc(3rem + 1vmin) 10% 0px;
+    }
+    
+    .quote-header-price {
+        margin: 0px 10%;
+    }
+}
+
+@media (max-width: 767px) {  
+    .quote-header-stock-name {
+        margin: 3rem 5% 0px;
+    }
+    
+    .quote-header-stock-symbol {
+        font-size: calc(2px + 2vmin);
+        margin: calc(3rem + 1vmin) 5% 0px;
+    }
+    
+    .quote-header-price {
+        margin: 0px 5%;
+    }
 }

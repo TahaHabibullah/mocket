@@ -24,22 +24,37 @@
     background-color: #1c1c1c;
 }
 
-.quote-data-grid-hdivider {
-    display: flex;
+@media (max-width: 1223px) {
+    .quote-data-grid-left {
+        margin: 0px 5% 0px 10%;
+        width: 40%
+    }
+    
+    .quote-data-grid-right {
+        margin: 0px 10% 0px 5%;
+        width: 40%
+    }
+    
+    .quote-data-grid-vdivider {
+        width: 1px;
+        height: calc(24px + 5vmin);
+    }
 }
 
-.quote-data-grid-hdivider-left {
-    float: left;
-    width: 25%;
-    height: 2px;
-    margin: -6px 5% -6px 20%;
-    background-color: #1c1c1c;
-}
-
-.quote-data-grid-hdivider-right {
-    float: right;
-    width: 25%;
-    height: 2px;
-    margin: -6px 20% -6px 5%;
-    background-color: #1c1c1c;
+@media (max-width: 767px) {
+    .quote-data-grid-left {
+        margin: 5px 5%;
+        width: 40%
+    }
+    
+    .quote-data-grid-right {
+        margin: 5px 5%;
+        width: 40%
+    }
+    
+    .quote-data-grid-vdivider {
+        width: 1px;
+        height: 60px;
+        height: calc(32px + 5vmin);
+    }
 }

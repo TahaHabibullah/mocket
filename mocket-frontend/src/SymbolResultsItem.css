@@ -14,3 +14,13 @@
     font-size: 30px;
     opacity: 50%;
 }
+
+@media (max-width: 1223px) { 
+    .result-item-name {
+        font-size: calc(6px + 2vmin);
+    }
+    
+    .result-item-sym {
+        font-size: calc(6px + 2vmin);
+    }
+}

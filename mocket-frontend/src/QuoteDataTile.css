@@ -1,5 +1,5 @@
 .quote-tile {
-    background-color: #0f0f0f;
+    background-color: black;
     border-radius: 15px;
     border-color: #888888;
     border-style: solid;
@@ -11,17 +11,50 @@
 }
 
 .quote-tile-title {
-    font-size: 24px;
-    color: #aaaaaa;
+    color: #cccccc;
     float: left;
     opacity: 50%;
+    font-size: 24px;
     padding: 1rem;
 }
 
 .quote-tile-data {
-    font-size: 24px;
-    color: #cccccc;
+    color: white;
     float: right;
+    font-size: 24px;
     padding: 1rem;
-    border-left: 2px solid #1c1c1c
+}
+
+@media (max-width: 1223px) {
+    .quote-tile {
+        border-radius: 9px;
+        height: calc(8px + 5vmin);
+    }
+    
+    .quote-tile-title {
+        font-size: calc(10px + 1vmin);
+        padding: 1.5vmin;
+    }
+    
+    .quote-tile-data {
+        font-size: calc(10px + 1vmin);
+        padding: 1.5vmin;
+    }
+}
+
+@media (max-width: 767px) {
+    .quote-tile {
+        border-radius: 9px;
+        height: calc(14px + 5vmin);
+    }
+    
+    .quote-tile-title {
+        font-size: calc(6px + 1vmin);
+        padding: calc(2px + 2vmin);
+    }
+    
+    .quote-tile-data {
+        font-size: calc(6px + 1vmin);
+        padding: calc(2px + 2vmin);
+    }
 }

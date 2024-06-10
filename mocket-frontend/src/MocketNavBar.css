@@ -24,7 +24,6 @@
     text-decoration: none;
     float: right;
     color: #dddddd;
-    font-size: 30px;
 }
 
 .nav-bar-repo:hover {
@@ -59,10 +58,5 @@
     
     .nav-bar-repo {
         margin: 0px 5px 0px 0px;
-        font-size: calc(6px + 2vmin);
-    }
-    
-    .nav-bar-search {
-        padding-top: calc(22px - 0.8vmin);
     }
 }

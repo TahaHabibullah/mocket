@@ -98,12 +98,12 @@
 
     .quote-header-diff-green {
         margin: 0px 5% 20px;
-        font-size: calc(4px + 1vmin);
+        font-size: max(12px, calc(4px + 1vmin));
     }
     
     .quote-header-diff-red {
         margin: 0px 5% 20px;
-        font-size: calc(4px + 1vmin);
+        font-size: max(12px, calc(4px + 1vmin));
     }
 }
 
@@ -112,41 +112,17 @@
         margin: 0px 0% 20px;
         height: 300px;
     }
-    
-    .price-chart-interval {
-        margin: 0px 5%;
-    }
 
     .price-chart-interval-divider {
         margin: 0px 5px;
         height: 30px;
     }
 
-    .price-chart-divider {
-        margin: 20px 5% 20px 5%;
-        width: 90%;
-        height: 1px;
-    }
-
     .price-chart-interval-button-untoggled {
         width: 60px;
-        border-radius: 9px;
-        font-size: 10px;
     }
 
     .price-chart-interval-button-toggled {
         width: 60px;
-        border-radius: 9px;
-        font-size: 10px;
-    }
-
-    .quote-header-diff-green {
-        margin: 0px 5% 20px;
-        font-size: calc(4px + 1vmin);
-    }
-    
-    .quote-header-diff-red {
-        margin: 0px 5% 20px;
-        font-size: calc(4px + 1vmin);
     }
 }

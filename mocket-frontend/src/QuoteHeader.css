@@ -28,29 +28,22 @@
 @media (max-width: 1223px) {
     .quote-header-stock-name {
         margin: 1vmin 5% 0px;
+        font-size: max(24px, calc(10px + 2vmin));
     }
     
     .quote-header-stock-symbol {
-        font-size: calc(4px + 1vmin);
+        font-size: max(12px, calc(4px + 1vmin));
         margin: calc(14px + 1vmin) 5% 0px;
     }
     
     .quote-header-price {
         margin: 0px 5%;
+        font-size: max(24px, calc(10px + 2vmin));
     }
 }
 
 @media (max-width: 767px) {  
-    .quote-header-stock-name {
-        margin: 1vmin 5% 0px;
-    }
-    
     .quote-header-stock-symbol {
-        font-size: calc(4px + 1vmin);
-        margin: calc(4px + 1vmin) 5% 0px;
-    }
-    
-    .quote-header-price {
-        margin: 0px 5%;
+        margin: calc(8px + 1vmin) 5% 0px;
     }
 }

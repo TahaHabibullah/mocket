@@ -44,17 +44,16 @@
 
 @media (max-width: 767px) {
     .quote-tile {
-        border-radius: 9px;
         height: calc(10px + 5vmin);
     }
     
     .quote-tile-title {
-        font-size: calc(4px + 1vmin);
-        padding: calc(2px + 2vmin);
+        font-size: calc(4px + 1.5vmin);
+        padding: calc(2px + 1.5vmin);
     }
     
     .quote-tile-data {
-        font-size: calc(4px + 1vmin);
-        padding: calc(2px + 2vmin);
+        font-size: calc(4px + 1.5vmin);
+        padding: calc(2px + 1.5vmin);
     }
 }

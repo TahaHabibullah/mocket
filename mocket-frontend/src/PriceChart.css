@@ -53,17 +53,17 @@
 
 .quote-header-diff-green {
     margin: 0px max(5vw, calc((100vw - 1600px) / 2)) 4rem;
-    font-size: calc(6px + 1vmin);
+    font-size: 18px;
     color: rgb(0, 185, 0);
 }
 
 .quote-header-diff-red {
     margin: 0px max(5vw, calc((100vw - 1600px) / 2)) 4rem;
-    font-size: calc(6px + 1vmin);
+    font-size: 18px;
     color: red;
 }
 
-@media (max-width: 1223px) {
+@media (max-width: 1320px) {
     .price-chart {
         margin: 0px 5% 20px;
         height: 400px;
@@ -98,12 +98,12 @@
 
     .quote-header-diff-green {
         margin: 0px 5% 20px;
-        font-size: max(12px, calc(4px + 1vmin));
+        font-size: max(14px, calc(4px + 1vmin));
     }
     
     .quote-header-diff-red {
         margin: 0px 5% 20px;
-        font-size: max(12px, calc(4px + 1vmin));
+        font-size: max(14px, calc(4px + 1vmin));
     }
 }
 
@@ -124,5 +124,13 @@
 
     .price-chart-interval-button-toggled {
         width: 60px;
+    }
+
+    .quote-header-diff-green {
+        font-size: max(12px, calc(4px + 1vmin));
+    }
+    
+    .quote-header-diff-red {
+        font-size: max(12px, calc(4px + 1vmin));
     }
 }

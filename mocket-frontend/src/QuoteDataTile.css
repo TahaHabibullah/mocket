@@ -25,7 +25,7 @@
     padding: 1rem;
 }
 
-@media (max-width: 1223px) {
+@media (max-width: 1320px) {
     .quote-tile {
         border-radius: 9px;
         height: calc(8px + 5vmin);

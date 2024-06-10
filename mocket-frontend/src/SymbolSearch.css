@@ -27,7 +27,7 @@ input {
     padding-right: 1vmin;
 }
 
-@media (max-width: 1223px) {
+@media (max-width: 1320px) {
     .input-box {
         border-radius: 9px;
         height: 4vmin;

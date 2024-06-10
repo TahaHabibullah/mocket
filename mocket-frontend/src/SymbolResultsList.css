@@ -13,7 +13,7 @@
     z-index: 1;
 }
 
-@media (max-width: 1223px) {
+@media (max-width: 1320px) {
     .results-list {
         margin-top: 5px;
         border-radius: 9px;

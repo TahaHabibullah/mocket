@@ -36,7 +36,7 @@ const PriceChart = ({ liveData, quoteData }) => {
         { text: '1M' },
         { text: '1Y' }
     ];
-    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1223 });
+    const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
 
     setMouseOnRef.current = setMouseOn;

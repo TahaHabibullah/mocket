@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
-import { parseTimeSeriesData, parseTimeSeriesLabels, getPriceDiff } from "./Utils";
+import { parseTimeSeriesData, parseTimeSeriesLabels, getPriceDiff, getStartDate } from "./Utils";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
@@ -20,8 +20,6 @@ const PriceChart = ({ liveData, quoteData }) => {
     const [currDiff, setCurrDiff] = useState(getPriceDiff(quoteData.previous_close, liveData));
     const [labels, setLabels] = useState(null);
     const [toggledIndex, setToggledIndex] = useState(0);
-    const [mouseOn, setMouseOn] = useState(false);
-    const setMouseOnRef = useRef();
     const setCurrDataRef = useRef();
     const setCurrDiffRef = useRef();
     const getLiveDataRef = useRef();
@@ -38,8 +36,6 @@ const PriceChart = ({ liveData, quoteData }) => {
     ];
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
-
-    setMouseOnRef.current = setMouseOn;
     setCurrDataRef.current = setCurrData;
     setCurrDiffRef.current = setCurrDiff;
     getLiveDataRef.current = liveData;
@@ -51,7 +47,6 @@ const PriceChart = ({ liveData, quoteData }) => {
     const CustomTooltipPlugin = {
         id: 'custom-tooltip',
         beforeDraw: (chart) => {
-            const setMouseOn = chart.config.options.setMouseOnRef.current;
             const setCurrData = chart.config.options.setCurrDataRef.current;
             const setCurrDiff = chart.config.options.setCurrDiffRef.current;
             const liveData = chart.config.options.getLiveDataRef.current;
@@ -61,9 +56,6 @@ const PriceChart = ({ liveData, quoteData }) => {
             const labels = chart.config.options.getLabelsRef.current;
             const drawLabel = chart.config.options.drawLabelRef.current;
             if (chart.tooltip._active && chart.tooltip._active.length) {
-                if(setMouseOn) {
-                    setMouseOn(true);
-                }
                 const ctx = chart.ctx;
                 const activePoint = chart.tooltip._active[0];
                 const x = activePoint.element.x;
@@ -96,7 +88,6 @@ const PriceChart = ({ liveData, quoteData }) => {
                 activePoint.element.options.borderColor = '#ffffff';
             }
             else {
-                setMouseOn(false);
                 setCurrData(liveData);
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], liveData));
                 drawLabel.style.display = 'none';
@@ -149,7 +140,6 @@ const PriceChart = ({ liveData, quoteData }) => {
             },
             maintainAspectRatio: false,
             responsive: true,
-            setMouseOnRef,
             setCurrDataRef,
             setCurrDiffRef,
             getLiveDataRef,
@@ -175,26 +165,20 @@ const PriceChart = ({ liveData, quoteData }) => {
         callRestApi();
     }, [toggledIndex]);
 
-    useEffect (() => {
-        if(!mouseOn) {
-            setCurrData(liveData);
-            setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], liveData));
-        }
-    }, [liveData]);
-
     const callRestApi = async () => {
         var body;
+        const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            body = {"symbol": symbol, "interval": "5min", "outputSize": "78"};
+            body = {"symbol": symbol, "interval": "5min", "date": "today"};
         }
         else if(toggledIndex === 1) {
-            body = {"symbol": symbol, "interval": "15min", "outputSize": "182"};
+            body = {"symbol": symbol, "interval": "15min", "start_date": start_date};
         }
         else if(toggledIndex === 2) {
-            body = {"symbol": symbol, "interval": "1h", "outputSize": "154"};
+            body = {"symbol": symbol, "interval": "1h", "start_date": start_date};
         }
         else {
-            body = {"symbol": symbol, "interval": "1day", "outputSize": "365"};
+            body = {"symbol": symbol, "interval": "1day", "start_date": start_date};
         }
         return fetch(restEndpoint, {
             method: 'POST',

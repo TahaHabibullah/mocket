@@ -44,6 +44,13 @@ public interface TradeDataFeignClient {
                                                                  @RequestParam("format") String format,
                                                                  @RequestParam("delimiter") String delimiter,
                                                                  @RequestParam("prepost") String prepost,
+                                                                 @RequestParam("dp") String dp,
+                                                                 @RequestParam("order") String order,
+                                                                 @RequestParam("timezone") String timezone,
+                                                                 @RequestParam("date") String date,
+                                                                 @RequestParam("start_date") String start_date,
+                                                                 @RequestParam("end_date") String end_date,
+                                                                 @RequestParam("previous_close") String previous_close,
                                                                  @RequestParam("apikey") String apikey);
 
     @RequestMapping(method=RequestMethod.GET, path="/price")

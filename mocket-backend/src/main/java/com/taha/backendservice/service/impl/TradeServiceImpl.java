@@ -73,6 +73,13 @@ public class TradeServiceImpl implements TradeService {
                                                                             request.getFormat(),
                                                                             request.getDelimiter(),
                                                                             request.getPrepost(),
+                                                                            request.getDp(),
+                                                                            request.getOrder(),
+                                                                            request.getTimezone(),
+                                                                            request.getDate(),
+                                                                            request.getStart_date(),
+                                                                            request.getEnd_date(),
+                                                                            request.getPrevious_close(),
                                                                             apiKey).getBody();
             logger.info("Response from Twelve Data /time_series API: " + mapper.writeValueAsString(priceData));
             return priceData;

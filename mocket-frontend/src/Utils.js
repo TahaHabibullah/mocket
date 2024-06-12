@@ -1,5 +1,9 @@
 const regex = /^[a-zA-Z]+$/;
 
+function isAlpha(text) {
+    return regex.test(text);
+}
+
 export function truncateOutput(text) {
     if(!text)
         return "";
@@ -30,10 +34,6 @@ export function parseVolume(vol) {
     }
 }
 
-export function isAlpha(text) {
-    return regex.test(text);
-}
-
 export function checkInput(text) {
     if(text.length < 1 || !isAlpha(text))
         return '1';
@@ -44,7 +44,7 @@ export function checkInput(text) {
 export function parseTimeSeriesData(data) {
     var result = [];
     for(var i in data) {
-        result.push(parsePrice(data[i].close))
+        result.push(parsePrice(data[i].close));
     }
     return result.reverse();
 }
@@ -74,4 +74,20 @@ export function getPriceDiff(previous_close, currPrice) {
         res += " (" + diffPercent.toFixed(2) + "%)";
     }
     return res;
+}
+
+export function getStartDate(mode) {
+    const date = new Date();
+    if(mode === 1)
+        date.setDate(date.getDate() - 7);
+    else if(mode === 2)
+        date.setDate(date.getDate() - 30);
+    else
+        date.setDate(date.getDate() - 365);
+
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day =  date.getDate().toString().padStart(2, '0');
+
+    return year + '-' + month + '-' + day;
 }

@@ -24,6 +24,12 @@ public class TwelveDataRequest implements Serializable {
     private String eod;
     private String rollingPeriod;
     private String dp;
+    private String order;
+    private String timezone;
+    private String date;
+    private String start_date;
+    private String end_date;
+    private String previous_close;
     @JsonCreator
     public TwelveDataRequest(String symbol) {this.symbol = symbol;}
 }

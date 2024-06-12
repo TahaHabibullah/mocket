@@ -41,7 +41,7 @@ public class TradeController {
 
     @GetMapping(value= TradeConstant.LIVE_PRICE, produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> getLivePrice(@RequestParam String symbol) {
-        return Flux.interval(Duration.ofSeconds(8))
+        return Flux.interval(Duration.ofSeconds(30))
                 .map(interval -> ServerSentEvent.<String>builder()
                 .data(tradeService.getLivePrice(new TwelveDataRequest(symbol)))
                 .retry(Duration.ofSeconds(1))

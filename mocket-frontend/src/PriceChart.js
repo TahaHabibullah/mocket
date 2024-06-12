@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
-import { parseTimeSeriesData, parseTimeSeriesLabels, getPriceDiff, getStartDate } from "./Utils";
+import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, getPriceDiff, getStartDate,  } from "./Utils";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
@@ -79,8 +79,8 @@ const PriceChart = ({ liveData, quoteData }) => {
     
                 const chartRect = chart.canvas.getBoundingClientRect();
                 drawLabel.style.left = `${chartRect.left + x}px`;
-                drawLabel.style.top = `${chartRect.top-12}px`;
-                drawLabel.textContent = labels[dataX];
+                drawLabel.style.top = `calc(${chartRect.top-12}px - 0.5vmin)`;
+                drawLabel.textContent = parseLabel(labels[dataX], toggledIndex);
                 drawLabel.style.display = 'block';
     
                 activePoint.element.options.pointStyle = 'circle';

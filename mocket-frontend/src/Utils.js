@@ -89,5 +89,30 @@ export function getStartDate(mode) {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day =  date.getDate().toString().padStart(2, '0');
 
-    return year + '-' + month + '-' + day;
+    return `${year}-${month}-${day}`;
+}
+
+export function parseLabel(label, mode) {
+    const date = new Date(label);
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    
+    const month = monthNames[date.getMonth()];
+    const day = date.getDate();
+    var hours = date.getHours();
+    var minutes = date.getMinutes();
+
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+        
+    hours = hours % 12;
+    hours = hours ? hours : 12;
+        
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    if(mode === 0)
+        return `${hours}:${minutes} ${ampm}`;
+    else if(mode === 3)
+        return `${month} ${day}`;
+    else
+        return `${month} ${day} ${hours}:${minutes} ${ampm}`;
 }

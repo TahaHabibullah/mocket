@@ -46,7 +46,7 @@ export function parseTimeSeriesData(data) {
     for(var i in data) {
         result.push(parsePrice(data[i].close));
     }
-    return result.reverse();
+    return result;
 }
 
 export function parseTimeSeriesLabels(data) {
@@ -54,7 +54,7 @@ export function parseTimeSeriesLabels(data) {
     for(var i in data) {
         result.push(data[i].datetime);
     }
-    return result.reverse();
+    return result;
 }
 
 export function getPriceDiff(previous_close, currPrice) {
@@ -115,4 +115,31 @@ export function parseLabel(label, mode) {
         return `${month} ${day}`;
     else
         return `${month} ${day} ${hours}:${minutes} ${ampm}`;
+}
+
+export function fillLiveList(list) {
+    console.log(list);
+    var result = [];
+    for(let i = 0; i < list.length; i++) {
+        result.push(list[i]);
+    }
+    for(let i = list.length; i < 78; i++) {
+        result.push(null);
+    }
+    return result;
+}
+
+export function getCurrTime() {
+    const moment = require("moment-timezone");
+    const curr = new Date();
+    const est = moment(curr).tz("America/New_York").format("YYYY-MM-DD HH:mm:ss");
+    return est;
+}
+
+export function truncateTime(datetime) {
+    const moment = require("moment-timezone");
+    const time = new Date(datetime);
+    time.setSeconds(0);
+    const result = moment(time).format("YYYY-MM-DD HH:mm:ss");
+    return result;
 }

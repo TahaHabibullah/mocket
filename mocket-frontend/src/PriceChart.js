@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
-import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, getPriceDiff, getStartDate,  } from "./Utils";
+import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, 
+         getPriceDiff, getStartDate, fillLiveList, getCurrTime, truncateTime } from "./Utils";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
@@ -20,6 +21,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     const [currDiff, setCurrDiff] = useState(getPriceDiff(quoteData.previous_close, liveData));
     const [labels, setLabels] = useState(null);
     const [toggledIndex, setToggledIndex] = useState(0);
+    const [liveIndex, setLiveIndex] = useState(0);
     const setCurrDataRef = useRef();
     const setCurrDiffRef = useRef();
     const getLiveDataRef = useRef();
@@ -165,20 +167,38 @@ const PriceChart = ({ liveData, quoteData }) => {
         callRestApi();
     }, [toggledIndex]);
 
+    useEffect(() => {
+        if(data && toggledIndex === 0) {
+            const currTime = truncateTime(getCurrTime());
+            const prevTime = labels[liveIndex-1];
+            var dataCopy = [...data];
+            var labelsCopy = [...labels];
+            dataCopy[liveIndex] = liveData;
+            labelsCopy[liveIndex] = currTime;
+            setData(dataCopy);
+            setLabels(labelsCopy);
+            console.log("Prev time: " + prevTime);
+            console.log("Curr time: " + currTime);
+            if(new Date(currTime) - new Date(prevTime) >= 300000) {
+                setLiveIndex(liveIndex < 78 ? liveIndex + 1 : 77);
+            }
+        }
+    }, [liveData])
+
     const callRestApi = async () => {
         var body;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            body = {"symbol": symbol, "interval": "5min", "date": "today"};
+            body = {"symbol": symbol, "interval": "5min", "date": "today", "order": "ASC"};
         }
         else if(toggledIndex === 1) {
-            body = {"symbol": symbol, "interval": "15min", "start_date": start_date};
+            body = {"symbol": symbol, "interval": "15min", "start_date": start_date, "order": "ASC"};
         }
         else if(toggledIndex === 2) {
-            body = {"symbol": symbol, "interval": "1h", "start_date": start_date};
+            body = {"symbol": symbol, "interval": "1h", "start_date": start_date, "order": "ASC"};
         }
         else {
-            body = {"symbol": symbol, "interval": "1day", "start_date": start_date};
+            body = {"symbol": symbol, "interval": "1day", "start_date": start_date, "order": "ASC"};
         }
         return fetch(restEndpoint, {
             method: 'POST',
@@ -188,8 +208,18 @@ const PriceChart = ({ liveData, quoteData }) => {
         .then((response) => response.json())
         .then((responseJson) => {
             console.log(responseJson);
-            setData(parseTimeSeriesData(responseJson.values));
-            setLabels(parseTimeSeriesLabels(responseJson.values));
+            const fullData = JSON.parse(JSON.stringify(responseJson.values));
+            const timeSeriesData = parseTimeSeriesData(fullData);
+            const timeSeriesLabels = parseTimeSeriesLabels(fullData);
+            if(toggledIndex === 0 && quoteData.is_market_open) {
+                setLiveIndex(fullData.length);
+                setData(fillLiveList(timeSeriesData));
+                setLabels(fillLiveList(timeSeriesLabels));
+            }
+            else {
+                setData(timeSeriesData);
+                setLabels(timeSeriesLabels);
+            }
         })
     }
 
@@ -225,7 +255,6 @@ const PriceChart = ({ liveData, quoteData }) => {
                     font: 'max(12px, calc(4px + 1vmin)) Arial'
                 }}
             />
-
             <div className="price-chart-interval">
                 {buttons.map((b, i) => (
                     <React.Fragment key={i}>

@@ -1,3 +1,11 @@
 twelvedata:
   api:
     url: https://api.twelvedata.com/
+
+spring:
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/mocket
+  threads:
+    virtual:
+      enabled: true

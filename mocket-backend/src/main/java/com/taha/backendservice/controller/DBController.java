@@ -2,6 +2,7 @@ package com.taha.backendservice.controller;
 
 import com.taha.backendservice.constants.DBConstant;
 import com.taha.backendservice.dto.UserDTO;
+import com.taha.backendservice.model.DBRequest;
 import com.taha.backendservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -80,6 +81,15 @@ public class DBController {
     @PutMapping("users")
     public Long putUsers(@RequestBody List<UserDTO> usersDTO) {
         return userService.update(usersDTO);
+    }
+
+    @PutMapping("user/addPos")
+    public UserDTO putPosition(@RequestBody DBRequest request) {
+        return userService.addPosition(request.getUserId(), request.getPosition());
+    }
+    @PutMapping("user/closePos")
+    public UserDTO putClosePosition(@RequestBody DBRequest request) {
+        return userService.closePosition(request.getUserId(), request.getPosId(), request.getQuantity());
     }
 
     @ExceptionHandler(RuntimeException.class)

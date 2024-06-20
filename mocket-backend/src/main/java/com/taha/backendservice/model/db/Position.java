@@ -31,6 +31,9 @@ public class Position {
         this.closeTimestamp = closeTimestamp;
     }
 
+    public double getValue() {
+        return quantity * price;
+    }
     public ObjectId getId() {
         return id;
     }

@@ -1,6 +1,6 @@
 package com.taha.backendservice.service.impl;
 
-import com.taha.backendservice.controller.DBController;
+import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
 import com.taha.backendservice.repository.UserRepository;
 import com.taha.backendservice.service.UserService;
@@ -86,5 +86,15 @@ public class UserServiceImpl implements UserService {
     public long update(List<UserDTO> usersDTO) {
         logger.info("Updating multiple with info: " + usersDTO.stream().map(UserDTO::toUser).toString());
         return userRepository.update(usersDTO.stream().map(UserDTO::toUser).toList());
+    }
+
+    @Override
+    public UserDTO addPosition(String id, PositionDTO p) {
+        return new UserDTO(userRepository.addPosition(id, p.toPosition()));
+    }
+
+    @Override
+    public UserDTO closePosition(String userId, String posId, int quantity) {
+        return new UserDTO(userRepository.closePosition(userId, posId, quantity));
     }
 }

@@ -9,6 +9,7 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReplaceOneModel;
+import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
 import com.taha.backendservice.repository.UserRepository;
 import org.bson.BsonDocument;
@@ -117,6 +118,20 @@ public class UserRepositoryImpl implements UserRepository {
             return clientSession.withTransaction(
                    () -> userCollection.bulkWrite(clientSession, writes).getModifiedCount(), txnOptions);
         }
+    }
+
+    @Override
+    public User addPosition(String id, Position p) {
+        User u = find(id);
+        u.addPosition(p);
+        return update(u);
+    }
+
+    @Override
+    public User closePosition(String userId, String posId, int quantity) {
+        User u = find(userId);
+        u.closePosition(posId, quantity);
+        return update(u);
     }
 
     private List<ObjectId> mapToObjectIds(List<String> ids) {

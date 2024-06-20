@@ -1,5 +1,6 @@
 package com.taha.backendservice.service;
 
+import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface UserService {
     long deleteAll();
     UserDTO update(UserDTO userDTO);
     long update(List<UserDTO> usersDTO);
+    UserDTO addPosition(String id, PositionDTO p);
+    UserDTO closePosition(String userId, String posId, int quantity);
 }

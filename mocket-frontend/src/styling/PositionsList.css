@@ -1,0 +1,26 @@
+.positions-list {
+    display: grid;
+}
+
+.positions-list-item {
+    display: flex;
+    margin: 10px max(5vw, calc((100vw - 800px) / 2));
+}
+
+@media (max-width: 1320px) {
+    .positions-list-item {
+        display: flex;
+        margin: 10px 10% 10px 10%;
+        width: 80%;
+    }
+    
+}
+
+@media (max-width: 767px) {
+    .positions-list-item {
+        display: flex;
+        margin: 10px 5% 10px 5%;
+        width: 90%;
+    }
+    
+}

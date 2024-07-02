@@ -1,0 +1,60 @@
+.quote-header {
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+.quote-header-stock {
+    display: grid;
+}
+
+.quote-header-stock-name {
+    float: left;
+    margin: 3rem 0px 0px max(5vw, calc((100vw - 1600px) / 2));
+    font-size: 36px;
+}
+
+.quote-header-stock-symbol {
+    float: right;
+    color: #cccccc;
+    opacity: 50%;
+    font-size: 18px;
+    margin: calc(3rem + 1vmin) max(5vw, calc((100vw - 1600px) / 2)) 0px 0px;
+}
+
+.quote-header-price {
+    margin: 0px max(5vw, calc((100vw - 1600px) / 2));
+    font-size: 36px;
+}
+
+@media (max-width: 1320px) {
+    .quote-header-stock-name {
+        margin: 3vmin 5% 0px;
+        font-size: max(30px, calc(10px + 2vmin));
+    }
+    
+    .quote-header-stock-symbol {
+        font-size: max(14px, calc(6px + 1vmin));
+        margin: calc(14px + 3vmin) 5% 0px;
+    }
+    
+    .quote-header-price {
+        margin: 0px 5%;
+        font-size: max(30px, calc(10px + 2vmin));
+    }
+}
+
+@media (max-width: 767px) {  
+    .quote-header-stock-name {
+        margin: 1vmin 5% 0px;
+        font-size: max(24px, calc(10px + 2vmin));
+    }
+
+    .quote-header-stock-symbol {
+        margin: calc(8px + 1vmin) 5% 0px;
+    }
+
+    .quote-header-price {
+        font-size: max(24px, calc(10px + 2vmin));
+    }
+}

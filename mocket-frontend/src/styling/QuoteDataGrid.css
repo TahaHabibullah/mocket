@@ -1,0 +1,60 @@
+.quote-data-grid {
+    display: grid;
+}
+
+.quote-data-grid-item {
+    display: flex;
+}
+
+.quote-data-grid-left {
+    float: left;
+    margin: 10px 5% 10px 20%;
+    width: 25%;
+}
+
+.quote-data-grid-right {
+    float: right;
+    margin: 10px 20% 10px 5%;
+    width: 25%;
+}
+
+.quote-data-grid-vdivider {
+    width: 3px;
+    height: 100px;
+    background-color: #1c1c1c;
+}
+
+@media (max-width: 1320px) {
+    .quote-data-grid-left {
+        margin: 5px 5% 0px 10%;
+        width: 40%
+    }
+    
+    .quote-data-grid-right {
+        margin: 5px 10% 0px 5%;
+        width: 40%
+    }
+    
+    .quote-data-grid-vdivider {
+        width: 1px;
+        height: calc(32px + 4vmin);
+    }
+}
+
+@media (max-width: 767px) {
+    .quote-data-grid-left {
+        margin: 5px 5%;
+        width: 40%
+    }
+    
+    .quote-data-grid-right {
+        margin: 5px 5%;
+        width: 40%
+    }
+    
+    .quote-data-grid-vdivider {
+        width: 1px;
+        height: 60px;
+        height: calc(32px + 5vmin);
+    }
+}

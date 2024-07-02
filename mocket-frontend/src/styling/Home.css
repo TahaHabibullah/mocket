@@ -1,0 +1,23 @@
+.home-header {
+    margin: 0;
+    padding: 0;
+    color: white;
+}
+
+.home-header-balance {
+    margin: 20px max(5vw, calc((100vw - 1600px) / 2));
+    font-size: 36px;
+}
+
+@media (max-width: 1320px) {
+    .home-header-balance {
+        margin: 0px 5%;
+        font-size: max(30px, calc(10px + 2vmin));
+    }
+}
+
+@media (max-width: 767px) {  
+    .home-header-balance {
+        font-size: max(24px, calc(10px + 2vmin));
+    }
+}

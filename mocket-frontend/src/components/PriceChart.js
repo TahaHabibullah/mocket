@@ -7,8 +7,8 @@ import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
 import QuoteHeader from "./QuoteHeader";
-import "./PriceChart.css";
-import "./QuoteHeader.css";
+import "../styling/PriceChart.css";
+import "../styling/QuoteHeader.css";
 
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);

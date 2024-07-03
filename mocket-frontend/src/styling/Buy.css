@@ -1,0 +1,122 @@
+.buy {
+    display: grid;
+    margin: 0;
+    padding: 10px;
+    font-size: calc(10px + 1vmin);
+}
+
+.buy-divider {
+    background-color: #444444;
+    height: 2px;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.buy-header {
+    margin: 10px 0 0 0;
+    display: inline-block;
+}
+
+.buy-header-left {
+    float: left;
+}
+
+.buy-header-right {
+    float: right;
+}
+
+.buy-input-box {
+    position: relative;
+    display: inline-block;
+    z-index: 5;
+}
+
+.buy-input-label {
+    float: left;
+}
+
+.buy-input {
+    float: right;
+    text-align: right;
+    width: 120px;
+}
+
+.buy-shares {
+    display: inline-block;
+}
+
+.buy-shares-label {
+    float: left;
+}
+
+.buy-shares-live {
+    float: right;
+}
+
+.buy-total {
+    display: inline-block;
+}
+
+.buy-total-label {
+    float: left;
+}
+
+.buy-total-live {
+    float: right;
+}
+
+.buy-button {
+    position: relative;
+    background-color: black;
+    cursor: pointer;
+    color: white;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 2px;
+    font-size: 16px;
+    font-weight: bold;
+    transition: 0.3s;
+    justify-self: center;
+    width: 30%;
+    height: 40px;
+    text-align: center;
+    margin: 10px 0;
+    z-index: 5;
+}
+
+.buy-button:hover {
+    background-color: rgb(35, 138, 255);
+    border-color: rgb(35, 138, 255);
+    color: black;
+}
+
+@media (max-width: 1320px) {
+    .buy {
+        font-size: 2vmin;
+    }
+
+    .buy-divider {
+        height: 1px;
+    }
+
+    .buy-button {
+        font-size: 1.5vmin;
+        height: max(25px, 3vmin);
+    }
+}
+
+@media (max-width: 767px) {
+    .buy {
+        font-size: calc(8px + 1vmin);
+    }
+
+    .buy-button {
+        font-size: calc(6px + 1vmin);
+        margin: 5px 0;
+    }
+
+    .buy-input {
+        width: 75px;
+    }
+}

@@ -1,5 +1,6 @@
 .positions-tile {
     background-color: black;
+    cursor: pointer;
     border-radius: 15px;
     border-color: #888888;
     border-style: solid;

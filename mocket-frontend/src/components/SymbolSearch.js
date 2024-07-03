@@ -28,7 +28,7 @@ const SymbolSearch = ( {setResults} ) => {
     return (
         <div className="input-box">
             <FaSearch id="search-icon"/>
-            <input placeholder="Search" onChange={handleChange}></input>
+            <input placeholder="Search" onChange={handleChange}/>
         </div>
     )
 }

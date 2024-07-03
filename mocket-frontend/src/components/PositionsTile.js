@@ -10,7 +10,7 @@ const PositionsTile = ({ data }) => {
             <div className="positions-tile-symbol">{data.symbol}</div>
             <div className="positions-tile-divider"/>
             <div className="positions-tile-shares">{data.quantity} Shares</div>
-            <div className="positions-tile-data">{data.price}</div>
+            <div className="positions-tile-data">${data.price}</div>
         </div>
     )
 }

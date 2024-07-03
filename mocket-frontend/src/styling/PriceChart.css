@@ -16,6 +16,7 @@
 
 .price-chart-interval-button-untoggled {
     background-color: black;
+    cursor: pointer;
     color: white;
     width: 100px;
     border-radius: 15px;
@@ -23,6 +24,7 @@
     border-style: solid;
     border-width: 2px;
     font-weight: bold;
+    transition: 0.3s;
 }
 
 .price-chart-interval-button-untoggled:hover {
@@ -31,6 +33,7 @@
 
 .price-chart-interval-button-toggled {
     background-color: rgb(35, 138, 255);
+    cursor: pointer;
     color: black;
     width: 100px;
     border-radius: 15px;
@@ -38,6 +41,7 @@
     border-style: solid;
     border-width: 1px;
     font-weight: bold;
+    transition: 0.3s;
 }
 
 .price-chart-interval-button-toggled:hover {

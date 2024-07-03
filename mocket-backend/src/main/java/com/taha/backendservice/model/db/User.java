@@ -4,6 +4,7 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -58,6 +59,17 @@ public class User {
         positions.add(p);
         balance -= p.getValue();
     }
+
+    public List<Position> getSymPositions(String symbol) {
+        List<Position> result = new ArrayList<>();
+        for(int i = 0; i < positions.size(); i++) {
+            Position p = positions.get(i);
+            if(p.isOpen() && symbol.equals(p.getSymbol())) {
+                result.add(p);
+            }
+        }
+        return result;
+    }
     public ObjectId getId() {
         return id;
     }
@@ -89,11 +101,11 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-                "id='" + id + '\'' +
-                ", email='" + email + '\'' +
-                ", balance=" + balance +
-                ", positions=" + positions +
-                '}';
+               "id='" + id + '\'' +
+               ", email='" + email + '\'' +
+               ", balance=" + balance +
+               ", positions=" + positions +
+               '}';
     }
 
     @Override

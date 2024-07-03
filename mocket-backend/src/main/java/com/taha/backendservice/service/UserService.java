@@ -18,4 +18,5 @@ public interface UserService {
     long update(List<UserDTO> usersDTO);
     UserDTO addPosition(String id, PositionDTO p);
     UserDTO closePosition(String userId, String posId, int quantity);
+    List<PositionDTO> getSymPositions(String id, String symbol);
 }

@@ -134,6 +134,12 @@ public class UserRepositoryImpl implements UserRepository {
         return update(u);
     }
 
+    @Override
+    public List<Position> getSymPositions(String id, String symbol) {
+        User u = find(id);
+        return u.getSymPositions(symbol);
+    }
+
     private List<ObjectId> mapToObjectIds(List<String> ids) {
         return ids.stream().map(ObjectId::new).toList();
     }

@@ -21,4 +21,5 @@ public interface UserRepository {
     long update(List<User> users);
     User addPosition(String id, Position p);
     User closePosition(String userId, String posId, int quantity);
+    List<Position> getSymPositions(String id, String symbol);
 }

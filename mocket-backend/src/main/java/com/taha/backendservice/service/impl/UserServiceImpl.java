@@ -97,4 +97,9 @@ public class UserServiceImpl implements UserService {
     public UserDTO closePosition(String userId, String posId, int quantity) {
         return new UserDTO(userRepository.closePosition(userId, posId, quantity));
     }
+
+    @Override
+    public List<PositionDTO> getSymPositions(String id, String symbol) {
+        return userRepository.getSymPositions(id, symbol).stream().map(PositionDTO::new).toList();
+    }
 }

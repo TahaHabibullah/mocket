@@ -1,6 +1,7 @@
 package com.taha.backendservice.controller;
 
 import com.taha.backendservice.constants.DBConstant;
+import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
 import com.taha.backendservice.model.DBRequest;
 import com.taha.backendservice.service.UserService;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RestController
 @RequestMapping(DBConstant.DB_ROOT_URI)
 public class DBController {
@@ -55,6 +57,11 @@ public class DBController {
     @GetMapping("users/count")
     public Long getCount() {
         return userService.count();
+    }
+
+    @GetMapping("user/getPos")
+    public List<PositionDTO> getSymPositions(@RequestParam String id, @RequestParam String symbol) {
+        return userService.getSymPositions(id, symbol);
     }
 
     @DeleteMapping("users")

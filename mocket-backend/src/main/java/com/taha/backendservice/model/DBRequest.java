@@ -8,7 +8,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DBRequest {
     private String userId;
-    private String posId;
+    private String symbol;
     private int quantity;
     private PositionDTO position;
 }

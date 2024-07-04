@@ -25,31 +25,32 @@ public class User {
         this.balance = balance;
         this.positions = positions;
     }
-    public void closePosition(String id, int quantity) {
-        for(int i = 0; i < positions.size(); i++) {
-            Position p = positions.get(i);
-            if(p.getId().equals(new ObjectId(id))) {
-                if(p.isOpen()) {
-                    if(quantity < 1) {
-                        p.setOpen(false);
-                        balance += p.getValue();
-                        p.setCloseTimestamp(new Date());
-                        positions.set(i, p);
-                    }
-                    else {
-                        Position temp = new Position(new ObjectId(),
-                                                     p.getSymbol(),
-                                                     quantity,
-                                                     p.getPrice(),
-                                                     false,
-                                                     p.getOpenTimestamp(),
-                                                     new Date());
-                        p.setQuantity(p.getQuantity() - quantity);
-                        balance += temp.getValue();
-                        positions.add(temp);
-                    }
-                }
-                return;
+    public void closePosition(String symbol, int quantity) {
+        List<Position> sympos = getSymPositions(symbol);
+        int count = 0;
+        for(int i = 0; i < sympos.size(); i++) {
+            if(count >= quantity)
+                break;
+            Position p = sympos.get(i);
+            if(p.getQuantity() > quantity) {
+                Position temp = new Position(new ObjectId(),
+                                             p.getSymbol(),
+                                             quantity - count,
+                                             p.getPrice(),
+                                             false,
+                                             p.getOpenTimestamp(),
+                                             new Date());
+                p.setQuantity(p.getQuantity() - (quantity - count));
+                balance += temp.getValue();
+                positions.add(temp);
+                count += quantity;
+            }
+            else {
+                p.setOpen(false);
+                balance += p.getValue();
+                p.setCloseTimestamp(new Date());
+                positions.set(i, p);
+                count += p.getQuantity();
             }
         }
     }

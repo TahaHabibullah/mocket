@@ -96,7 +96,7 @@ public class DBController {
     }
     @PutMapping("user/closePos")
     public UserDTO putClosePosition(@RequestBody DBRequest request) {
-        return userService.closePosition(request.getUserId(), request.getPosId(), request.getQuantity());
+        return userService.closePosition(request.getUserId(), request.getSymbol(), request.getQuantity());
     }
 
     @ExceptionHandler(RuntimeException.class)

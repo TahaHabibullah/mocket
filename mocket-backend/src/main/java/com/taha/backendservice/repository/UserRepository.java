@@ -20,6 +20,6 @@ public interface UserRepository {
     User update(User user);
     long update(List<User> users);
     User addPosition(String id, Position p);
-    User closePosition(String userId, String posId, int quantity);
+    User closePosition(String userId, String symbol, int quantity);
     List<Position> getSymPositions(String id, String symbol);
 }

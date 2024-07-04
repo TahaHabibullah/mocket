@@ -20,7 +20,7 @@ const Sell = ({ symbol, positions, live }) => {
     const handleClick = async () => {
         const body = {
             "userId": "666f3772a145123a860ad98e",
-            "posId": "",
+            "symbol": symbol,
             "quantity": document.getElementById("sell-in").value,
         }
         return fetch(restEndpoint, {
@@ -44,6 +44,7 @@ const Sell = ({ symbol, positions, live }) => {
             <div className="sell-input-box">
                 <div className="sell-input-label">Number of Shares</div>
                 <input 
+                    id="sell-in"
                     type="number" 
                     className="sell-input" 
                     placeholder="0" 

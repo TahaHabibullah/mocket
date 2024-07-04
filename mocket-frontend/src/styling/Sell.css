@@ -2,7 +2,7 @@
     display: grid;
     margin: 0;
     padding: 10px;
-    font-size: 20px;
+    font-size: calc(10px + 1vmin);
 }
 
 .sell-divider {
@@ -38,7 +38,7 @@
 .sell-input {
     float: right;
     text-align: right;
-    width: 120px;
+    width: 125px;
 }
 
 .sell-shares {
@@ -85,11 +85,23 @@
     z-index: 5;
 }
 
+.sell-button:disabled {
+    background-color: #444444;
+    color: #cccccc;
+}
+
 .sell-button:hover {
     background-color: rgb(35, 138, 255);
     border-color: rgb(35, 138, 255);
     color: black;
 }
+
+.sell-button:disabled:hover {
+    background-color: #444444;
+    border-color: #888888;
+    color: #aaaaaa;
+}
+
 
 @media (max-width: 1320px) {
     .sell {

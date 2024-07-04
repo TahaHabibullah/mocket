@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import PositionsTile from "./PositionsTile";
 import "../styling/PositionsList.css";
+import { UserContext } from "./UserContext";
+import { getOpenPositions } from "./Utils";
 
-const PositionsList = ({ data }) => {
+const PositionsList = () => {
+    const positions = getOpenPositions(useContext(UserContext).positions);
     return (
         <div className="positions-list">
-            {data.map((position, index) => (
+            {positions.map((position, index) => (
                 <div key={index} className="positions-list-item">
                     <PositionsTile data={position}/>
                 </div>

@@ -1,29 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext } from "react";
 import MocketNavBar from "./MocketNavBar";
-import PositionsList from "./PositionsList"
-import TradeActions from "./TradeActions";
+import PositionsList from "./PositionsList";
+import { UserContext } from "./UserContext";
 import { getOpenPositions } from "./Utils";
 import '../styling/App.css';
 import '../styling/Home.css';
 
 const Home = () => {
-    const restEndpoint = "http://19.26.28.37:8080/database/user/666f3772a145123a860ad98e"
-    const [user, setUser] = useState(null);
-    const callRestApi = async () => {
-        return fetch(restEndpoint, {
-            method: 'GET', 
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            console.log(responseJson);
-            setUser(responseJson);
-        })
-    }
-
-    useEffect(() => {
-        callRestApi();
-    }, [])
+    const user = useContext(UserContext);
 
     return (
         <div className="App">
@@ -33,8 +17,7 @@ const Home = () => {
                     <div className="home-header">
                         <div className="home-header-balance">{user.balance}</div>
                     </div>
-                    <TradeActions positions={[1]} live={0}/>
-                    <PositionsList data={getOpenPositions(user.positions)}/>
+                    <PositionsList/>
                 </div>
             ) : (
                 <div/>

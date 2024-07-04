@@ -3,3 +3,13 @@
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
 }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}

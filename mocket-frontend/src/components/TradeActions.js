@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useMediaQuery } from 'react-responsive';
 import Buy from "./Buy";
 import Sell from "./Sell";
+import { UserContext } from "./UserContext";
 import "../styling/TradeActions.css"
 
-const TradeActions = ({ positions, live }) => {
+const TradeActions = ({ symbol, positions, live }) => {
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
+    const user = useContext(UserContext);
     var buyOpen = false;
     var sellOpen = false;
     var acc = document.getElementsByClassName("accordion");
@@ -86,18 +88,18 @@ const TradeActions = ({ positions, live }) => {
 
     return (
         <div>
-            {positions ? (
+            {positions.length > 0 ? (
                 <div className="trade-actions">
                     <div className="trade-actions-buy">
                         <button className="accordion left" onClick={() => {handleToggle(0)}}>BUY</button>
                         <div className="panel left">
-                            <Buy/>
+                            <Buy symbol={symbol} balance={user.balance} live={live}/>
                         </div>
                     </div>
                     <div className="trade-actions-sell">
                         <button className="accordion right" onClick={() => {handleToggle(1)}}>SELL</button>
                         <div className="panel right">
-                            <Sell/>
+                            <Sell symbol={symbol} positions={positions} live={live}/>
                         </div>
                     </div>
                 </div>
@@ -105,7 +107,7 @@ const TradeActions = ({ positions, live }) => {
                 <div className="trade-actions-buy-lone">
                     <button className="accordion" onClick={() => {handleToggleLone()}}>BUY</button>
                     <div className="panel">
-                        <Buy/>
+                        <Buy symbol={symbol} balance={user.balance} live={live}/>
                     </div>
                 </div>
             )}

@@ -38,7 +38,7 @@
 .buy-input {
     float: right;
     text-align: right;
-    width: 120px;
+    width: 125px;
 }
 
 .buy-shares {
@@ -67,8 +67,8 @@
 
 .buy-button {
     position: relative;
-    background-color: black;
     cursor: pointer;
+    background-color: black;
     color: white;
     border-radius: 15px;
     border-color: #888888;
@@ -85,11 +85,23 @@
     z-index: 5;
 }
 
+.buy-button:disabled {
+    background-color: #444444;
+    color: #cccccc;
+}
+
 .buy-button:hover {
     background-color: rgb(35, 138, 255);
     border-color: rgb(35, 138, 255);
     color: black;
 }
+
+.buy-button:disabled:hover {
+    background-color: #444444;
+    border-color: #888888;
+    color: #aaaaaa;
+}
+
 
 @media (max-width: 1320px) {
     .buy {

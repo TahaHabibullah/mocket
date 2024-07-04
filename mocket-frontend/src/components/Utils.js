@@ -152,3 +152,49 @@ export function getOpenPositions(positions) {
     }
     return result;
 }
+
+export function buyInputValid(num, bal, price) {
+    if(!num) {
+        return false;
+    }
+
+    var result = parseInt(num);
+    if(result < 1) {
+        return false;
+    }
+    else {
+        if(price * result > bal) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+}
+
+export function sellInputValid(num, shares) {
+    if(!num) {
+        return false;
+    }
+
+    var result = parseInt(num);
+    if(result < 1) {
+        return false;
+    }
+    else {
+        if(num > shares) {
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+}
+
+export function getTotalShares(positions) {
+    var result = 0;
+    for(var i = 0; i < positions.length; i++) {
+        result += positions[i].quantity;
+    }
+    return result;
+}

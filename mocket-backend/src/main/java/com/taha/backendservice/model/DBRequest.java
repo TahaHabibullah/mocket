@@ -10,5 +10,6 @@ public class DBRequest {
     private String userId;
     private String symbol;
     private int quantity;
+    private double price;
     private PositionDTO position;
 }

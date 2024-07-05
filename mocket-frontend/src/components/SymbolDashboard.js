@@ -84,7 +84,11 @@ const SymbolDashboard = () => {
                         <MocketNavBar/>
                         <PriceChart liveData={liveData} quoteData={quoteData}/>
                         <TradeActions symbol={symbol} positions={positions} live={liveData}/>
-                        <PositionsSummary positions={positions} live={liveData}/>
+                        {positions.length > 0 ? (
+                            <PositionsSummary positions={positions} live={liveData}/> 
+                        ) : (
+                            <div/>
+                        )}
                         <QuoteDataGrid data={quoteData}/>
                     </div>
                 ) : (

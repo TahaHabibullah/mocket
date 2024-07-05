@@ -22,6 +22,7 @@ const Sell = ({ symbol, positions, live }) => {
             "userId": "666f3772a145123a860ad98e",
             "symbol": symbol,
             "quantity": document.getElementById("sell-in").value,
+            "price": live
         }
         return fetch(restEndpoint, {
             method: 'PUT',

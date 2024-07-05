@@ -25,7 +25,7 @@ public class User {
         this.balance = balance;
         this.positions = positions;
     }
-    public void closePosition(String symbol, int quantity) {
+    public void closePosition(String symbol, int quantity, double price) {
         List<Position> sympos = getSymPositions(symbol);
         int count = 0;
         for(int i = 0; i < sympos.size(); i++) {
@@ -36,7 +36,7 @@ public class User {
                 Position temp = new Position(new ObjectId(),
                                              p.getSymbol(),
                                              quantity - count,
-                                             p.getPrice(),
+                                             price,
                                              false,
                                              p.getOpenTimestamp(),
                                              new Date());
@@ -47,7 +47,7 @@ public class User {
             }
             else {
                 p.setOpen(false);
-                balance += p.getValue();
+                balance += p.getQuantity() * price;
                 p.setCloseTimestamp(new Date());
                 positions.set(i, p);
                 count += p.getQuantity();

@@ -13,14 +13,14 @@ const PositionsSummary = ({ positions, live }) => {
             </div>
             <div className="pos-summary-values">
                 <div className="pos-summary-values-left">{getTotalShares(positions)}</div>
-                <div className="pos-summary-values-right">{getAverageCost(positions)}</div>
+                <div className="pos-summary-values-right">${getAverageCost(positions)}</div>
             </div>
             <div className="pos-summary-labels">
                 <div className="pos-summary-labels-left">Total Value</div>
                 <div className="pos-summary-labels-right">Total Return</div>
             </div>
             <div className="pos-summary-values">
-                <div className="pos-summary-values-left">{getTotalValue(positions, live)}</div>
+                <div className="pos-summary-values-left">${getTotalValue(positions, live)}</div>
                 <div className="pos-summary-values-right">{getTotalReturn(positions, live)}</div>
             </div>
         </div>

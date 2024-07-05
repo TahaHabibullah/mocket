@@ -19,29 +19,29 @@ const QuoteDataGrid = ({ data }) => {
             </div>
             <div className="quote-data-grid-item">
                 <div className="quote-data-grid-left">
-                    <QuoteDataTile title="Today's High" data={parsePrice(data.high)}/>
+                    <QuoteDataTile title="Today's High" data={"$"+parsePrice(data.high)}/>
                 </div>
                 <div className="quote-data-grid-vdivider"/>
                 <div className="quote-data-grid-right">
-                    <QuoteDataTile title="Today's Low" data={parsePrice(data.low)}/>
+                    <QuoteDataTile title="Today's Low" data={"$"+parsePrice(data.low)}/>
                 </div>
             </div>
             <div className="quote-data-grid-item">
                 <div className="quote-data-grid-left">
-                    <QuoteDataTile title="Today's Open" data={parsePrice(data.open)}/>
+                    <QuoteDataTile title="Previous Close" data={"$"+parsePrice(data.previous_close)}/>
                 </div>
                 <div className="quote-data-grid-vdivider"/>
                 <div className="quote-data-grid-right">
-                    <QuoteDataTile title="Today's Close" data={parsePrice(data.close)}/>
+                    <QuoteDataTile title="Today's Open" data={"$"+parsePrice(data.open)}/>
                 </div>
             </div>
             <div className="quote-data-grid-item">
                 <div className="quote-data-grid-left">
-                    <QuoteDataTile title="52-Week High" data={parsePrice(data.fifty_two_week.high)}/>
+                    <QuoteDataTile title="52-Week High" data={"$"+parsePrice(data.fifty_two_week.high)}/>
                 </div>
                 <div className="quote-data-grid-vdivider"/>
                 <div className="quote-data-grid-right">
-                    <QuoteDataTile title="52-Week Low" data={parsePrice(data.fifty_two_week.low)}/>
+                    <QuoteDataTile title="52-Week Low" data={"$"+parsePrice(data.fifty_two_week.low)}/>
                 </div>
             </div>
         </div>

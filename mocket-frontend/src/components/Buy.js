@@ -41,7 +41,7 @@ const Buy = ({ symbol, balance, live }) => {
         <div className="buy">
             <div className="buy-header">
                 <div className="buy-header-left">{symbol}</div>
-                <div className="buy-header-right">${balance} Available</div>
+                <div className="buy-header-right">${parsePrice(balance)} Available</div>
             </div>
             <div className="buy-divider"/>
             <div className="buy-input-box">

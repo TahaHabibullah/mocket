@@ -128,9 +128,9 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public User closePosition(String userId, String symbol, int quantity) {
+    public User closePosition(String userId, String symbol, int quantity, double price) {
         User u = find(userId);
-        u.closePosition(symbol, quantity);
+        u.closePosition(symbol, quantity, price);
         return update(u);
     }
 

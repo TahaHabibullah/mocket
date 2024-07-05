@@ -206,7 +206,7 @@ export function getAverageCost(positions) {
         total += positions[i].quantity * positions[i].price;
         shares += positions[i].quantity;
     }
-    return total / shares;
+    return parsePrice(total / shares);
 }
 
 export function getTotalValue(positions, live) {
@@ -214,7 +214,7 @@ export function getTotalValue(positions, live) {
     for(var i = 0; i < positions.length; i++) {
         result += positions[i].quantity * live;
     }
-    return result;
+    return parsePrice(result);
 }
 
 export function getTotalReturn(positions, live) {

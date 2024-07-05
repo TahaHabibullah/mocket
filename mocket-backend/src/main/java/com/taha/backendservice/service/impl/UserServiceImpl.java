@@ -94,8 +94,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDTO closePosition(String userId, String symbol, int quantity) {
-        return new UserDTO(userRepository.closePosition(userId, symbol, quantity));
+    public UserDTO closePosition(String userId, String symbol, int quantity, double price) {
+        return new UserDTO(userRepository.closePosition(userId, symbol, quantity, price));
     }
 
     @Override

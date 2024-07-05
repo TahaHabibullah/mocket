@@ -6,6 +6,8 @@ import "../styling/QuoteDataGrid.css";
 const QuoteDataGrid = ({ data }) => {
     return (
         <div className="quote-data-grid">
+            <div className="quote-data-grid-header">Statistics</div>
+            <div className="quote-data-grid-divider"/>
             <div className="quote-data-grid-item">
                 <div className="quote-data-grid-left">
                     <QuoteDataTile title="Volume" data={parseVolume(data.volume)}/>

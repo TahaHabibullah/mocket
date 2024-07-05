@@ -198,3 +198,31 @@ export function getTotalShares(positions) {
     }
     return result;
 }
+
+export function getAverageCost(positions) {
+    var shares = 0;
+    var total = 0;
+    for(var i = 0; i < positions.length; i++) {
+        total += positions[i].quantity * positions[i].price;
+        shares += positions[i].quantity;
+    }
+    return total / shares;
+}
+
+export function getTotalValue(positions, live) {
+    var result = 0;
+    for(var i = 0; i < positions.length; i++) {
+        result += positions[i].quantity * live;
+    }
+    return result;
+}
+
+export function getTotalReturn(positions, live) {
+    var cost = 0;
+    var curr = 0;
+    for(var i = 0; i < positions.length; i++) {
+        cost += positions[i].quantity * positions[i].price;
+        curr += positions[i].quantity * live;
+    }
+    return getPriceDiff(cost, curr);
+}

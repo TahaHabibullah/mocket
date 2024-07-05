@@ -114,6 +114,5 @@
 
     .accordion {
         height: max(40px, 8vmin);
-        font-size: calc(10px + 1vmin);
     }
 }

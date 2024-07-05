@@ -4,7 +4,7 @@ import { parsePrice } from "./Utils";
 import QuoteDataGrid from "./QuoteDataGrid";
 import PriceChart from "./PriceChart";
 import MocketNavBar from "./MocketNavBar";
-import PositionsList from "./PositionsList";
+import PositionsSummary from "./PositionsSummary";
 import TradeActions from "./TradeActions";
 import '../styling/App.css';
 
@@ -84,6 +84,7 @@ const SymbolDashboard = () => {
                         <MocketNavBar/>
                         <PriceChart liveData={liveData} quoteData={quoteData}/>
                         <TradeActions symbol={symbol} positions={positions} live={liveData}/>
+                        <PositionsSummary positions={positions} live={liveData}/>
                         <QuoteDataGrid data={quoteData}/>
                     </div>
                 ) : (

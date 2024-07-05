@@ -2,6 +2,19 @@
     display: grid;
 }
 
+.quote-data-grid-header {
+    margin: 20px max(5vw, calc((100vw - 1600px) / 2)) 10px;
+    font-size: 36px;
+    color: white;
+}
+
+.quote-data-grid-divider {
+    margin: 10px max(5vw, calc((100vw - 1600px) / 2)) 20px;
+    width: 100vw - 1600px;
+    height: 2px;
+    background-color: #1c1c1c;
+}
+
 .quote-data-grid-item {
     display: flex;
 }
@@ -25,11 +38,17 @@
 }
 
 @media (max-width: 1320px) {
+    .quote-data-grid-header {
+        margin: 20px 5% 0;
+        font-size: max(30px, calc(10px + 2vmin));
+    }
+    .quote-data-grid-divider {
+        height: 1px;
+    }
     .quote-data-grid-left {
         margin: 5px 5% 0px 10%;
         width: 40%
     }
-    
     .quote-data-grid-right {
         margin: 5px 10% 0px 5%;
         width: 40%
@@ -42,6 +61,9 @@
 }
 
 @media (max-width: 767px) {
+    .quote-data-grid-header {
+        font-size: max(24px, calc(10px + 2vmin));
+    }    
     .quote-data-grid-left {
         margin: 5px 5%;
         width: 40%

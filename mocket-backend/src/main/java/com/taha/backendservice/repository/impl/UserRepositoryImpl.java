@@ -9,9 +9,13 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReplaceOneModel;
+import com.taha.backendservice.exception.TradeException;
+import com.taha.backendservice.model.TwelveDataRequest;
 import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
+import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.repository.UserRepository;
+import com.taha.backendservice.service.TradeService;
 import org.bson.BsonDocument;
 import org.bson.types.ObjectId;
 
@@ -35,8 +39,10 @@ public class UserRepositoryImpl implements UserRepository {
                                                                            .build();
     private final MongoClient client;
     private MongoCollection<User> userCollection;
-    public UserRepositoryImpl(MongoClient client) {
+    private TradeService tradeService;
+    public UserRepositoryImpl(MongoClient client, TradeService tradeService) {
         this.client = client;
+        this.tradeService = tradeService;
     }
 
     @PostConstruct
@@ -138,6 +144,19 @@ public class UserRepositoryImpl implements UserRepository {
     public List<Position> getSymPositions(String id, String symbol) {
         User u = find(id);
         return u.getSymPositions(symbol);
+    }
+
+    @Override
+    public List<QuoteResponse> getPosQuotes(String id) throws TradeException {
+        User u = find(id);
+        List<Position> positions = u.getPositions();
+        ArrayList<QuoteResponse> result = new ArrayList<>();
+        for(int i = 0; i < positions.size(); i++) {
+            String symbol = positions.get(i).getSymbol();
+            TwelveDataRequest request = new TwelveDataRequest(symbol);
+            result.add(tradeService.getQuoteData(request));
+        }
+        return result;
     }
 
     private List<ObjectId> mapToObjectIds(List<String> ids) {

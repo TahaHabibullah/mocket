@@ -1,7 +1,6 @@
 package com.taha.backendservice.model.db;
 
 import org.bson.types.ObjectId;
-import java.util.Date;
 import java.util.Objects;
 
 public class Position {

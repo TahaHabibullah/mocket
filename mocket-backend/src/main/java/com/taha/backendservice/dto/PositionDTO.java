@@ -2,7 +2,6 @@ package com.taha.backendservice.dto;
 
 import com.taha.backendservice.model.db.Position;
 import org.bson.types.ObjectId;
-import java.util.Date;
 public record PositionDTO (String id,
                            String symbol,
                            int quantity,

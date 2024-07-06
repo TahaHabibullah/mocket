@@ -3,7 +3,10 @@ package com.taha.backendservice.controller;
 import com.taha.backendservice.constants.DBConstant;
 import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
+import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.DBRequest;
+import com.taha.backendservice.model.db.Position;
+import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,8 +63,13 @@ public class DBController {
     }
 
     @GetMapping("user/getPos")
-    public List<PositionDTO> getSymPositions(@RequestParam String id, @RequestParam String symbol) {
+    public List<Position> getSymPositions(@RequestParam String id, @RequestParam String symbol) {
         return userService.getSymPositions(id, symbol);
+    }
+
+    @GetMapping("user/getQuotes")
+    public List<QuoteResponse> getPosQuotes(@RequestParam String id) throws TradeException {
+        return userService.getPosQuotes(id);
     }
 
     @DeleteMapping("users")

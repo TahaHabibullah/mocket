@@ -2,6 +2,9 @@ package com.taha.backendservice.service.impl;
 
 import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
+import com.taha.backendservice.exception.TradeException;
+import com.taha.backendservice.model.db.Position;
+import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.repository.UserRepository;
 import com.taha.backendservice.service.UserService;
 import org.slf4j.Logger;
@@ -104,8 +107,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<PositionDTO> getSymPositions(String id, String symbol) {
+    public List<Position> getSymPositions(String id, String symbol) {
         logger.info("Retrieving positions from user with id=" + id + " where symbol='" + symbol + "'");
-        return userRepository.getSymPositions(id, symbol).stream().map(PositionDTO::new).toList();
+        return userRepository.getSymPositions(id, symbol);
+    }
+
+    @Override
+    public List<QuoteResponse> getPosQuotes(String id) throws TradeException {
+        logger.info("Retrieving quotes for positions from user with id=" + id);
+        return userRepository.getPosQuotes(id);
     }
 }

@@ -8,8 +8,8 @@ public record PositionDTO (String id,
                            int quantity,
                            double price,
                            boolean open,
-                           Date openTimestamp,
-                           Date closeTimestamp) {
+                           String openTimestamp,
+                           String closeTimestamp) {
 
     public PositionDTO(Position p) {
         this(p.getId() == null ? new ObjectId().toHexString() : p.getId().toHexString(), p.getSymbol(),

@@ -153,6 +153,14 @@ export function getOpenPositions(positions) {
     return result;
 }
 
+export function getSymbols(positions) {
+    var result = [];
+    for(var i = 0; i < positions.length; i++) {
+        result.push(positions[i].symbol);
+    }
+    return result;
+}
+
 export function buyInputValid(num, bal, price) {
     if(!num) {
         return false;

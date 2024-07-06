@@ -20,13 +20,13 @@ public class UserServiceImpl implements UserService {
     }
     @Override
     public UserDTO save(UserDTO userDTO) {
-        logger.info("User info received: " + userDTO.toUser().toString());
+        logger.info("User info received: " + userDTO.toUser());
         return new UserDTO(userRepository.save(userDTO.toUser()));
     }
 
     @Override
     public List<UserDTO> saveAll(List<UserDTO> usersDTO) {
-        logger.info("Multiple user info received: " + usersDTO.stream().map(UserDTO::toUser).toString());
+        logger.info("Multiple user info received: " + usersDTO.stream().map(UserDTO::toUser).toList());
         return usersDTO.stream()
                .map(UserDTO::toUser)
                .peek(userRepository::save)
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserDTO> findAll(List<String> ids) {
-        logger.info("Searching for users with ids=" + ids.stream().toString());
+        logger.info("Searching for users with ids=" + ids.toString());
         return userRepository.findAll(ids).stream().map(UserDTO::new).toList();
     }
 
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public long deleteAll(List<String> ids) {
-        logger.info("Deleting users with ids=" + ids.stream().toString());
+        logger.info("Deleting users with ids=" + ids.toString());
         return userRepository.deleteAll(ids);
     }
 
@@ -78,28 +78,34 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDTO update(UserDTO userDTO) {
-        logger.info("Updating user with id=" + userDTO.toUser().getId() + " with info: " + userDTO.toUser().toString());
+        logger.info("Updating user with id=" + userDTO.toUser().getId() + " with info: " + userDTO.toUser());
         return new UserDTO(userRepository.update(userDTO.toUser()));
     }
 
     @Override
     public long update(List<UserDTO> usersDTO) {
-        logger.info("Updating multiple with info: " + usersDTO.stream().map(UserDTO::toUser).toString());
+        logger.info("Updating multiple with info: " + usersDTO.stream().map(UserDTO::toUser).toList());
         return userRepository.update(usersDTO.stream().map(UserDTO::toUser).toList());
     }
 
     @Override
     public UserDTO addPosition(String id, PositionDTO p) {
+        logger.info("Adding position to user with id=" + id + " with info: " + p.toPosition());
         return new UserDTO(userRepository.addPosition(id, p.toPosition()));
     }
 
     @Override
     public UserDTO closePosition(String userId, String symbol, int quantity, double price) {
+        logger.info("Closing position of user with id=" + userId + " with info: "
+                    + "symbol='" + symbol
+                    + "', quantity='" + quantity
+                    + "', price='" + price + "'");
         return new UserDTO(userRepository.closePosition(userId, symbol, quantity, price));
     }
 
     @Override
     public List<PositionDTO> getSymPositions(String id, String symbol) {
+        logger.info("Retrieving positions from user with id=" + id + " where symbol='" + symbol + "'");
         return userRepository.getSymPositions(id, symbol).stream().map(PositionDTO::new).toList();
     }
 }

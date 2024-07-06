@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { parsePrice } from "./Utils";
 import QuoteDataGrid from "./QuoteDataGrid";
@@ -6,22 +6,21 @@ import PriceChart from "./PriceChart";
 import MocketNavBar from "./MocketNavBar";
 import PositionsSummary from "./PositionsSummary";
 import TradeActions from "./TradeActions";
+import { UserContext } from "./UserContext";
 import '../styling/App.css';
 
 
 const SymbolDashboard = () => {
     const liveEndpoint = "http://19.26.28.37:8080/trade-service/live/price?symbol=";
     const restEndpoint = "http://19.26.28.37:8080/trade-service/quote";
-    const dbEndpoint = "http://19.26.28.37:8080/database/user/getPos?id=666f3772a145123a860ad98e&symbol=";
     const { symbol } = useParams();
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
     const [marketOpen, setMarketOpen] = useState(null);
-    const [positions, setPositions] = useState(null);
+    const user = useContext(UserContext);
 
     useEffect (() => {
         callRestApi();
-        getPositions();
         if(marketOpen) {
             const source = new EventSource(liveEndpoint + symbol);
             source.onopen = () => {
@@ -64,18 +63,6 @@ const SymbolDashboard = () => {
         })
     }
 
-    const getPositions = async () => {
-        return fetch(dbEndpoint + symbol, {
-            method: 'GET',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        .then((response) => response.json())
-        .then((responseJson) => {
-            console.log(responseJson);
-            setPositions(responseJson);
-        })
-    }
-
     return (
         <div className="App">
             <header className="App-header">
@@ -83,9 +70,9 @@ const SymbolDashboard = () => {
                     <div>
                         <MocketNavBar/>
                         <PriceChart liveData={liveData} quoteData={quoteData}/>
-                        <TradeActions symbol={symbol} positions={positions} live={liveData}/>
-                        {positions.length > 0 ? (
-                            <PositionsSummary positions={positions} live={liveData}/> 
+                        <TradeActions symbol={symbol} positions={user.positions} live={liveData}/>
+                        {user.positions.length > 0 ? (
+                            <PositionsSummary positions={user.positions} live={liveData}/> 
                         ) : (
                             <div/>
                         )}

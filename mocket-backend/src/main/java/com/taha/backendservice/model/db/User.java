@@ -1,11 +1,10 @@
 package com.taha.backendservice.model.db;
 
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
-import java.util.Date;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,8 +13,6 @@ public class User {
     private String email;
     private double balance;
     private List<Position> positions;
-
-    private final static Logger logger = LoggerFactory.getLogger(User.class);
 
     public User() {}
 
@@ -39,7 +36,8 @@ public class User {
                                              price,
                                              false,
                                              p.getOpenTimestamp(),
-                                             new Date());
+                                             ZonedDateTime.now(ZoneId.of("America/New_York"))
+                                             .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 p.setQuantity(p.getQuantity() - (quantity - count));
                 balance += temp.getValue();
                 positions.add(temp);
@@ -48,7 +46,8 @@ public class User {
             else {
                 p.setOpen(false);
                 balance += p.getQuantity() * price;
-                p.setCloseTimestamp(new Date());
+                p.setCloseTimestamp(ZonedDateTime.now(ZoneId.of("America/New_York"))
+                        .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 positions.set(i, p);
                 count += p.getQuantity();
             }
@@ -56,7 +55,8 @@ public class User {
     }
     public void addPosition(Position p) {
         p.setOpen(true);
-        p.setOpenTimestamp(new Date());
+        p.setOpenTimestamp(ZonedDateTime.now(ZoneId.of("America/New_York"))
+                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
         positions.add(p);
         balance -= p.getValue();
     }

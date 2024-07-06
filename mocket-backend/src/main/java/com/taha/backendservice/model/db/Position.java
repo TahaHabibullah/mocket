@@ -10,8 +10,8 @@ public class Position {
     private int quantity;
     private double price;
     private boolean open;
-    private Date openTimestamp;
-    private Date closeTimestamp;
+    private String openTimestamp;
+    private String closeTimestamp;
 
     public Position() {}
 
@@ -20,8 +20,8 @@ public class Position {
                     int quantity,
                     double price,
                     boolean open,
-                    Date openTimestamp,
-                    Date closeTimestamp) {
+                    String openTimestamp,
+                    String closeTimestamp) {
         this.id = id;
         this.symbol = symbol;
         this.quantity = quantity;
@@ -69,17 +69,17 @@ public class Position {
         this.open = open;
     }
 
-    public Date getOpenTimestamp() {
+    public String getOpenTimestamp() {
         return openTimestamp;
     }
-    public void setOpenTimestamp(Date timestamp) {
+    public void setOpenTimestamp(String timestamp) {
         this.openTimestamp = timestamp;
     }
 
-    public Date getCloseTimestamp() {
+    public String getCloseTimestamp() {
         return closeTimestamp;
     }
-    public void setCloseTimestamp(Date timestamp) {
+    public void setCloseTimestamp(String timestamp) {
         this.closeTimestamp = timestamp;
     }
 

@@ -1,10 +1,11 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useMediaQuery } from 'react-responsive';
 import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, 
-         getPriceDiff, getStartDate, fillLiveList, getCurrTime, truncateTime } from "./Utils";
+         getPriceDiff, getStartDate, getPortfolioValue, getOpenPositions } from "./Utils";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
+import { UserContext } from "./UserContext";
 import "../styling/PriceChart.css";
 import "../styling/QuoteHeader.css";
 import "../styling/Home.css";
@@ -12,8 +13,9 @@ import "../styling/Home.css";
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
-const HomePriceChart = ({ total }) => {
+const HomePriceChart = ({ total, quotes }) => {
     const restEndpoint = "http://19.26.28.37:8080/trade-service/data/price";
+    const user = useContext(UserContext);
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
     const [currDiff, setCurrDiff] = useState(getPriceDiff(quoteData.previous_close, total));
@@ -189,9 +191,15 @@ const HomePriceChart = ({ total }) => {
 
     return (
         <div>
-            <div className="home-header">
-                <div className="home-header-balance">${parsePrice(currData)}</div>
-            </div>
+            {quotes.length > 0 ? (
+                <div className="home-header">
+                    <div className="home-header-balance">${getPortfolioValue(getOpenPositions(user.positions), user.balance, quotes)}</div>
+                </div>
+            ) : (
+                <div className="home-header">
+                    <div className="home-header-balance">${parsePrice(currData)}</div>
+                </div>
+            )}
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">
                 <Line 

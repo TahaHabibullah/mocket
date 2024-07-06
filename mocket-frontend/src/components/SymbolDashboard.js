@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { parsePrice } from "./Utils";
+import { parsePrice, getOpenPositions, getSymPositions } from "./Utils";
 import QuoteDataGrid from "./QuoteDataGrid";
 import PriceChart from "./PriceChart";
 import MocketNavBar from "./MocketNavBar";
@@ -11,16 +11,18 @@ import '../styling/App.css';
 
 
 const SymbolDashboard = () => {
+    const user = useContext(UserContext);
     const liveEndpoint = "http://19.26.28.37:8080/trade-service/live/price?symbol=";
     const restEndpoint = "http://19.26.28.37:8080/trade-service/quote";
     const { symbol } = useParams();
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
     const [marketOpen, setMarketOpen] = useState(null);
-    const user = useContext(UserContext);
+    const [positions, setPositions] = useState(null);
 
     useEffect (() => {
         callRestApi();
+        setPositions(getSymPositions(getOpenPositions(user.positions), symbol));
         if(marketOpen) {
             const source = new EventSource(liveEndpoint + symbol);
             source.onopen = () => {
@@ -65,23 +67,21 @@ const SymbolDashboard = () => {
 
     return (
         <div className="App">
-            <header className="App-header">
-                {quoteData ? (
-                    <div>
-                        <MocketNavBar/>
-                        <PriceChart liveData={liveData} quoteData={quoteData}/>
-                        <TradeActions symbol={symbol} positions={user.positions} live={liveData}/>
-                        {user.positions.length > 0 ? (
-                            <PositionsSummary positions={user.positions} live={liveData}/> 
-                        ) : (
-                            <div/>
-                        )}
-                        <QuoteDataGrid data={quoteData}/>
-                    </div>
-                ) : (
-                    <div/>
-                )}
-            </header>
+            {quoteData ? (
+                <div>
+                    <MocketNavBar/>
+                    <PriceChart liveData={liveData} quoteData={quoteData}/>
+                    <TradeActions symbol={symbol} positions={positions} live={liveData}/>
+                    {positions.length > 0 ? (
+                        <PositionsSummary positions={positions} live={liveData}/> 
+                    ) : (
+                        <div/>
+                    )}
+                    <QuoteDataGrid data={quoteData}/>
+                </div>
+            ) : (
+                <div/>
+            )}
         </div>
     )
 }

@@ -153,6 +153,16 @@ export function getOpenPositions(positions) {
     return result;
 }
 
+export function getSymPositions(positions, symbol) {
+    var result = [];
+    for(var i = 0; i < positions.length; i++) {
+        if(positions[i].symbol === symbol) {
+            result.push(positions[i]);
+        }
+    }
+    return result;
+}
+
 export function getSymbols(positions) {
     var result = [];
     for(var i = 0; i < positions.length; i++) {
@@ -233,4 +243,13 @@ export function getTotalReturn(positions, live) {
         curr += positions[i].quantity * live;
     }
     return getPriceDiff(cost, curr);
+}
+
+export function getPortfolioValue(positions, balance, live) {
+    var result = balance;
+    for(var i = 0; i < positions.length; i++) {
+        result += positions[i].quantity * live[i].close;
+    }
+    return parsePrice(result);
+
 }

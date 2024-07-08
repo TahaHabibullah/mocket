@@ -163,14 +163,6 @@ export function getSymPositions(positions, symbol) {
     return result;
 }
 
-export function getSymbols(positions) {
-    var result = [];
-    for(var i = 0; i < positions.length; i++) {
-        result.push(positions[i].symbol);
-    }
-    return result;
-}
-
 export function buyInputValid(num, bal, price) {
     if(!num) {
         return false;
@@ -245,11 +237,24 @@ export function getTotalReturn(positions, live) {
     return getPriceDiff(cost, curr);
 }
 
-export function getPortfolioValue(positions, balance, live) {
+export function getPortfolioValue(positions, balance, quotes) {
+    if(quotes.length < 1) {
+        return parsePrice(balance);
+    }
     var result = balance;
     for(var i = 0; i < positions.length; i++) {
-        result += positions[i].quantity * live[i].close;
+        result += positions[i].quantity * quotes[i].close;
     }
     return parsePrice(result);
+}
 
+export function getPortfolioPrevClose(positions, balance, quotes) {
+    if(quotes.length < 1) {
+        return parsePrice(balance);
+    }
+    var result = balance;
+    for(var i = 0; i < positions.length; i++) {
+        result += positions[i].quantity * quotes[i].previous_close;
+    }
+    return parsePrice(result);
 }

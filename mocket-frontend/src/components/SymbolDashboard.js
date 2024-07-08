@@ -18,11 +18,9 @@ const SymbolDashboard = () => {
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
     const [marketOpen, setMarketOpen] = useState(null);
-    const [positions, setPositions] = useState(null);
 
     useEffect (() => {
         callRestApi();
-        setPositions(getSymPositions(getOpenPositions(user.positions), symbol));
         if(marketOpen) {
             const source = new EventSource(liveEndpoint + symbol);
             source.onopen = () => {
@@ -67,13 +65,13 @@ const SymbolDashboard = () => {
 
     return (
         <div className="App">
-            {quoteData ? (
+            {user && quoteData ? (
                 <div>
                     <MocketNavBar/>
                     <PriceChart liveData={liveData} quoteData={quoteData}/>
-                    <TradeActions symbol={symbol} positions={positions} live={liveData}/>
-                    {positions.length > 0 ? (
-                        <PositionsSummary positions={positions} live={liveData}/> 
+                    <TradeActions symbol={symbol} positions={user.positions} live={liveData}/>
+                    {getSymPositions(getOpenPositions(user.positions), symbol).length > 0 ? (
+                        <PositionsSummary positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/> 
                     ) : (
                         <div/>
                     )}

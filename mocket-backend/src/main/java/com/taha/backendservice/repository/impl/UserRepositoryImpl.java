@@ -13,9 +13,13 @@ import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.TwelveDataRequest;
 import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
+import com.taha.backendservice.model.price.GraphData;
+import com.taha.backendservice.model.price.PriceData;
+import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.repository.UserRepository;
 import com.taha.backendservice.service.TradeService;
+import com.taha.backendservice.service.impl.UserServiceImpl;
 import org.bson.BsonDocument;
 import org.bson.types.ObjectId;
 
@@ -24,10 +28,13 @@ import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.ReturnDocument.AFTER;
 
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -38,6 +45,8 @@ public class UserRepositoryImpl implements UserRepository {
                                                                            .writeConcern(WriteConcern.MAJORITY)
                                                                            .build();
     private final MongoClient client;
+
+    private final static Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
     private MongoCollection<User> userCollection;
     private TradeService tradeService;
     public UserRepositoryImpl(MongoClient client, TradeService tradeService) {
@@ -151,10 +160,71 @@ public class UserRepositoryImpl implements UserRepository {
         User u = find(id);
         List<Position> positions = u.getPositions();
         ArrayList<QuoteResponse> result = new ArrayList<>();
-        for(int i = 0; i < positions.size(); i++) {
-            String symbol = positions.get(i).getSymbol();
-            TwelveDataRequest request = new TwelveDataRequest(symbol);
-            result.add(tradeService.getQuoteData(request));
+        ArrayList<String> fetched = new ArrayList<>();
+        for(Position p : positions) {
+            String symbol = p.getSymbol();
+            if(!fetched.contains(symbol)) {
+                TwelveDataRequest request = new TwelveDataRequest(symbol);
+                result.add(tradeService.getQuoteData(request));
+            }
+            fetched.add(symbol);
+        }
+        return result;
+    }
+
+    @Override
+    public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException {
+        User u = find(id);
+        List<Position> positions = u.getPositions();
+        Map<String, TimeIntervalResponse> priceData = new HashMap<>();
+        ArrayList<String> fetched = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        for(Position p : positions) {
+            String symbol = p.getSymbol();
+            if(!fetched.contains(symbol)) {
+                TwelveDataRequest request = new TwelveDataRequest(symbol, interval, start_date, "ASC");
+                priceData.put(symbol, tradeService.getPriceData(request));
+                fetched.add(symbol);
+            }
+        }
+        ArrayList<GraphData> result = new ArrayList<>();
+        Map<String, Double> resMap = new TreeMap<>();
+        for(Position p : positions) {
+            TimeIntervalResponse timeseries = priceData.get(p.getSymbol());
+            Date opendt;
+            Date closedt = null;
+            try {
+                opendt = sdf.parse(p.getOpenTimestamp());
+                if(p.getCloseTimestamp() != null) {
+                    closedt = sdf.parse(p.getCloseTimestamp());
+                }
+            }
+            catch (ParseException e){
+                e.printStackTrace();
+                continue;
+            }
+            for(PriceData pd : timeseries.getValues()) {
+                Date datadt;
+                String datetime = pd.getDatetime();
+                double total = 0.0;
+                try {
+                    datadt = sdf.parse(datetime);
+                }
+                catch (ParseException e){
+                    e.printStackTrace();
+                    continue;
+                }
+                if(datadt.after(opendt) && (closedt == null || datadt.before(closedt))) {
+                    total += p.getQuantity() * Double.parseDouble(pd.getClose());
+                }
+                resMap.put(datetime, resMap.getOrDefault(datetime, 0.0) + total);
+            }
+        }
+        Set<Map.Entry<String, Double>> entries = resMap.entrySet();
+        Map.Entry<String, Double>[] entriesArr = entries.toArray(new Map.Entry[entries.size()]);
+        for(int i = 0; i < entriesArr.length; i++) {
+            GraphData g = new GraphData(entriesArr[i].getKey(), entriesArr[i].getValue() + u.getBalance());
+            result.add(g);
         }
         return result;
     }

@@ -189,7 +189,7 @@ const PriceChart = ({ liveData, quoteData }) => {
         var body;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            body = {"symbol": symbol, "interval": "5min", "date": quoteData.datetime, "order": "ASC"};
+            body = {"symbol": symbol, "interval": "5min", "start_date": quoteData.datetime, "order": "ASC"};
         }
         else if(toggledIndex === 1) {
             body = {"symbol": symbol, "interval": "15min", "start_date": start_date, "order": "ASC"};

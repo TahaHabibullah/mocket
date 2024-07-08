@@ -32,4 +32,14 @@ public class TwelveDataRequest implements Serializable {
     private String previous_close;
     @JsonCreator
     public TwelveDataRequest(String symbol) {this.symbol = symbol;}
+
+    public TwelveDataRequest(String symbol,
+                             String interval,
+                             String start_date,
+                             String order) {
+        this.symbol = symbol;
+        this.interval = interval;
+        this.start_date = start_date;
+        this.order = order;
+    }
 }

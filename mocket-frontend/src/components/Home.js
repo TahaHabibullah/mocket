@@ -2,9 +2,10 @@ import React, { useContext, useEffect, useState } from "react";
 import MocketNavBar from "./MocketNavBar";
 import PositionsList from "./PositionsList";
 import { UserContext } from "./UserContext";
-import { getOpenPositions, getPortfolioValue, parsePrice } from "./Utils";
+import { getOpenPositions, getPortfolioValue, getPortfolioPrevClose } from "./Utils";
 import '../styling/App.css';
 import '../styling/Home.css';
+import HomePriceChart from "./HomePriceChart";
 
 const Home = () => {
     const restEndpoint = "http://19.26.28.37:8080/database/user/getQuotes?id=";
@@ -34,17 +35,14 @@ const Home = () => {
             {user ? (
                 <div>
                     <MocketNavBar/>
+                    <HomePriceChart 
+                        prevClose={getPortfolioPrevClose(user.positions, user.balance, quotes)} 
+                        total={getPortfolioValue(getOpenPositions(user.positions), user.balance, quotes)}
+                    />
                     {quotes.length > 0 ? (
-                        <div>
-                            <div className="home-header">
-                                <div className="home-header-balance">${getPortfolioValue(getOpenPositions(user.positions), user.balance, quotes)}</div>
-                            </div>
-                            <PositionsList quoteList={quotes}/>
-                        </div>
+                        <PositionsList quoteList={quotes}/>
                     ) : (
-                        <div className="home-header">
-                            <div className="home-header-balance">${parsePrice(user.balance)}</div>
-                        </div>
+                        <div/>
                     )}
                 </div>
             ) : (

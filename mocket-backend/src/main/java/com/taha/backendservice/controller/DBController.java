@@ -6,6 +6,7 @@ import com.taha.backendservice.dto.UserDTO;
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.DBRequest;
 import com.taha.backendservice.model.db.Position;
+import com.taha.backendservice.model.price.GraphData;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.service.UserService;
 import org.slf4j.Logger;
@@ -72,6 +73,13 @@ public class DBController {
         return userService.getPosQuotes(id);
     }
 
+    @GetMapping("user/getGraph")
+    public List<GraphData> getGraphData(@RequestParam String id,
+                                        @RequestParam String interval,
+                                        @RequestParam String start_date) throws TradeException {
+        return userService.getGraphData(id, interval, start_date);
+    }
+
     @DeleteMapping("users")
     public Long deleteUsers() {
         return userService.deleteAll();
@@ -104,7 +112,10 @@ public class DBController {
     }
     @PutMapping("user/closePos")
     public UserDTO putClosePosition(@RequestBody DBRequest request) {
-        return userService.closePosition(request.getUserId(), request.getSymbol(), request.getQuantity(), request.getPrice());
+        return userService.closePosition(request.getUserId(),
+                                         request.getSymbol(),
+                                         request.getQuantity(),
+                                         request.getPrice());
     }
 
     @ExceptionHandler(RuntimeException.class)

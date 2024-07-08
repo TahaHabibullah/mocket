@@ -4,6 +4,7 @@ import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.db.Position;
+import com.taha.backendservice.model.price.GraphData;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.repository.UserRepository;
 import com.taha.backendservice.service.UserService;
@@ -116,5 +117,10 @@ public class UserServiceImpl implements UserService {
     public List<QuoteResponse> getPosQuotes(String id) throws TradeException {
         logger.info("Retrieving quotes for positions from user with id=" + id);
         return userRepository.getPosQuotes(id);
+    }
+
+    @Override
+    public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException {
+        return userRepository.getGraphData(id, interval, start_date);
     }
 }

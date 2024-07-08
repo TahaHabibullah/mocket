@@ -5,7 +5,7 @@
 }
 
 .home-header-balance {
-    margin: 20px max(5vw, calc((100vw - 1600px) / 2));
+    margin: 20px max(5vw, calc((100vw - 1600px) / 2)) 0;
     font-size: 36px;
 }
 

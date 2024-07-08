@@ -4,6 +4,7 @@ import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.db.Position;
+import com.taha.backendservice.model.price.GraphData;
 import com.taha.backendservice.model.quote.QuoteResponse;
 
 import java.util.List;
@@ -24,4 +25,5 @@ public interface UserService {
     UserDTO closePosition(String userId, String symbol, int quantity, double price);
     List<Position> getSymPositions(String id, String symbol);
     List<QuoteResponse> getPosQuotes(String id) throws TradeException;
+    List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException;
 }

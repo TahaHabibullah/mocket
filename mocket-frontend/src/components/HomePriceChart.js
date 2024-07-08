@@ -1,28 +1,27 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useMediaQuery } from 'react-responsive';
 import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, 
-         getPriceDiff, getStartDate, getPortfolioValue, getOpenPositions } from "./Utils";
+         getPriceDiff, getStartDate, parsePrice } from "./Utils";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
-import { UserContext } from "./UserContext";
 import "../styling/PriceChart.css";
-import "../styling/QuoteHeader.css";
 import "../styling/Home.css";
 
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
-const HomePriceChart = ({ total, quotes }) => {
-    const restEndpoint = "http://19.26.28.37:8080/trade-service/data/price";
-    const user = useContext(UserContext);
+const HomePriceChart = ({ prevClose, total }) => {
+    const restEndpoint = "http://19.26.28.37:8080/database/user/getGraph?id=6688d97bc948341d3dee4115&";
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
-    const [currDiff, setCurrDiff] = useState(getPriceDiff(quoteData.previous_close, total));
+    const [currDiff, setCurrDiff] = useState(getPriceDiff(prevClose, total));
     const [labels, setLabels] = useState(null);
     const [toggledIndex, setToggledIndex] = useState(0);
     const setCurrDataRef = useRef();
     const setCurrDiffRef = useRef();
+    const getPrevCloseRef = useRef();
+    const getTotalRef = useRef();
     const getDataRef = useRef();
     const getToggledIndexRef = useRef();
     const getLabelsRef = useRef();
@@ -37,6 +36,8 @@ const HomePriceChart = ({ total, quotes }) => {
     const isMobile = useMediaQuery({ maxWidth: 767 });
     setCurrDataRef.current = setCurrData;
     setCurrDiffRef.current = setCurrDiff;
+    getPrevCloseRef.current = prevClose;
+    getTotalRef.current = total;
     getDataRef.current = data;
     getToggledIndexRef.current = toggledIndex;
     getLabelsRef.current = labels;
@@ -46,6 +47,8 @@ const HomePriceChart = ({ total, quotes }) => {
         beforeDraw: (chart) => {
             const setCurrData = chart.config.options.setCurrDataRef.current;
             const setCurrDiff = chart.config.options.setCurrDiffRef.current;
+            const prevClose = chart.config.options.getPrevCloseRef.current;
+            const total = chart.config.options.getTotalRef.current;
             const data = chart.config.options.getDataRef.current;
             const toggledIndex = chart.config.options.getToggledIndexRef.current;
             const labels = chart.config.options.getLabelsRef.current;
@@ -60,7 +63,7 @@ const HomePriceChart = ({ total, quotes }) => {
                 const dataX = activePoint.element.$context.parsed.x;
                 const dataY = activePoint.element.$context.parsed.y;
                 setCurrData(dataY.toFixed(2));
-                setCurrDiff(data[0], dataY);
+                setCurrDiff(getPriceDiff(toggledIndex === 0 ? prevClose : data[0], dataY));
                 
                 ctx.save();
                 ctx.beginPath();
@@ -83,8 +86,8 @@ const HomePriceChart = ({ total, quotes }) => {
                 activePoint.element.options.borderColor = '#ffffff';
             }
             else {
-                setCurrData(currData);
-                setCurrDiff(getPriceDiff(data[0], currData));
+                setCurrData(total);
+                setCurrDiff(getPriceDiff(toggledIndex === 0 ? prevClose : data[0], total));
                 drawLabel.style.display = 'none';
             }
         }
@@ -107,8 +110,8 @@ const HomePriceChart = ({ total, quotes }) => {
                     annotations: {
                         breakeven: {
                             type: 'line',
-                            yMin: toggledIndex === 0 ? quoteData.previous_close : data[0],
-                            yMax: toggledIndex === 0 ? quoteData.previous_close : data[0],
+                            yMin: toggledIndex === 0 ? prevClose : data[0],
+                            yMax: toggledIndex === 0 ? prevClose : data[0],
                             borderColor: '#cccccc',
                             borderDash: [1, 3],
                             borderWidth: 1,
@@ -137,8 +140,8 @@ const HomePriceChart = ({ total, quotes }) => {
             responsive: true,
             setCurrDataRef,
             setCurrDiffRef,
-            getLiveDataRef,
-            getQuoteDataRef,
+            getPrevCloseRef,
+            getTotalRef,
             getDataRef,
             getToggledIndexRef,
             getLabelsRef,
@@ -161,29 +164,28 @@ const HomePriceChart = ({ total, quotes }) => {
     }, [toggledIndex]);
 
     const callRestApi = async () => {
-        var body;
+        var params;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            body = {"symbol": symbol, "interval": "5min", "date": quoteData.datetime, "order": "ASC"};
+            params = "interval=5min&start_date=2024-07-05";
         }
         else if(toggledIndex === 1) {
-            body = {"symbol": symbol, "interval": "15min", "start_date": start_date, "order": "ASC"};
+            params = "interval=15min&start_date=" + start_date;
         }
         else if(toggledIndex === 2) {
-            body = {"symbol": symbol, "interval": "1h", "start_date": start_date, "order": "ASC"};
+            params = "interval=1h&start_date=" + start_date;
         }
         else {
-            body = {"symbol": symbol, "interval": "1day", "start_date": start_date, "order": "ASC"};
+            params = "interval=1day&start_date=" + start_date;
         }
-        return fetch(restEndpoint, {
-            method: 'POST',
+        return fetch(restEndpoint + params, {
+            method: 'GET',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-            body: JSON.stringify(body)
         })
         .then((response) => response.json())
         .then((responseJson) => {
             console.log(responseJson);
-            const fullData = JSON.parse(JSON.stringify(responseJson.values));
+            const fullData = JSON.parse(JSON.stringify(responseJson));
             setData(parseTimeSeriesData(fullData));
             setLabels(parseTimeSeriesLabels(fullData));
         })
@@ -191,15 +193,9 @@ const HomePriceChart = ({ total, quotes }) => {
 
     return (
         <div>
-            {quotes.length > 0 ? (
-                <div className="home-header">
-                    <div className="home-header-balance">${getPortfolioValue(getOpenPositions(user.positions), user.balance, quotes)}</div>
-                </div>
-            ) : (
-                <div className="home-header">
-                    <div className="home-header-balance">${parsePrice(currData)}</div>
-                </div>
-            )}
+            <div className="home-header">
+                <div className="home-header-balance">${parsePrice(currData)}</div>
+            </div>
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">
                 <Line 

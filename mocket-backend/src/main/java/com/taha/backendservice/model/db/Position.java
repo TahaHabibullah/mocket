@@ -7,7 +7,8 @@ public class Position {
     private ObjectId id;
     private String symbol;
     private int quantity;
-    private double price;
+    private double buy;
+    private double sell;
     private boolean open;
     private String openTimestamp;
     private String closeTimestamp;
@@ -17,21 +18,23 @@ public class Position {
     public Position(ObjectId id,
                     String symbol,
                     int quantity,
-                    double price,
+                    double buy,
+                    double sell,
                     boolean open,
                     String openTimestamp,
                     String closeTimestamp) {
         this.id = id;
         this.symbol = symbol;
         this.quantity = quantity;
-        this.price = price;
+        this.buy = buy;
+        this.sell = sell;
         this.open = open;
         this.openTimestamp = openTimestamp;
         this.closeTimestamp = closeTimestamp;
     }
 
     public double getValue() {
-        return quantity * price;
+        return quantity * buy;
     }
     public ObjectId getId() {
         return id;
@@ -54,11 +57,18 @@ public class Position {
         this.quantity = quantity;
     }
 
-    public double getPrice() {
-        return price;
+    public double getBuy() {
+        return buy;
     }
-    public void setPrice(double price) {
-        this.price = price;
+    public void setBuy(double buy) {
+        this.buy = buy;
+    }
+
+    public double getSell() {
+        return sell;
+    }
+    public void setSell(double sell) {
+        this.sell = sell;
     }
 
     public boolean isOpen() {
@@ -88,7 +98,8 @@ public class Position {
                 "id='" + id + '\'' +
                 ", symbol='" + symbol + '\'' +
                 ", quantity=" + quantity +
-                ", price=" + price +
+                ", buy=" + buy +
+                ", sell=" + sell +
                 ", open=" + open +
                 ", openTimestamp=" + openTimestamp +
                 ", closeTimestamp=" + closeTimestamp +
@@ -101,7 +112,8 @@ public class Position {
         if (o == null || getClass() != o.getClass()) return false;
         Position position = (Position) o;
         return quantity == position.quantity &&
-               Double.compare(position.price, price) == 0 &&
+               Double.compare(position.buy, buy) == 0 &&
+               Double.compare(position.sell, sell) == 0 &&
                open == position.open && Objects.equals(id, position.id) &&
                Objects.equals(symbol, position.symbol) &&
                Objects.equals(openTimestamp, position.openTimestamp) &&
@@ -110,6 +122,6 @@ public class Position {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, symbol, quantity, price, open, openTimestamp, closeTimestamp);
+        return Objects.hash(id, symbol, quantity, buy, sell, open, openTimestamp, closeTimestamp);
     }
 }

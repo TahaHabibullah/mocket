@@ -19,7 +19,7 @@ const Sell = ({ symbol, positions, live }) => {
 
     const handleClick = async () => {
         const body = {
-            "userId": "666f3772a145123a860ad98e",
+            "userId": "669c943e6e45b63f43d7add8",
             "symbol": symbol,
             "quantity": document.getElementById("sell-in").value,
             "price": live
@@ -55,7 +55,7 @@ const Sell = ({ symbol, positions, live }) => {
             <div className="sell-divider"/>
             <div className="sell-shares">
                 <div className="sell-shares-label">Share Value</div>
-                <div className="sell-shares-live">{live}</div>
+                <div className="sell-shares-live">${live}</div>
             </div>
             <div className="sell-divider"/>
             <div className="sell-total">

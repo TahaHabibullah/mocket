@@ -23,6 +23,7 @@ public interface UserService {
     long update(List<UserDTO> usersDTO);
     UserDTO addPosition(String id, PositionDTO p);
     UserDTO closePosition(String userId, String symbol, int quantity, double price);
+    UserDTO updatePosition(String userId, String posId, PositionDTO p);
     List<Position> getSymPositions(String id, String symbol);
     List<QuoteResponse> getPosQuotes(String id) throws TradeException;
     List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException;

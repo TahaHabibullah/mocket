@@ -118,6 +118,13 @@ public class DBController {
                                          request.getPrice());
     }
 
+    @PutMapping("user/updatePos")
+    public UserDTO putUpdatePosition(@RequestBody DBRequest request) {
+        return userService.updatePosition(request.getUserId(),
+               request.getPosId(),
+               request.getPosition());
+    }
+
     @ExceptionHandler(RuntimeException.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public final Exception handleAllExceptions(RuntimeException e) {

@@ -12,7 +12,7 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const HomePriceChart = ({ prevClose, total }) => {
-    const restEndpoint = "http://19.26.28.37:8080/database/user/getGraph?id=6688d97bc948341d3dee4115&";
+    const restEndpoint = "http://19.26.28.37:8080/database/user/getGraph?id=669c943e6e45b63f43d7add8&";
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
     const [currDiff, setCurrDiff] = useState(getPriceDiff(prevClose, total));
@@ -90,6 +90,9 @@ const HomePriceChart = ({ prevClose, total }) => {
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? prevClose : data[0], total));
                 drawLabel.style.display = 'none';
             }
+        },
+        beforeDestroy: () => {
+            ChartJS.unregister(CustomTooltipPlugin);
         }
     };
 
@@ -167,7 +170,7 @@ const HomePriceChart = ({ prevClose, total }) => {
         var params;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            params = "interval=5min&start_date=2024-07-05";
+            params = "interval=5min&start_date=2024-07-19";
         }
         else if(toggledIndex === 1) {
             params = "interval=15min&start_date=" + start_date;

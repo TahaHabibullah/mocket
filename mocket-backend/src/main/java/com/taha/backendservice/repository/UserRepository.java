@@ -24,6 +24,7 @@ public interface UserRepository {
     long update(List<User> users);
     User addPosition(String id, Position p);
     User closePosition(String userId, String symbol, int quantity, double price);
+    User updatePosition(String userId, String posId, Position p);
     List<Position> getSymPositions(String id, String symbol);
     List<QuoteResponse> getPosQuotes(String id) throws TradeException;
     List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException;

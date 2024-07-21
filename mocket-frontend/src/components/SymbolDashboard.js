@@ -69,7 +69,7 @@ const SymbolDashboard = () => {
                 <div>
                     <MocketNavBar/>
                     <PriceChart liveData={liveData} quoteData={quoteData}/>
-                    <TradeActions symbol={symbol} positions={user.positions} live={liveData}/>
+                    <TradeActions symbol={symbol} positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/>
                     {getSymPositions(getOpenPositions(user.positions), symbol).length > 0 ? (
                         <PositionsSummary positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/> 
                     ) : (

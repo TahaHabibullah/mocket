@@ -108,6 +108,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDTO updatePosition(String userId, String posId, PositionDTO p) {
+        logger.info("Updating position with id=" + posId + " of user with id=" + userId + " with info: " + p.toPosition());
+        return new UserDTO(userRepository.updatePosition(userId, posId, p.toPosition()));
+    }
+
+    @Override
     public List<Position> getSymPositions(String id, String symbol) {
         logger.info("Retrieving positions from user with id=" + id + " where symbol='" + symbol + "'");
         return userRepository.getSymPositions(id, symbol);

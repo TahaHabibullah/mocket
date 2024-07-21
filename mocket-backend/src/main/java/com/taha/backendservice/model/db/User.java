@@ -1,6 +1,10 @@
 package com.taha.backendservice.model.db;
 
+import com.taha.backendservice.service.impl.UserServiceImpl;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.ArrayList;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,6 +19,8 @@ public class User {
     private List<Position> positions;
 
     public User() {}
+
+    private final static Logger logger = LoggerFactory.getLogger(User.class);
 
     public User(ObjectId id, String email, double balance, List<Position> positions) {
         this.id = id;
@@ -33,6 +39,7 @@ public class User {
                 Position temp = new Position(new ObjectId(),
                                              p.getSymbol(),
                                              quantity - count,
+                                             p.getBuy(),
                                              price,
                                              false,
                                              p.getOpenTimestamp(),
@@ -45,10 +52,11 @@ public class User {
             }
             else {
                 p.setOpen(false);
+                p.setSell(price);
                 balance += p.getQuantity() * price;
                 p.setCloseTimestamp(ZonedDateTime.now(ZoneId.of("America/New_York"))
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-                positions.set(i, p);
+                updatePosition(p.getId().toString(), p);
                 count += p.getQuantity();
             }
         }
@@ -61,6 +69,14 @@ public class User {
         balance -= p.getValue();
     }
 
+    public void updatePosition(String id, Position p) {
+        for(int i = 0; i < positions.size(); i++) {
+            if(positions.get(i).getId().equals(new ObjectId(id))) {
+                positions.set(i, p);
+                return;
+            }
+        }
+    }
     public List<Position> getSymPositions(String symbol) {
         List<Position> result = new ArrayList<>();
         for(int i = 0; i < positions.size(); i++) {

@@ -19,7 +19,6 @@ import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.repository.UserRepository;
 import com.taha.backendservice.service.TradeService;
-import com.taha.backendservice.service.impl.UserServiceImpl;
 import org.bson.BsonDocument;
 import org.bson.types.ObjectId;
 
@@ -150,6 +149,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User updatePosition(String userId, String posId, Position p) {
+        User u = find(userId);
+        u.updatePosition(posId, p);
+        return update(u);
+    }
+
+    @Override
     public List<Position> getSymPositions(String id, String symbol) {
         User u = find(id);
         return u.getSymPositions(symbol);
@@ -162,12 +168,14 @@ public class UserRepositoryImpl implements UserRepository {
         ArrayList<QuoteResponse> result = new ArrayList<>();
         ArrayList<String> fetched = new ArrayList<>();
         for(Position p : positions) {
-            String symbol = p.getSymbol();
-            if(!fetched.contains(symbol)) {
-                TwelveDataRequest request = new TwelveDataRequest(symbol);
-                result.add(tradeService.getQuoteData(request));
+            if(p.isOpen()) {
+                String symbol = p.getSymbol();
+                if(!fetched.contains(symbol)) {
+                    TwelveDataRequest request = new TwelveDataRequest(symbol);
+                    result.add(tradeService.getQuoteData(request));
+                }
+                fetched.add(symbol);
             }
-            fetched.add(symbol);
         }
         return result;
     }
@@ -178,7 +186,14 @@ public class UserRepositoryImpl implements UserRepository {
         List<Position> positions = u.getPositions();
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
         ArrayList<String> fetched = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf;
+        if(interval == "1day") {
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
+        }
+        else {
+            sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        }
+
         for(Position p : positions) {
             String symbol = p.getSymbol();
             if(!fetched.contains(symbol)) {
@@ -191,6 +206,9 @@ public class UserRepositoryImpl implements UserRepository {
         Map<String, Double> resMap = new TreeMap<>();
         for(Position p : positions) {
             TimeIntervalResponse timeseries = priceData.get(p.getSymbol());
+            if(timeseries.getValues() == null) {
+                continue;
+            }
             Date opendt;
             Date closedt = null;
             try {
@@ -214,8 +232,21 @@ public class UserRepositoryImpl implements UserRepository {
                     e.printStackTrace();
                     continue;
                 }
-                if(datadt.after(opendt) && (closedt == null || datadt.before(closedt))) {
-                    total += p.getQuantity() * Double.parseDouble(pd.getClose());
+                if(datadt.before(opendt)) {
+                    if(p.isOpen()) {
+                        total += p.getQuantity() * p.getBuy();
+                    }
+                    else {
+                        continue;
+                    }
+                }
+                else if(datadt.after(opendt) && (closedt == null || datadt.before(closedt))) {
+                    if(p.isOpen()) {
+                        total += p.getQuantity() * Double.parseDouble(pd.getClose());
+                    }
+                    else {
+                        total += p.getQuantity() * (Double.parseDouble(pd.getClose()) - p.getSell());
+                    }
                 }
                 resMap.put(datetime, resMap.getOrDefault(datetime, 0.0) + total);
             }

@@ -213,7 +213,7 @@ export function getAverageCost(positions) {
     var shares = 0;
     var total = 0;
     for(var i = 0; i < positions.length; i++) {
-        total += positions[i].quantity * positions[i].price;
+        total += positions[i].quantity * positions[i].buy;
         shares += positions[i].quantity;
     }
     return parsePrice(total / shares);
@@ -231,7 +231,7 @@ export function getTotalReturn(positions, live) {
     var cost = 0;
     var curr = 0;
     for(var i = 0; i < positions.length; i++) {
-        cost += positions[i].quantity * positions[i].price;
+        cost += positions[i].quantity * positions[i].buy;
         curr += positions[i].quantity * live;
     }
     return getPriceDiff(cost, curr);
@@ -242,9 +242,14 @@ export function getPortfolioValue(positions, balance, quotes) {
         return parsePrice(balance);
     }
     var result = balance;
-    for(var i = 0; i < positions.length; i++) {
-        result += positions[i].quantity * quotes[i].close;
+    for(var i = 0; i < quotes.length; i++) {
+        for(var j = 0; j < positions.length; j++) {
+            if(quotes[i].symbol === positions[j].symbol) {
+                result += positions[j].quantity * quotes[i].close;
+            }
+        }
     }
+    console.log(result);
     return parsePrice(result);
 }
 
@@ -253,8 +258,13 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
         return parsePrice(balance);
     }
     var result = balance;
-    for(var i = 0; i < positions.length; i++) {
-        result += positions[i].quantity * quotes[i].previous_close;
+    for(var i = 0; i < quotes.length; i++) {
+        for(var j = 0; j < positions.length; j++) {
+            if(quotes[i].symbol === positions[j].symbol) {
+                result += positions[j].quantity * quotes[i].previous_close;
+            }
+        }
     }
+    console.log(result);
     return parsePrice(result);
 }

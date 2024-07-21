@@ -19,11 +19,11 @@ const Buy = ({ symbol, balance, live }) => {
 
     const handleClick = async () => {
         const body = {
-            "userId": "666f3772a145123a860ad98e",
+            "userId": "669c943e6e45b63f43d7add8",
             "position": {
                 "symbol": symbol,
                 "quantity": document.getElementById("buy-in").value,
-                "price": live
+                "buy": live
             }
         }
         return fetch(restEndpoint, {

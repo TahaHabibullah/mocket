@@ -94,6 +94,9 @@ const PriceChart = ({ liveData, quoteData }) => {
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], liveData));
                 drawLabel.style.display = 'none';
             }
+        },
+        beforeDestroy: () => {
+            ChartJS.unregister(CustomTooltipPlugin);
         }
     };
 

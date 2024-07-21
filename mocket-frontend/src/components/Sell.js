@@ -19,7 +19,7 @@ const Sell = ({ symbol, positions, live }) => {
 
     const handleClick = async () => {
         const body = {
-            "userId": "669c943e6e45b63f43d7add8",
+            "userId": "6688d97bc948341d3dee4115",
             "symbol": symbol,
             "quantity": document.getElementById("sell-in").value,
             "price": live

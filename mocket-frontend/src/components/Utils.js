@@ -238,7 +238,7 @@ export function getTotalReturn(positions, live) {
 }
 
 export function getPortfolioValue(positions, balance, quotes) {
-    if(quotes.length < 1) {
+    if(quotes.length < 1 || positions.length < 1) {
         return parsePrice(balance);
     }
     var result = balance;
@@ -249,12 +249,11 @@ export function getPortfolioValue(positions, balance, quotes) {
             }
         }
     }
-    console.log(result);
     return parsePrice(result);
 }
 
 export function getPortfolioPrevClose(positions, balance, quotes) {
-    if(quotes.length < 1) {
+    if(quotes.length < 1 || positions.length < 1) {
         return parsePrice(balance);
     }
     var result = balance;
@@ -265,6 +264,21 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
             }
         }
     }
-    console.log(result);
     return parsePrice(result);
+}
+
+export function getLastBusinessDay() {
+    const date = new Date();
+    const d = date.getDay();
+    if(d === 0) {
+        date.setDate(date.getDate() - 2);
+    }
+    else if(d === 6) {
+        date.setDate(date.getDate() - 1);
+    }
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day =  date.getDate().toString().padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
 }

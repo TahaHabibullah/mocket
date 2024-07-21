@@ -236,15 +236,11 @@ public class UserRepositoryImpl implements UserRepository {
                     if(p.isOpen()) {
                         total += p.getQuantity() * p.getBuy();
                     }
-                    else {
-                        continue;
-                    }
                 }
                 else if(datadt.after(opendt) && (closedt == null || datadt.before(closedt))) {
-                    if(p.isOpen()) {
+                    if (p.isOpen()) {
                         total += p.getQuantity() * Double.parseDouble(pd.getClose());
-                    }
-                    else {
+                    } else {
                         total += p.getQuantity() * (Double.parseDouble(pd.getClose()) - p.getSell());
                     }
                 }

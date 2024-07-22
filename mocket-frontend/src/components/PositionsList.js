@@ -2,18 +2,29 @@ import React, { useContext } from "react";
 import PositionsTile from "./PositionsTile";
 import "../styling/PositionsList.css";
 import { UserContext } from "./UserContext";
-import { getOpenPositions } from "./Utils";
+import { getCombinedPositions, getOpenPositions, getSymQuote } from "./Utils";
 
 const PositionsList = ({ quoteList }) => {
-    const positions = getOpenPositions(useContext(UserContext).positions);
+    const positions = getCombinedPositions(getOpenPositions(useContext(UserContext).positions));
+
+    const renderList = () => {
+        const list = [];
+        positions.forEach((value, key) => {
+            list.push(
+                <div key={key} className="positions-list-item">
+                    <PositionsTile data={value} quoteData={getSymQuote(quoteList, key)}/>
+                </div>
+            );
+        })
+        return list;
+    }
     return (
         <div className="positions-list">
-            {positions.map((position, index) => (
-                <div key={index} className="positions-list-item">
-                    <PositionsTile data={position} quoteData={quoteList[index]}/>
-                </div>
-            ))}
+            <div className="positions-list-header">Your Positions</div>
+            <div className="positions-list-divider"/>
+            {renderList()}
         </div>
+        
     )
     
 }

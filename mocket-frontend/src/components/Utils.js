@@ -282,3 +282,27 @@ export function getLastBusinessDay() {
 
     return `${year}-${month}-${day}`;
 }
+
+export function getCombinedPositions(positions) {
+    const result = new Map();
+    for(var i = 0; i < positions.length; i++) {
+        if(result.has(positions[i].symbol)) {
+            var temp = {...result.get(positions[i].symbol)};
+            temp.quantity += positions[i].quantity;
+            result.set(positions[i].symbol, temp);
+        }
+        else {
+            result.set(positions[i].symbol, positions[i]);
+        }
+    }
+    return result;
+}
+
+export function getSymQuote(quoteList, symbol) {
+    for(var i = 0; i < quoteList.length; i++) {
+        if(quoteList[i].symbol === symbol) {
+            return quoteList[i];
+        }
+    }
+    return null;
+}

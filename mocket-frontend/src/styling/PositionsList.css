@@ -2,25 +2,50 @@
     display: grid;
 }
 
+.positions-list-header {
+    margin: 20px max(5vw, calc((100vw - 1600px) / 2)) 10px;
+    font-size: 36px;
+    color: white;
+}
+
+.positions-list-divider {
+    margin: 10px max(5vw, calc((100vw - 1600px) / 2)) 20px;
+    width: 100vw - 1600px;
+    height: 2px;
+    background-color: #1c1c1c;
+}
+
 .positions-list-item {
     display: flex;
     margin: 10px max(5vw, calc((100vw - 800px) / 2));
 }
 
 @media (max-width: 1320px) {
+    .positions-list-header {
+        margin: 20px 5% 0;
+        font-size: max(30px, calc(10px + 2vmin));
+    }
+    
+    .positions-list-divider {
+        margin: 10px max(5vw, calc((100vw - 1600px) / 2)) 10px;
+        height: 1px;
+    }
+
     .positions-list-item {
         display: flex;
         margin: 10px 10% 10px 10%;
         width: 80%;
     }
-    
 }
 
 @media (max-width: 767px) {
+    .positions-list-header {
+        font-size: max(24px, calc(10px + 2vmin));
+    }
+
     .positions-list-item {
         display: flex;
         margin: 10px 5% 10px 5%;
         width: 90%;
     }
-    
 }

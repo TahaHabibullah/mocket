@@ -17,10 +17,12 @@ const Home = () => {
             method: 'GET',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
         })
-        .then((response) => response.json())
+        .then((response) =>  { if(response.ok) return response.json() })
         .then((responseJson) => {
             console.log(responseJson);
             setQuotes(responseJson);
+        }).catch(error => {
+            console.log(error)
         })
     }
 

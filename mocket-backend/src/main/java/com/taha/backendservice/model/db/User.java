@@ -62,11 +62,13 @@ public class User {
         }
     }
     public void addPosition(Position p) {
-        p.setOpen(true);
-        p.setOpenTimestamp(ZonedDateTime.now(ZoneId.of("America/New_York"))
-                .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
-        positions.add(p);
-        balance -= p.getValue();
+        if(p.getValue() < balance) {
+            p.setOpen(true);
+            p.setOpenTimestamp(ZonedDateTime.now(ZoneId.of("America/New_York"))
+                    .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+            positions.add(p);
+            balance -= p.getValue();
+        }
     }
 
     public void updatePosition(String id, Position p) {

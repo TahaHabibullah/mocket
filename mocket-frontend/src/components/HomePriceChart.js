@@ -12,7 +12,7 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const HomePriceChart = ({ prevClose, total }) => {
-    const restEndpoint = "http://19.26.28.37:8080/database/user/getGraph?id=6688d97bc948341d3dee4115&";
+    const restEndpoint = "http://19.26.28.37:8080/database/user/getGraph?id=669c943e6e45b63f43d7add8&";
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
     const [currDiff, setCurrDiff] = useState(getPriceDiff(prevClose, total));

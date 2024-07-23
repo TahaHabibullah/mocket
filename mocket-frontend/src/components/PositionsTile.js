@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { parsePrice } from "./Utils";
 
 const PositionsTile = ({ data, quoteData }) => {
-    console.log(data);
-    console.log(quoteData);
     const navigator = useNavigate();
 
     const getDataStyle = () => {

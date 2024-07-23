@@ -1,12 +1,9 @@
-import React, { useContext } from "react";
+import React from "react";
 import PositionsTile from "./PositionsTile";
 import "../styling/PositionsList.css";
-import { UserContext } from "./UserContext";
-import { getCombinedPositions, getOpenPositions, getSymQuote } from "./Utils";
+import { getSymQuote } from "./Utils";
 
-const PositionsList = ({ quoteList }) => {
-    const positions = getCombinedPositions(getOpenPositions(useContext(UserContext).positions));
-
+const PositionsList = ({ positions, quoteList }) => {
     const renderList = () => {
         const list = [];
         positions.forEach((value, key) => {

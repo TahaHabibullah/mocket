@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { buyInputValid, parsePrice } from "./Utils";
 import "../styling/Buy.css"
+import { UserContext } from "./UserContext";
 
 const Buy = ({ symbol, balance, live }) => {
     const restEndpoint = "http://19.26.28.37:8080/database/user/addPos";
+    const { refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const handleChange = (e) => {
@@ -19,7 +21,7 @@ const Buy = ({ symbol, balance, live }) => {
 
     const handleClick = async () => {
         const body = {
-            "userId": "6688d97bc948341d3dee4115",
+            "userId": "669c943e6e45b63f43d7add8",
             "position": {
                 "symbol": symbol,
                 "quantity": document.getElementById("buy-in").value,
@@ -33,6 +35,7 @@ const Buy = ({ symbol, balance, live }) => {
         })
         .then((response) => response.json())
         .then((responseJson) => {
+            refetch();
             console.log(responseJson);
         })
     }

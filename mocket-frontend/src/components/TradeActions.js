@@ -8,7 +8,7 @@ import "../styling/TradeActions.css"
 const TradeActions = ({ symbol, positions, live }) => {
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
-    const user = useContext(UserContext);
+    const { user } = useContext(UserContext);
     var buyOpen = false;
     var sellOpen = false;
     var acc = document.getElementsByClassName("accordion");

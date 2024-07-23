@@ -2,14 +2,15 @@ import React, { useContext, useEffect, useState } from "react";
 import MocketNavBar from "./MocketNavBar";
 import PositionsList from "./PositionsList";
 import { UserContext } from "./UserContext";
-import { getOpenPositions, getPortfolioValue, getPortfolioPrevClose } from "./Utils";
+import { getOpenPositions, getPortfolioValue, 
+         getPortfolioPrevClose, getCombinedPositions } from "./Utils";
 import '../styling/App.css';
 import '../styling/Home.css';
 import HomePriceChart from "./HomePriceChart";
 
 const Home = () => {
     const restEndpoint = "http://19.26.28.37:8080/database/user/getQuotes?id=";
-    const user = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [quotes, setQuotes] = useState([]);
 
     const callRestApi = async () => {
@@ -42,7 +43,7 @@ const Home = () => {
                         total={getPortfolioValue(getOpenPositions(user.positions), user.balance, quotes)}
                     />
                     {quotes.length > 0 ? (  
-                        <PositionsList quoteList={quotes}/>
+                        <PositionsList positions={getCombinedPositions(getOpenPositions(user.positions))} quoteList={quotes}/>
                     ) : (
                         <div/>
                     )}

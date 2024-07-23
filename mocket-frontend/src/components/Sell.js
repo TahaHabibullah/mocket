@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { sellInputValid, getTotalShares, parsePrice } from "./Utils";
 import "../styling/Sell.css";
+import { UserContext } from "./UserContext";
 
 const Sell = ({ symbol, positions, live }) => {
     const restEndpoint = "http://19.26.28.37:8080/database/user/closePos";
+    const { refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const handleChange = (e) => {
@@ -19,7 +21,7 @@ const Sell = ({ symbol, positions, live }) => {
 
     const handleClick = async () => {
         const body = {
-            "userId": "6688d97bc948341d3dee4115",
+            "userId": "669c943e6e45b63f43d7add8",
             "symbol": symbol,
             "quantity": document.getElementById("sell-in").value,
             "price": live
@@ -31,6 +33,7 @@ const Sell = ({ symbol, positions, live }) => {
         })
         .then((response) => response.json())
         .then((responseJson) => {
+            refetch();
             console.log(responseJson);
         })
     }

@@ -144,6 +144,7 @@ export function truncateTime(datetime) {
 }
 
 export function getOpenPositions(positions) {
+    console.log(positions);
     var result = [];
     for(var i = 0; i < positions.length; i++) {
         if(positions[i].open) {
@@ -268,12 +269,18 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
 }
 
 export function getLastBusinessDay() {
-    const date = new Date();
-    const d = date.getDay();
-    if(d === 0) {
+    const date = new Date(getCurrTime());
+    if(date.getHours() < 9) {
+        date.setDate(date.getDate() - 1);
+    }
+    else if(date.getHours() === 9 && date.getMinutes() < 30) {
+        date.setDate(date.getDate() - 1);
+    }
+
+    if(date.getDay() === 0) {
         date.setDate(date.getDate() - 2);
     }
-    else if(d === 6) {
+    else if(date.getDay() === 6) {
         date.setDate(date.getDate() - 1);
     }
     const year = date.getFullYear();

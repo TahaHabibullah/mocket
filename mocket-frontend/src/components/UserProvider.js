@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { UserContext } from "./UserContext";
 
 const UserProvider = ({ children }) => {
-    const restEndpoint = "http://19.26.28.37:8080/database/user/6688d97bc948341d3dee4115"
+    const restEndpoint = "http://19.26.28.37:8080/database/user/669c943e6e45b63f43d7add8"
     const [user, setUser] = useState(null);
     const callRestApi = async () => {
         return fetch(restEndpoint, {
@@ -23,7 +23,7 @@ const UserProvider = ({ children }) => {
     }, [])
 
     return (
-        <UserContext.Provider value={user}>
+        <UserContext.Provider value={{user, refetch: callRestApi}}>
             {children}
         </UserContext.Provider>
     );

@@ -10,7 +10,7 @@
 
 .nav-bar-brand {
     background-image: url(../assets/mocket-b.PNG);
-    width: 235px;
+    width: 240px;
     height: 60px;
     margin: 0px 5vw;
     text-decoration: none;
@@ -22,8 +22,8 @@
 }
 
 .nav-bar-repo {
-    margin: 0px 20px 0px -15vw;
-    width: 46px;
+    margin: 10px 20px 0px -15vw;
+    width: 45px;
     height: 45px;
     text-decoration: none;
     float: right;
@@ -43,11 +43,15 @@
 @media (max-width: 1320px) {
     .nav-bar-brand {
         margin: 0px 3vw;
+        width: max(120px, 12vw);
+        height: max(30px, 3vw);
     }
     
     .nav-bar-repo {
-        margin: 0px 10px 0px 0px;
+        margin: 10px 10px 0px 0px;
         font-size: calc(6px + 2vmin);
+        height: max(20px, 3vw);
+        width: max(20px, 3vw);
     }
     
     .nav-bar-search {

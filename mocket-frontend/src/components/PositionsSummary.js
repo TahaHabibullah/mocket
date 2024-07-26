@@ -1,5 +1,6 @@
 import React from "react";
-import { getTotalShares, getAverageCost, getTotalValue, getTotalReturn } from "./Utils";
+import { getTotalShares, getAverageCost, 
+         getTotalValue, getTotalReturn } from "./Utils";
 import "../styling/PositionsSummary.css"
 
 const PositionsSummary = ({ positions, live }) => {

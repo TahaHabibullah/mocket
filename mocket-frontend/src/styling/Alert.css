@@ -1,0 +1,85 @@
+.alert {
+    position: absolute;
+    left: 30%;
+    right: 30%;
+    top: 10px;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+    z-index: 15;
+}
+
+.alert-error {
+    height: 50px;
+    box-shadow: 0px 0px 10px 10px #171717;
+    border-radius: 15px;
+    border-width: 3px;
+    border-color: rgba(255, 70, 70, 0.5);
+    border-style: solid;
+    background-color: #fd7066;
+    color: white;
+}
+
+.alert-message {
+    padding: 0.4rem 20px;
+    font-size: 24px;
+    float: left;
+}
+
+.alert-dismiss {
+    padding: 0.4rem 10px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 24px;
+    cursor: pointer;
+    transition: 0.3s;
+    float: right;
+}
+
+.alert-dismiss:hover {
+    color: black;
+}
+
+
+@media (max-width: 1320px) {
+    .alert {
+        left: 20%;
+        right: 20%;
+    }
+    
+    .alert-error {
+        height: 50px;
+    }
+    
+    .alert-message {
+        padding: 0.55rem 0 0 20px;
+        font-size: 20px;
+    }
+    
+    .alert-dismiss {
+        padding: 0.55rem 10px 0 0;
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 767px) {
+    .alert {
+        left: 10%;
+        right: 10%;
+    }
+    
+    .alert-error {
+        height: 40px;
+    }
+    
+    .alert-message {
+        padding: 0.6rem 0 0 10px;
+        font-size: 12px;
+    }
+    
+    .alert-dismiss {
+        padding: 0.6rem 10px 0 0;
+        font-size: 12px;
+    }
+}

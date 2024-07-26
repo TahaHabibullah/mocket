@@ -9,13 +9,13 @@ const MocketNavBar = () => {
     const [results, setResults] = useState(null);
     return (
         <ul className="nav-bar">
-            <a href="/"><img src={logo} className="nav-bar-brand"/></a>
+            <a href="/"><img src={logo} alt="" className="nav-bar-brand"/></a>
             <li className="nav-bar-search">
                 <SymbolSearch setResults={setResults}/>
                 {results && results.hasOwnProperty("data") && <SymbolResultsList results={results}/>}
             </li>
-            <a href="https://github.com/TahaHabibullah/" target="_blank">
-                <img src={github} className="nav-bar-repo"/>
+            <a href="https://github.com/TahaHabibullah/" target="_blank" rel="noreferrer">
+                <img src={github} alt="" className="nav-bar-repo"/>
             </a>
         </ul>
     );

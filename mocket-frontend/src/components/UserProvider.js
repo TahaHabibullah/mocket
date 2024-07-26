@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { UserContext } from "./UserContext";
+import Alert from "./Alert";
 
 const UserProvider = ({ children }) => {
     const restEndpoint = "http://19.26.28.37:8080/database/user/669c943e6e45b63f43d7add8"
     const [user, setUser] = useState(null);
+    const [error, setError] = useState(null);
     const callRestApi = async () => {
         return fetch(restEndpoint, {
             method: 'GET', 
@@ -14,6 +16,7 @@ const UserProvider = ({ children }) => {
             console.log(responseJson);
             setUser(responseJson);
         }).catch(error => {
+            setError("Failed to fetch from backend.");
             console.log(error);
         })
     }
@@ -24,6 +27,11 @@ const UserProvider = ({ children }) => {
 
     return (
         <UserContext.Provider value={{user, refetch: callRestApi}}>
+            {error ? (
+                <Alert message={error} style={"error"}/>
+            ) : (
+                <div/>
+            )}
             {children}
         </UserContext.Provider>
     );

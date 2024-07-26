@@ -144,7 +144,6 @@ export function truncateTime(datetime) {
 }
 
 export function getOpenPositions(positions) {
-    console.log(positions);
     var result = [];
     for(var i = 0; i < positions.length; i++) {
         if(positions[i].open) {

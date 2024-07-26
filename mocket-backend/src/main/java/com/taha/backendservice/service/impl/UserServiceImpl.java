@@ -127,6 +127,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException {
+        logger.info("Retrieving graph data for user with id=" + id);
         return userRepository.getGraphData(id, interval, start_date);
     }
 }

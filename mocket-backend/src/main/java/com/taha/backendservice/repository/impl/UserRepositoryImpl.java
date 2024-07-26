@@ -187,7 +187,7 @@ public class UserRepositoryImpl implements UserRepository {
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
         ArrayList<String> fetched = new ArrayList<>();
         SimpleDateFormat sdf;
-        if(interval == "1day") {
+        if(interval.equals("1day")) {
             sdf = new SimpleDateFormat("yyyy-MM-dd");
         }
         else {
@@ -237,7 +237,7 @@ public class UserRepositoryImpl implements UserRepository {
                         total += p.getQuantity() * p.getBuy();
                     }
                 }
-                else if(datadt.after(opendt) && (closedt == null || datadt.before(closedt))) {
+                else if((datadt.equals(opendt) || datadt.after(opendt)) && (closedt == null || datadt.before(closedt))) {
                     if (p.isOpen()) {
                         total += p.getQuantity() * Double.parseDouble(pd.getClose());
                     } else {

@@ -7,6 +7,7 @@ import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
 import QuoteHeader from "./QuoteHeader";
+import Alert from "./Alert";
 import "../styling/PriceChart.css";
 import "../styling/QuoteHeader.css";
 
@@ -22,6 +23,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     const [labels, setLabels] = useState(null);
     const [toggledIndex, setToggledIndex] = useState(0);
     const [liveIndex, setLiveIndex] = useState(0);
+    const [error, setError] = useState(null);
     const setCurrDataRef = useRef();
     const setCurrDiffRef = useRef();
     const getLiveDataRef = useRef();
@@ -130,8 +132,6 @@ const PriceChart = ({ liveData, quoteData }) => {
                 },
                 tooltip: {
                     enabled: false,
-                    mode: 'index',
-                    intersect: false,
                 },
             },
             interaction: {
@@ -143,6 +143,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                     pointStyle: false
                 }
             },
+            spanGaps: true,
             maintainAspectRatio: false,
             responsive: true,
             setCurrDataRef,
@@ -208,26 +209,39 @@ const PriceChart = ({ liveData, quoteData }) => {
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
             body: JSON.stringify(body)
         })
-        .then((response) => response.json())
+        .then((response) => { if(response.ok) return response.json() })
         .then((responseJson) => {
             console.log(responseJson);
-            const fullData = JSON.parse(JSON.stringify(responseJson.values));
-            const timeSeriesData = parseTimeSeriesData(fullData);
-            const timeSeriesLabels = parseTimeSeriesLabels(fullData);
-            if(toggledIndex === 0 && quoteData.is_market_open) {
-                setLiveIndex(fullData.length);
-                setData(fillLiveList(timeSeriesData));
-                setLabels(fillLiveList(timeSeriesLabels));
+            if(responseJson.status === "error") {
+                setError("API limit exceeded. Try again later.");
             }
             else {
-                setData(timeSeriesData);
-                setLabels(timeSeriesLabels);
+                const fullData = JSON.parse(JSON.stringify(responseJson.values));
+                const timeSeriesData = parseTimeSeriesData(fullData);
+                const timeSeriesLabels = parseTimeSeriesLabels(fullData);
+                if(toggledIndex === 0 && quoteData.is_market_open) {
+                    setLiveIndex(fullData.length);
+                    setData(fillLiveList(timeSeriesData));
+                    setLabels(fillLiveList(timeSeriesLabels));
+                }
+                else {
+                    setData(timeSeriesData);
+                    setLabels(timeSeriesLabels);
+                }
             }
+        }).catch(error => {
+            setError("Failed to fetch data from API.");
+            console.log(error);
         })
     }
 
     return (
         <div>
+            {error ? (
+                <Alert message={error} style={"error"}/>
+            ) : (
+                <div/>
+            )}
             <QuoteHeader live={currData} data={quoteData}/>
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">

@@ -5,6 +5,7 @@ import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel,
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
+import Alert from "./Alert";
 import "../styling/PriceChart.css";
 import "../styling/Home.css";
 
@@ -18,6 +19,7 @@ const HomePriceChart = ({ prevClose, total }) => {
     const [currDiff, setCurrDiff] = useState(getPriceDiff(prevClose, total));
     const [labels, setLabels] = useState(null);
     const [toggledIndex, setToggledIndex] = useState(0);
+    const [error, setError] = useState(null);
     const setCurrDataRef = useRef();
     const setCurrDiffRef = useRef();
     const getPrevCloseRef = useRef();
@@ -185,17 +187,30 @@ const HomePriceChart = ({ prevClose, total }) => {
             method: 'GET',
             headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
         })
-        .then((response) => response.json())
+        .then((response) => { if(response.ok) return response.json() })
         .then((responseJson) => {
             console.log(responseJson);
-            const fullData = JSON.parse(JSON.stringify(responseJson));
-            setData(parseTimeSeriesData(fullData));
-            setLabels(parseTimeSeriesLabels(fullData));
+            if(responseJson.length < 1) {
+                setError("API limit exceeded. Try again later.");
+            }
+            else {
+                const fullData = JSON.parse(JSON.stringify(responseJson));
+                setData(parseTimeSeriesData(fullData));
+                setLabels(parseTimeSeriesLabels(fullData));
+            }
+        }).catch(error => {
+            setError("Failed to fetch data from API.");
+            console.log(error);
         })
     }
 
     return (
         <div>
+            {error ? (
+                <Alert message={error} style={"error"}/>
+            ) : (
+                <div/>
+            )}
             <div className="home-header">
                 <div className="home-header-balance">${parsePrice(currData)}</div>
             </div>

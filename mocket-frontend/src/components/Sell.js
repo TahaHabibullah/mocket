@@ -47,7 +47,7 @@ const Sell = ({ symbol, positions, live }) => {
         <div>
             <div>
                 {error ? (
-                    <Alert message={error} style={"error"}/>
+                    <Alert message={error} style={"error"} setError={setError}/>
                 ) : (
                     <div/>
                 )}

@@ -46,7 +46,7 @@ const Home = () => {
     return (
         <div className="App">
             {error ? (
-                <Alert message={error} style={"error"}/>
+                <Alert message={error} style={"error"} setError={setError}/>
             ) : (
                 <div/>
             )}

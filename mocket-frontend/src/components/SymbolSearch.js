@@ -34,7 +34,7 @@ const SymbolSearch = ( {setResults} ) => {
     return (
         <div>
             {error ? (
-                <Alert message={error} style={"error"}/>
+                <Alert message={error} style={"error"} setError={setError}/>
             ) : (
                 <div/>
             )}

@@ -80,7 +80,7 @@ const SymbolDashboard = () => {
         <div className="App">
             <MocketNavBar/>
             {error ? (
-                <Alert message={error} style={"error"}/>
+                <Alert message={error} style={"error"} setError={setError}/>
             ) : (
                 <div/>
             )}

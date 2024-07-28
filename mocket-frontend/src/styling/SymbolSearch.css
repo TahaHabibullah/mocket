@@ -21,6 +21,10 @@ input {
     width: 100%;
 }
 
+input:focus {
+    outline: none;
+}
+
 #search-icon {
     color: #888888;
     height: 50%;

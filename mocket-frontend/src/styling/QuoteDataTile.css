@@ -15,14 +15,14 @@
     float: left;
     opacity: 50%;
     font-size: 24px;
-    padding: 1rem;
+    padding: 1.15rem;
 }
 
 .quote-tile-data {
     color: white;
     float: right;
     font-size: 24px;
-    padding: 1rem;
+    padding: 1.15rem;
 }
 
 @media (max-width: 1320px) {

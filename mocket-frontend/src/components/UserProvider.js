@@ -28,7 +28,7 @@ const UserProvider = ({ children }) => {
     return (
         <UserContext.Provider value={{user, refetch: callRestApi}}>
             {error ? (
-                <Alert message={error} style={"error"}/>
+                <Alert message={error} style={"error"} setError={setError}/>
             ) : (
                 <div/>
             )}

@@ -20,7 +20,7 @@
     float: left;
     opacity: 50%;
     font-size: 28px;
-    padding: 1.75rem;
+    padding: 2rem;
 }
 
 .positions-tile-divider {
@@ -66,7 +66,7 @@
     
     .positions-tile-symbol {
         font-size: calc(15px + 1vmin);
-        padding: 2vmin;
+        padding: 2.25vmin;
     }
 
     .positions-tile-divider {
@@ -76,7 +76,7 @@
     
     .positions-tile-shares {
         font-size: calc(8px + 1vmin);
-        padding: 2.5vmin;
+        padding: 2.7vmin;
     }
     
     .positions-tile-data {
@@ -90,7 +90,7 @@
 @media (max-width: 767px) {
     .positions-tile-symbol {
         font-size: calc(11px + 1vmin);
-        padding: 2vmin;
+        padding: 2.25vmin;
     }
 
     .positions-tile-shares {
@@ -101,7 +101,7 @@
     .positions-tile-data {
         border-radius: 3px;
         font-size: calc(10px + 1vmin);
-        margin: 1.5vmin;
+        margin: 1.8vmin;
         padding: 0.5vmin;
     }
 }

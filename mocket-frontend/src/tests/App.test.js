@@ -1,8 +1,13 @@
 import { render, screen } from '@testing-library/react';
-import App from './App';
+import App from '../components/App.js';
+import { UserProvider } from '../components/UserProvider.js';
 
 test('renders learn react link', () => {
-  render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
+  render(
+    <UserProvider>
+      <App/>
+    </UserProvider>
+  );
+  const linkElement = screen.getByPlaceholderText(/Search/i)
   expect(linkElement).toBeInTheDocument();
 });

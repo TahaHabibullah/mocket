@@ -1,11 +1,13 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useMediaQuery } from 'react-responsive';
 import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, 
          getPriceDiff, getStartDate, parsePrice, getLastBusinessDay } from "./Utils";
 import { Chart as ChartJS, registerables } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
+import { UserContext } from "./UserContext";
 import Alert from "./Alert";
+import axios from "axios";
 import "../styling/PriceChart.css";
 import "../styling/Home.css";
 
@@ -13,7 +15,8 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const HomePriceChart = ({ prevClose, total }) => {
-    const restEndpoint = "http://19.26.28.37:8080/database/user/getGraph?id=669c943e6e45b63f43d7add8&";
+    const restEndpoint = "http://19.26.28.37:8080/database/user/getGraph?id=";
+    const { user } = useContext(UserContext);
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
     const [currDiff, setCurrDiff] = useState(getPriceDiff(prevClose, total));
@@ -36,6 +39,7 @@ const HomePriceChart = ({ prevClose, total }) => {
     ];
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
+
     setCurrDataRef.current = setCurrData;
     setCurrDiffRef.current = setCurrDiff;
     getPrevCloseRef.current = prevClose;
@@ -172,29 +176,25 @@ const HomePriceChart = ({ prevClose, total }) => {
         var params;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            params = "interval=5min&start_date=" + getLastBusinessDay();
+            params = "&interval=5min&start_date=" + getLastBusinessDay();
         }
         else if(toggledIndex === 1) {
-            params = "interval=15min&start_date=" + start_date;
+            params = "&interval=15min&start_date=" + start_date;
         }
         else if(toggledIndex === 2) {
-            params = "interval=1h&start_date=" + start_date;
+            params = "&interval=1h&start_date=" + start_date;
         }
         else {
-            params = "interval=1day&start_date=" + start_date;
+            params = "&interval=1day&start_date=" + start_date;
         }
-        return fetch(restEndpoint + params, {
-            method: 'GET',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-        })
-        .then((response) => { if(response.ok) return response.json() })
-        .then((responseJson) => {
-            console.log(responseJson);
-            if(responseJson.length < 1) {
+        return axios.get(restEndpoint + user.id + params)
+        .then((response) => {
+            console.log(response.data);
+            if(response.data.length < 1 && user.positions.length > 0) {
                 setError("API limit exceeded. Try again later.");
             }
             else {
-                const fullData = JSON.parse(JSON.stringify(responseJson));
+                const fullData = response.data;
                 setData(parseTimeSeriesData(fullData));
                 setLabels(parseTimeSeriesLabels(fullData));
             }

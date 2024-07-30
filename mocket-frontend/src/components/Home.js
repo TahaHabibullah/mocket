@@ -5,7 +5,9 @@ import HomePriceChart from "./HomePriceChart";
 import Alert from "./Alert";
 import { UserContext } from "./UserContext";
 import { getOpenPositions, getPortfolioValue, 
-         getPortfolioPrevClose, getCombinedPositions } from "./Utils";
+         getPortfolioPrevClose, getCombinedPositions, 
+         checkQuoteListError} from "./Utils";
+import axios from "axios";
 import '../styling/App.css';
 import '../styling/Home.css';
 
@@ -16,19 +18,15 @@ const Home = () => {
     const [error, setError] = useState(null);
 
     const callRestApi = async () => {
-        return fetch(restEndpoint + user.id, {
-            method: 'GET',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }
-        })
-        .then((response) =>  { if(response.ok) return response.json() })
-        .then((responseJson) => {
-            console.log(responseJson);
-            if(responseJson.length > 0) {
-                if(responseJson[0].timestamp === 0) {
+        return axios.get(restEndpoint + user.id)
+        .then((response) => {
+            console.log(response.data);
+            if(response.data.length > 0) {
+                if(checkQuoteListError(response.data)) {
                     setError("API limit exceeded. Try again later.");
                 }
                 else {
-                    setQuotes(responseJson);
+                    setQuotes(response.data);
                 }
             }
         }).catch(error => {

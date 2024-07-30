@@ -8,6 +8,7 @@ import PositionsSummary from "./PositionsSummary";
 import TradeActions from "./TradeActions";
 import Alert from "./Alert";
 import { UserContext } from "./UserContext";
+import axios from "axios";
 import '../styling/App.css';
 
 const SymbolDashboard = () => {
@@ -54,21 +55,16 @@ const SymbolDashboard = () => {
 
     const callRestApi = async () => {
         const body = {symbol};
-        return fetch(restEndpoint, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        })
-        .then((response) => { if(response.ok) return response.json() })
-        .then((responseJson) => {
-            console.log(responseJson);
-            if(responseJson.timestamp === 0) {
+        return axios.post(restEndpoint, body)
+        .then((response) => {
+            console.log(response.data);
+            if(response.data.timestamp === 0) {
                 setError("API limit exceeded. Try again later.");
             }
             else {
-                setQuoteData(responseJson);
-                setMarketOpen(responseJson.is_market_open);
-                setLiveData(parsePrice(responseJson.close));
+                setQuoteData(response.data);
+                setMarketOpen(response.data.is_market_open);
+                setLiveData(parsePrice(response.data.close));
             }
         }).catch(error => {
             setError("Failed to fetch data from API.");

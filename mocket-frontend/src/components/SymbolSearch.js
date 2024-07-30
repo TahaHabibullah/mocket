@@ -3,22 +3,18 @@ import Alert from "./Alert";
 import "../styling/SymbolSearch.css";
 import { FaSearch } from "react-icons/fa";
 import { checkInput } from "./Utils";
+import axios from "axios";
 
 const SymbolSearch = ( {setResults} ) => {
     const restEndpoint = "http://19.26.28.37:8080/trade-service/ticker/search";
     const [error, setError] = useState(null);
 
     const callRestApi = async (symbol) => {
-        const body = {"symbol": symbol, "country": "United States", "outputsize": 10}
-        return fetch(restEndpoint, {
-            method:'POST', 
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-            body: JSON.stringify(body)
-        })
-        .then((response) => { if(response.ok) return response.json() })
-        .then((responseJson) => {
-            console.log(responseJson);
-            setResults(responseJson);
+        const body = {symbol: symbol, country: "United States", outputsize: 10}
+        return axios.post(restEndpoint, body)
+        .then((response) => {
+            console.log(response.data);
+            setResults(response.data);
         }).catch(error => {
             setError("Failed to fetch search results.");
             console.log(error);

@@ -2,11 +2,12 @@ import React, { useState, useContext } from "react";
 import { buyInputValid, parsePrice } from "./Utils";
 import Alert from "./Alert";
 import { UserContext } from "./UserContext";
+import axios from "axios";
 import "../styling/Buy.css"
 
 const Buy = ({ symbol, balance, live }) => {
     const restEndpoint = "http://19.26.28.37:8080/database/user/addPos";
-    const { refetch } = useContext(UserContext);
+    const { user, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null);
@@ -23,22 +24,17 @@ const Buy = ({ symbol, balance, live }) => {
 
     const handleClick = async () => {
         const body = {
-            "userId": "669c943e6e45b63f43d7add8",
-            "position": {
-                "symbol": symbol,
-                "quantity": document.getElementById("buy-in").value,
-                "buy": live
+            userId: user.id,
+            position: {
+                symbol: symbol,
+                quantity: document.getElementById("buy-in").value,
+                buy: live
             }
         }
-        return fetch(restEndpoint, {
-            method: 'PUT',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
-            body: JSON.stringify(body)
-        })
-        .then((response) => { if(response.ok) return response.json() })
-        .then((responseJson) => {
+        return axios.put(restEndpoint, body)
+        .then((response) => {
             refetch();
-            console.log(responseJson);
+            console.log(response.data);
         }).catch(error => {
             setError("Failed to send data to backend.");
             console.log(error);

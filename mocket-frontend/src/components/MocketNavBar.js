@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import SymbolSearch from "./SymbolSearch";
 import SymbolResultsList from "./SymbolResultsList";
-import logo from "../assets/mocket-b.PNG";
+import logo from "../assets/mocket-b.png";
 import github from "../assets/github-mark-white.png";
 import "../styling/MocketNavBar.css";
 

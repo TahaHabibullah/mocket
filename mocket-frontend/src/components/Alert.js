@@ -4,10 +4,6 @@ import "../styling/Alert.css";
 const Alert = ({ message, style, setError }) => {
     const handleClick = () => {
         setError(null);
-        /*const alerts = document.getElementsByClassName("alert");
-        for(var i = 0; i < alerts.length; i++) {
-            alerts[i].style.display = "none";
-        }*/
     }
 
     const getType = () => {

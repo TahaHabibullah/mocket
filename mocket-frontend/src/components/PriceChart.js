@@ -8,6 +8,7 @@ import annotationPlugin from 'chartjs-plugin-annotation';
 import { Line } from "react-chartjs-2";
 import QuoteHeader from "./QuoteHeader";
 import Alert from "./Alert";
+import axios from "axios";
 import "../styling/PriceChart.css";
 import "../styling/QuoteHeader.css";
 
@@ -193,30 +194,25 @@ const PriceChart = ({ liveData, quoteData }) => {
         var body;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            body = {"symbol": symbol, "interval": "5min", "start_date": quoteData.datetime, "order": "ASC"};
+            body = {symbol: symbol, interval: "5min", start_date: quoteData.datetime, order: "ASC"};
         }
         else if(toggledIndex === 1) {
-            body = {"symbol": symbol, "interval": "15min", "start_date": start_date, "order": "ASC"};
+            body = {symbol: symbol, interval: "15min", start_date: start_date, order: "ASC"};
         }
         else if(toggledIndex === 2) {
-            body = {"symbol": symbol, "interval": "1h", "start_date": start_date, "order": "ASC"};
+            body = {symbol: symbol, interval: "1h", start_date: start_date, order: "ASC"};
         }
         else {
-            body = {"symbol": symbol, "interval": "1day", "start_date": start_date, "order": "ASC"};
+            body = {symbol: symbol, interval: "1day", start_date: start_date, order: "ASC"};
         }
-        return fetch(restEndpoint, {
-            method: 'POST',
-            headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' }, 
-            body: JSON.stringify(body)
-        })
-        .then((response) => { if(response.ok) return response.json() })
-        .then((responseJson) => {
-            console.log(responseJson);
-            if(responseJson.status === "error") {
+        return axios.post(restEndpoint, body)
+        .then((response) => {
+            console.log(response.data);
+            if(response.data.status === "error") {
                 setError("API limit exceeded. Try again later.");
             }
             else {
-                const fullData = JSON.parse(JSON.stringify(responseJson.values));
+                const fullData = response.data.values;
                 const timeSeriesData = parseTimeSeriesData(fullData);
                 const timeSeriesLabels = parseTimeSeriesLabels(fullData);
                 if(toggledIndex === 0 && quoteData.is_market_open) {

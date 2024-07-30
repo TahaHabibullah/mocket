@@ -312,3 +312,12 @@ export function getSymQuote(quoteList, symbol) {
     }
     return null;
 }
+
+export function checkQuoteListError(quoteList) {
+    for(var i = 0; i < quoteList.length; i++) {
+        if(quoteList[i].timestamp === 0) {
+            return true;
+        }
+    }
+    return false;
+}

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, waitFor, fireEvent } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import SymbolResultsItem from "../components/SymbolResultsItem.js";
 
 const mockUsedNavigate = jest.fn();
@@ -21,20 +21,16 @@ afterAll(() => {
 });
 
 
-test("component props displayed correctly", async () => {
-    render(<SymbolResultsItem name="Apple Inc" symbol="AAPL"/>);
-    const nameElement = await waitFor(() => screen.getByText(/Apple Inc/i));
-    const symbolElement = await waitFor(() => screen.getByText(/AAPL/i));
-    expect(nameElement).toBeInTheDocument();
-    expect(symbolElement).toBeInTheDocument();
+test("component renders correctly", async () => {
+    const { getByText } = render(<SymbolResultsItem name="Apple Inc" symbol="AAPL"/>);
+    expect(getByText(/Apple Inc/i)).toBeInTheDocument();
+    expect(getByText(/AAPL/i)).toBeInTheDocument();
 });
 
 test("name prop gets truncated", async () => {
-    render(<SymbolResultsItem name="Advanced Microsystems" symbol="AMD"/>);
-    const nameElement = await waitFor(() => screen.getByText(/Advanced Microsy.../i));
-    const symbolElement = await waitFor(() => screen.getByText(/AMD/i));
-    expect(nameElement).toBeInTheDocument();
-    expect(symbolElement).toBeInTheDocument();
+    const { getByText } = render(<SymbolResultsItem name="Advanced Microsystems" symbol="AMD"/>);
+    expect(getByText(/Advanced Microsy.../i)).toBeInTheDocument();
+    expect(getByText(/AMD/i)).toBeInTheDocument();
 });
 
 test("handleRedirect gets called onClick", async () => {

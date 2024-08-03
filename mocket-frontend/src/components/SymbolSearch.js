@@ -14,7 +14,12 @@ const SymbolSearch = ( {setResults} ) => {
         return axios.post(restEndpoint, body)
         .then((response) => {
             console.log(response.data);
-            setResults(response.data);
+            if(response.data.status == "error") {
+                setError("Unexpected API failure.")
+            }
+            else {
+                setResults(response.data);
+            }
         }).catch(error => {
             setError("Failed to fetch search results.");
             console.log(error);

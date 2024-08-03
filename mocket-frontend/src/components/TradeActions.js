@@ -92,13 +92,13 @@ const TradeActions = ({ symbol, positions, live }) => {
                 <div className="trade-actions">
                     <div className="trade-actions-buy">
                         <button className="accordion left" onClick={() => {handleToggle(0)}}>BUY</button>
-                        <div className="panel left">
+                        <div data-testid="left" className="panel left">
                             <Buy symbol={symbol} balance={user.balance} live={live}/>
                         </div>
                     </div>
                     <div className="trade-actions-sell">
                         <button className="accordion right" onClick={() => {handleToggle(1)}}>SELL</button>
-                        <div className="panel right">
+                        <div data-testid="right" className="panel right">
                             <Sell symbol={symbol} positions={positions} live={live}/>
                         </div>
                     </div>

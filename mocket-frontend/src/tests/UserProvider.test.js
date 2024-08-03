@@ -1,10 +1,14 @@
 import React, { act } from "react";
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import axios from 'axios';
 import '@testing-library/jest-dom';
 import { UserProvider } from "../components/UserProvider";
 
 jest.mock('axios');
+
+afterEach(() => {
+    jest.clearAllMocks();
+});
 
 test("fetches user data", async () => {
     const mockResponse = {
@@ -28,4 +32,13 @@ test("fetches user data", async () => {
     axios.get.mockResolvedValue({ data: mockResponse });
     await act( async () => render(<UserProvider/>));
     expect(axios.get).toHaveBeenCalledTimes(1);
+    const error = screen.queryByText("Error");
+    expect(error).toBeNull();
+});
+
+test("alert shown upon failure", async () => {
+    axios.get.mockRejectedValue(new Error("error"));
+    const { getByText } = await act( async () => render(<UserProvider/>));
+    expect(axios.get).toHaveBeenCalledTimes(1);
+    expect(getByText(/Error/i)).toBeInTheDocument();
 });

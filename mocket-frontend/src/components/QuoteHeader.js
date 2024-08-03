@@ -10,7 +10,7 @@ const QuoteHeader = ({ live, data }) => {
                     <div className="quote-header-stock-symbol">{data.symbol}</div>
                 </div>
             </div>
-            <div className="quote-header-price">${live}</div>
+            <div data-testid="price" className="quote-header-price">${live}</div>
         </div>
     )
 }

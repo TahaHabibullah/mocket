@@ -2,7 +2,6 @@ import React, { act } from "react";
 import { render, screen } from '@testing-library/react';
 import axios from 'axios';
 import Home from '../components/Home.js';
-import '@testing-library/jest-dom';
 import { UserContext } from "../components/UserContext.js";
 
 jest.mock("axios");
@@ -26,6 +25,8 @@ test("doesn't call api when user is null", async () => {
         </UserContext.Provider>
     ));
     expect(axios.get).toHaveBeenCalledTimes(0);
+    const error = screen.queryByText("Error");
+    expect(error).toBeNull();
 });
 
 test("uses context user data, fetches quote data, renders all children", async () => {
@@ -89,6 +90,8 @@ test("uses context user data, fetches quote data, renders all children", async (
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/AAPL/i)).toBeInTheDocument();
     expect(axios.get).toHaveBeenCalled();
+    const error = screen.queryByText("Error");
+    expect(error).toBeNull();
 });
 
 test("uses context user data, fetches quote data, does not render pos list", async () => {
@@ -153,6 +156,8 @@ test("uses context user data, fetches quote data, does not render pos list", asy
     const posTile = screen.queryByText("AAPL");
     expect(posTile).toBeNull();
     expect(axios.get).toHaveBeenCalled();
+    const error = screen.queryByText("Error");
+    expect(error).toBeNull();
 });
 
 test("uses context user data, fails to fetch quote data, alert shown, does not render pos list", async () => {

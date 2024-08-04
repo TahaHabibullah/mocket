@@ -1,10 +1,9 @@
 import React, { act } from "react";
-import { render, waitFor } from '@testing-library/react';
+import { render, waitFor, screen } from '@testing-library/react';
 import SymbolDashboard from "../components/SymbolDashboard.js";
 import { UserContext } from "../components/UserContext.js";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { sources } from "eventsourcemock";
 
 jest.mock("axios");
 jest.mock("react-chartjs-2", () => ({
@@ -19,7 +18,6 @@ jest.mock("react-router-dom", () => ({
 
 test("component renders all children correctly", async () => {
     useParams.mockReturnValue({ symbol: "AAPL" });
-    const message = new MessageEvent("foo", { data: 218.12 });
 
     const mockUser = {
         "id": "66a8957e631f435b8dcc2d43",
@@ -70,13 +68,14 @@ test("component renders all children correctly", async () => {
     };
 
     axios.post.mockResolvedValue({ data: mockResponse });
-    const { container, getByPlaceholderText, getByText } = await act( async () => render(
+    const { container, getByPlaceholderText, getByText } = await act(async () => render(
         <UserContext.Provider value={{ user: mockUser }}>
             <SymbolDashboard/>
         </UserContext.Provider>
     ));
 
     await waitFor(() => {
+        expect(axios.post).toHaveBeenCalled();
         expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
         expect(getByText(/Apple Inc/i)).toBeInTheDocument();
         expect(getByText(/BUY/i)).toBeInTheDocument();
@@ -89,5 +88,107 @@ test("component renders all children correctly", async () => {
         expect(container.querySelector(".price-chart-divider")).toBeInTheDocument();
         expect(container.querySelector(".quote-data-grid-header")).toBeInTheDocument();
         expect(container.querySelector(".quote-data-grid-divider")).toBeInTheDocument();
+    });
+});
+
+test("alert shown when quote fetch fails, only nav bar renders", async () => {
+    useParams.mockReturnValue({ symbol: "AAPL" });
+
+    const mockUser = {
+        "id": "66a8957e631f435b8dcc2d43",
+        "email": "test3@test.com",
+        "balance": 20000.0,
+        "positions": [
+            {
+                "id": "66a899e3631f435b8dcc2d45",
+                "symbol": "AAPL",
+                "quantity": 10,
+                "buy": 218.24,
+                "sell": 0,
+                "open": true,
+                "openTimestamp": "2024-07-30 03:44:35",
+                "closeTimestamp": null
+            }
+        ]
+    };
+
+    axios.post.mockRejectedValue(new Error("error"));
+    const { container, getByPlaceholderText, getByText } = await act(async () => render(
+        <UserContext.Provider value={{ user: mockUser }}>
+            <SymbolDashboard/>
+        </UserContext.Provider>
+    ));
+
+    await waitFor(() => {
+        expect(axios.post).toHaveBeenCalled();
+        expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
+        expect(getByText(/Failed to fetch data from API./i)).toBeInTheDocument();
+        const buy = screen.queryByText("BUY");
+        const sell = screen.queryByText("SELL");
+        const stats = screen.queryByText("Average Volume");
+        const intervals = screen.queryByText("1Y");
+        expect(buy).toBeNull();
+        expect(sell).toBeNull();
+        expect(stats).toBeNull();
+        expect(intervals).toBeNull();
+        expect(container.querySelector(".quote-header-diff-green")).toBeNull();
+        expect(container.querySelector(".price-chart")).toBeNull();
+        expect(container.querySelector(".price-chart-divider")).toBeNull();
+        expect(container.querySelector(".quote-data-grid-header")).toBeNull();
+        expect(container.querySelector(".quote-data-grid-divider")).toBeNull();
+    });
+});
+
+test("alert shown when quote fetch returns empty, only nav bar renders", async () => {
+    useParams.mockReturnValue({ symbol: "AAPL" });
+
+    const mockUser = {
+        "id": "66a8957e631f435b8dcc2d43",
+        "email": "test3@test.com",
+        "balance": 20000.0,
+        "positions": [
+            {
+                "id": "66a899e3631f435b8dcc2d45",
+                "symbol": "AAPL",
+                "quantity": 10,
+                "buy": 218.24,
+                "sell": 0,
+                "open": true,
+                "openTimestamp": "2024-07-30 03:44:35",
+                "closeTimestamp": null
+            }
+        ]
+    };
+
+    const mockResponse = {
+        "timestamp": 0,
+        "extended_timestamp": 0,
+        "is_market_open": false
+    };
+
+    axios.post.mockResolvedValue({ data: mockResponse });
+    const { container, getByPlaceholderText, getByText } = await act(async () => render(
+        <UserContext.Provider value={{ user: mockUser }}>
+            <SymbolDashboard/>
+        </UserContext.Provider>
+    ));
+
+    await waitFor(() => {
+        expect(axios.post).toHaveBeenCalled();
+        expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
+        expect(getByText(/API limit exceeded. Try again later./i)).toBeInTheDocument();
+        const buy = screen.queryByText("BUY");
+        const sell = screen.queryByText("SELL");
+        const stats = screen.queryByText("Average Volume");
+        const intervals = screen.queryByText("1Y");
+        expect(buy).toBeNull();
+        expect(sell).toBeNull();
+        expect(stats).toBeNull();
+        expect(intervals).toBeNull();
+        expect(container.querySelector(".quote-header-diff-green")).toBeNull();
+        expect(container.querySelector(".price-chart")).toBeNull();
+        expect(container.querySelector(".price-chart-divider")).toBeNull();
+        expect(container.querySelector(".quote-data-grid-header")).toBeNull();
+        expect(container.querySelector(".quote-data-grid-divider")).toBeNull();
     });
 });

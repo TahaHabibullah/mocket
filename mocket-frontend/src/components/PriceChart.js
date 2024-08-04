@@ -10,7 +10,6 @@ import QuoteHeader from "./QuoteHeader";
 import Alert from "./Alert";
 import axios from "axios";
 import "../styling/PriceChart.css";
-import "../styling/QuoteHeader.css";
 
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);

@@ -32,6 +32,9 @@ export function parseVolume(vol) {
         const adj = parseFloat(vol / 1000).toFixed(1);
         return "" + adj + "K";
     }
+    else {
+        return vol;
+    }
 }
 
 export function checkInput(text) {
@@ -66,7 +69,7 @@ export function getPriceDiff(previous_close, currPrice) {
     else {
         res += "-$" + (diff * -1).toFixed(2);
     }
-    const diffPercent = (diff / parseFloat(previous_close)) * 100;
+    const diffPercent = (diff === 0 ? 0 : diff / parseFloat(previous_close)) * 100;
     if(diffPercent >= 0) {
         res += " (+" + diffPercent.toFixed(2) + "%)";
     }

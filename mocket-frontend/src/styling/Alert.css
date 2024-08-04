@@ -21,13 +21,13 @@
 }
 
 .alert-message {
-    padding: 0.4rem 20px;
+    padding: 0.5rem 20px;
     font-size: 24px;
     float: left;
 }
 
 .alert-dismiss {
-    padding: 0.4rem 10px;
+    padding: 0.5rem 10px;
     color: white;
     font-weight: bold;
     float: right;

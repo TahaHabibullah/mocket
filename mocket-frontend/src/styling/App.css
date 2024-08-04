@@ -1,11 +1,7 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Poppins:wght@400;500;600;700&display=swap');
-
 .App {
   background-color: black;
   min-height: 100vh;
   font-size: calc(10px + 2vmin);
-  font-family: "Inter", sans-serif;
-  font-weight: 500;
 }
 
 input::-webkit-outer-spin-button,

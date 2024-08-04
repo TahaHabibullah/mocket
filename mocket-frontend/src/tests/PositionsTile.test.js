@@ -26,9 +26,9 @@ test("component renders correctly", async () => {
     };
 
     const { container, getByText } = render(<PositionsTile data={position} quoteData={quote}/>);
-    waitFor(() => {
+    await waitFor(() => {
         expect(container.querySelector(".positions-tile-divider")).toBeInTheDocument();
-        expect(container.querySelector(".positions-tile-data green")).toBeInTheDocument();
+        expect(container.querySelector(".positions-tile-data.green")).toBeInTheDocument();
         expect(getByText(/AAPL/i)).toBeInTheDocument();
         expect(getByText(/10 shares/i)).toBeInTheDocument();
         expect(getByText(/219.86/i)).toBeInTheDocument();
@@ -57,19 +57,18 @@ test("price label color changes depending on price change", async () => {
         "previous_close": "218.36000",
     };
 
-    var quote = gain;
-    const { container, getByText } = render(<PositionsTile data={position} quoteData={quote}/>);
-    waitFor(() => {
+    const { rerender, container, getByText } = render(<PositionsTile data={position} quoteData={gain}/>);
+    await waitFor(() => {
         expect(container.querySelector(".positions-tile-divider")).toBeInTheDocument();
-        expect(container.querySelector(".positions-tile-data green")).toBeInTheDocument();
+        expect(container.querySelector(".positions-tile-data.green")).toBeInTheDocument();
         expect(getByText(/AAPL/i)).toBeInTheDocument();
         expect(getByText(/10 shares/i)).toBeInTheDocument();
         expect(getByText(/219.86/i)).toBeInTheDocument();
     });
 
-    quote = loss;
-    waitFor(() => {
-        expect(container.querySelector(".positions-tile-data red")).toBeInTheDocument();
+    rerender(<PositionsTile data={position} quoteData={loss}/>);
+    await waitFor(() => {
+        expect(container.querySelector(".positions-tile-data.red")).toBeInTheDocument();
         expect(getByText(/217.86/i)).toBeInTheDocument();
     });
 });

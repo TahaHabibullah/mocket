@@ -26,11 +26,11 @@ export function parseVolume(vol) {
     }
     if(vol / 1000000 > 1) {
         const adj = parseFloat(vol / 1000000).toFixed(2);
-        return "" + adj + "M";
+        return adj + "M";
     }
     else if(vol / 1000 > 1) {
         const adj = parseFloat(vol / 1000).toFixed(1);
-        return "" + adj + "K";
+        return adj + "K";
     }
     else {
         return vol;
@@ -259,11 +259,20 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
     if(quotes.length < 1 || positions.length < 1) {
         return parsePrice(balance);
     }
+    const moment = require("moment");
+    const open = moment().set({hour: 9, minute: 30, second: 0, millisecond: 0});
     var result = balance;
     for(var i = 0; i < quotes.length; i++) {
         for(var j = 0; j < positions.length; j++) {
             if(quotes[i].symbol === positions[j].symbol) {
-                result += positions[j].quantity * quotes[i].previous_close;
+                const openTimestamp = moment(positions[j].openTimestamp, "YYYY-MM-DD HH:mm:ss");
+                if(openTimestamp.isAfter(open)) {
+                    result += positions[j].quantity * quotes[i].close;
+                }
+                else {
+                    result += positions[j].quantity * quotes[i].previous_close;
+                }
+                
             }
         }
     }

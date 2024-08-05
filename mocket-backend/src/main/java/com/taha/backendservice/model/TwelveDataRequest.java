@@ -42,4 +42,8 @@ public class TwelveDataRequest implements Serializable {
         this.start_date = start_date;
         this.order = order;
     }
+
+    public TwelveDataRequest() {
+
+    }
 }

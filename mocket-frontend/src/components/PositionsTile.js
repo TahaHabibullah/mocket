@@ -7,7 +7,7 @@ const PositionsTile = ({ data, quoteData }) => {
     const navigator = useNavigate();
 
     const getDataStyle = () => {
-        return quoteData.close > quoteData.previous_close ? 
+        return parseFloat(quoteData.close) > parseFloat(quoteData.previous_close) ? 
         "positions-tile-data green" : "positions-tile-data red";
     }
     

@@ -1,7 +1,6 @@
 package com.taha.backendservice.controller;
 
 import com.taha.backendservice.constants.DBConstant;
-import com.taha.backendservice.dto.PositionDTO;
 import com.taha.backendservice.dto.UserDTO;
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.DBRequest;

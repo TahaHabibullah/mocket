@@ -6,7 +6,7 @@ import { checkInput } from "./Utils";
 import axios from "axios";
 
 const SymbolSearch = ( {setResults} ) => {
-    const restEndpoint = "http://19.26.28.37:8080/trade-service/ticker/search";
+    const restEndpoint = `${process.env.REACT_APP_URL}trade-service/ticker/search`;
     const [error, setError] = useState(null);
 
     const callRestApi = async (symbol) => {
@@ -14,7 +14,7 @@ const SymbolSearch = ( {setResults} ) => {
         return axios.post(restEndpoint, body)
         .then((response) => {
             console.log(response.data);
-            if(response.data.status == "error") {
+            if(response.data.status === "error") {
                 setError("Unexpected API failure.")
             }
             else {

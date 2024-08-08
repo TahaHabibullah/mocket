@@ -4,7 +4,7 @@ import axios from "axios";
 import Alert from "./Alert";
 
 const UserProvider = ({ children }) => {
-    const restEndpoint = "http://19.26.28.37:8080/database/user/669c943e6e45b63f43d7add8"
+    const restEndpoint = `${process.env.REACT_APP_URL}database/user/${process.env.REACT_APP_USER}`
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const callRestApi = async () => {

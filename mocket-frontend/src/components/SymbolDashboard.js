@@ -13,8 +13,8 @@ import '../styling/App.css';
 
 const SymbolDashboard = () => {
     const { user } = useContext(UserContext);
-    const liveEndpoint = "http://19.26.28.37:8080/trade-service/live/price?symbol=";
-    const restEndpoint = "http://19.26.28.37:8080/trade-service/quote";
+    const liveEndpoint = `${process.env.REACT_APP_URL}trade-service/live/price?symbol=`;
+    const restEndpoint = `${process.env.REACT_APP_URL}trade-service/quote`;
     const { symbol } = useParams();
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);

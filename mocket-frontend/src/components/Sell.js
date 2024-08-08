@@ -6,7 +6,7 @@ import axios from "axios";
 import "../styling/Sell.css";
 
 const Sell = ({ symbol, positions, live }) => {
-    const restEndpoint = "http://19.26.28.37:8080/database/user/closePos";
+    const restEndpoint = `${process.env.REACT_APP_URL}database/user/closePos`;
     const { user, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);

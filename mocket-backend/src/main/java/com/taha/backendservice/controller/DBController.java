@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin
+@CrossOrigin(origins = {"${domain.http}", "${domain.https}"})
 @RestController
 @RequestMapping(DBConstant.DB_ROOT_URI)
 public class DBController {
@@ -27,89 +27,89 @@ public class DBController {
         this.userService = userService;
     }
 
-    @PostMapping("user")
+    @PostMapping(DBConstant.USER)
     @ResponseStatus(HttpStatus.CREATED)
     public UserDTO postUser(@RequestBody UserDTO userDTO) {
         return userService.save(userDTO);
     }
 
-    @PostMapping("users")
+    @PostMapping(DBConstant.USERS)
     @ResponseStatus(HttpStatus.CREATED)
     public List<UserDTO> postUsers(@RequestBody List<UserDTO> usersDTO) {
         return userService.saveAll(usersDTO);
     }
 
-    @GetMapping("users")
+    @GetMapping(DBConstant.USERS)
     public List<UserDTO> getUsers() {
         return userService.findAll();
     }
 
-    @GetMapping("user/{id}")
+    @GetMapping(DBConstant.GET_USER)
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
         UserDTO userDTO = userService.find(id);
         if (userDTO == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         return ResponseEntity.ok(userDTO);
     }
 
-    @GetMapping("users/{ids}")
+    @GetMapping(DBConstant.GET_USERS)
     public List<UserDTO> getUsers(@PathVariable String ids) {
         List<String> listIds = List.of(ids.split(","));
         return userService.findAll(listIds);
     }
 
-    @GetMapping("users/count")
+    @GetMapping(DBConstant.GET_COUNT)
     public Long getCount() {
         return userService.count();
     }
 
-    @GetMapping("user/getPos")
+    @GetMapping(DBConstant.GET_POS)
     public List<Position> getSymPositions(@RequestParam String id, @RequestParam String symbol) {
         return userService.getSymPositions(id, symbol);
     }
 
-    @GetMapping("user/getQuotes")
+    @GetMapping(DBConstant.GET_QUOTES)
     public List<QuoteResponse> getPosQuotes(@RequestParam String id) throws TradeException {
         return userService.getPosQuotes(id);
     }
 
-    @GetMapping("user/getGraph")
+    @GetMapping(DBConstant.GET_GRAPH)
     public List<GraphData> getGraphData(@RequestParam String id,
                                         @RequestParam String interval,
                                         @RequestParam String start_date) throws TradeException {
         return userService.getGraphData(id, interval, start_date);
     }
 
-    @DeleteMapping("users")
+    @DeleteMapping(DBConstant.USER)
     public Long deleteUsers() {
         return userService.deleteAll();
     }
 
-    @DeleteMapping("user/{id}")
+    @DeleteMapping(DBConstant.GET_USER)
     public Long deleteUser(@PathVariable String id) {
         return userService.delete(id);
     }
 
-    @DeleteMapping("users/{ids}")
+    @DeleteMapping(DBConstant.GET_USERS)
     public Long deleteUsers(@PathVariable String ids) {
         List<String> listIds = List.of(ids.split(","));
         return userService.deleteAll(listIds);
     }
 
-    @PutMapping("user")
+    @PutMapping(DBConstant.USER)
     public UserDTO putUser(@RequestBody UserDTO userDTO) {
         return userService.update(userDTO);
     }
 
-    @PutMapping("users")
+    @PutMapping(DBConstant.USERS)
     public Long putUsers(@RequestBody List<UserDTO> usersDTO) {
         return userService.update(usersDTO);
     }
 
-    @PutMapping("user/addPos")
+    @PutMapping(DBConstant.PUT_ADD)
     public UserDTO putPosition(@RequestBody DBRequest request) {
         return userService.addPosition(request.getUserId(), request.getPosition());
     }
-    @PutMapping("user/closePos")
+    @PutMapping(DBConstant.PUT_CLOSE)
     public UserDTO putClosePosition(@RequestBody DBRequest request) {
         return userService.closePosition(request.getUserId(),
                                          request.getSymbol(),
@@ -117,7 +117,7 @@ public class DBController {
                                          request.getPrice());
     }
 
-    @PutMapping("user/updatePos")
+    @PutMapping(DBConstant.PUT_UPDATE)
     public UserDTO putUpdatePosition(@RequestBody DBRequest request) {
         return userService.updatePosition(request.getUserId(),
                request.getPosId(),

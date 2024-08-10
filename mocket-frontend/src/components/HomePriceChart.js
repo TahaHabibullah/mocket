@@ -15,7 +15,7 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const HomePriceChart = ({ prevClose, total }) => {
-    const restEndpoint = `${process.env.REACT_APP_URL}database/user/getGraph?id=`;
+    const restEndpoint = '/database/user/getGraph?id=';
     const { user } = useContext(UserContext);
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);

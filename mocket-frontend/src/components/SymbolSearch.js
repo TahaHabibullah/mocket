@@ -6,7 +6,7 @@ import { checkInput } from "./Utils";
 import axios from "axios";
 
 const SymbolSearch = ( {setResults} ) => {
-    const restEndpoint = `${process.env.REACT_APP_URL}trade-service/ticker/search`;
+    const restEndpoint = '/trade-service/ticker/search';
     const [error, setError] = useState(null);
 
     const callRestApi = async (symbol) => {

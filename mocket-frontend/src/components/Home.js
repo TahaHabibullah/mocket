@@ -12,7 +12,7 @@ import '../styling/App.css';
 import '../styling/Home.css';
 
 const Home = () => {
-    const restEndpoint = `${process.env.REACT_APP_URL}database/user/getQuotes?id=`;
+    const restEndpoint = '/database/user/getQuotes?id=';
     const { user } = useContext(UserContext);
     const [quotes, setQuotes] = useState([]);
     const [error, setError] = useState(null);

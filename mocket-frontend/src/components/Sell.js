@@ -6,7 +6,7 @@ import axios from "axios";
 import "../styling/Sell.css";
 
 const Sell = ({ symbol, positions, live }) => {
-    const restEndpoint = `${process.env.REACT_APP_URL}database/user/closePos`;
+    const restEndpoint = '/database/user/closePos';
     const { user, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);

@@ -14,6 +14,7 @@ import com.taha.backendservice.model.TwelveDataRequest;
 import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
 import com.taha.backendservice.model.price.GraphData;
+import com.taha.backendservice.model.price.OrderData;
 import com.taha.backendservice.model.price.PriceData;
 import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.QuoteResponse;
@@ -253,6 +254,23 @@ public class UserRepositoryImpl implements UserRepository {
             GraphData g = new GraphData(entriesArr[i].getKey(), entriesArr[i].getValue() + u.getBalance());
             result.add(g);
         }
+        return result;
+    }
+
+    @Override
+    public List<OrderData> getOrderHist(String id) {
+        User u = find(id);
+        List<OrderData> result = new ArrayList<>();
+        List<Position> positions = u.getPositions();
+        for(Position p : positions) {
+            OrderData temp = new OrderData(p.getSymbol(), p.getOpenTimestamp(), p.getBuy(), p.getQuantity());
+            result.add(temp);
+            if(!p.isOpen()) {
+                temp = new OrderData(p.getSymbol(), p.getCloseTimestamp(), p.getBuy(), p.getSell(), p.getQuantity());
+                result.add(temp);
+            }
+        }
+        Collections.sort(result, (o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
         return result;
     }
 

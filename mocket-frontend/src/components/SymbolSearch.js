@@ -6,7 +6,7 @@ import { checkInput } from "./Utils";
 import axios from "axios";
 
 const SymbolSearch = ( {setResults} ) => {
-    const restEndpoint = '/trade-service/ticker/search';
+    const restEndpoint = 'http://localhost:8080/trade-service/ticker/search';
     const [error, setError] = useState(null);
 
     const callRestApi = async (symbol) => {

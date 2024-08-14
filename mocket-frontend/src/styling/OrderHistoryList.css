@@ -1,0 +1,12 @@
+.order-history-list {
+    padding: 10px;
+    display: grid;
+    font-size: calc(10px + 1vmin);
+}
+
+.order-history-list-divider {
+    margin: 20px 0 10px 0;
+    width: 100%;
+    height: 2px;
+    background-color: #1c1c1c;
+}

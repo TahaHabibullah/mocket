@@ -6,6 +6,7 @@ import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.DBRequest;
 import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.price.GraphData;
+import com.taha.backendservice.model.price.OrderData;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.service.UserService;
 import org.slf4j.Logger;
@@ -77,6 +78,11 @@ public class DBController {
                                         @RequestParam String interval,
                                         @RequestParam String start_date) throws TradeException {
         return userService.getGraphData(id, interval, start_date);
+    }
+
+    @GetMapping(DBConstant.GET_HIST)
+    public List<OrderData> getOrderHist(@RequestParam String id) throws TradeException {
+        return userService.getOrderHist(id);
     }
 
     @DeleteMapping(DBConstant.USER)

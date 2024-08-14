@@ -62,6 +62,7 @@ export function parseTimeSeriesLabels(data) {
 
 export function getPriceDiff(previous_close, currPrice) {
     const diff = (parseFloat(currPrice) - parseFloat(previous_close));
+    console.log(diff);
     var res = "";
     if(diff >= 0) {
         res += "+$" + diff.toFixed(2);

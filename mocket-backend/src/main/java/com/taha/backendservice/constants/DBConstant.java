@@ -9,6 +9,7 @@ public interface DBConstant {
     public final String GET_POS = "/user/getPos";
     public final String GET_QUOTES = "/user/getQuotes";
     public final String GET_GRAPH = "/user/getGraph";
+    public final String GET_HIST = "/user/getHist";
     public final String PUT_ADD = "/user/addPos";
     public final String PUT_CLOSE = "/user/closePos";
     public final String PUT_UPDATE = "/user/updatePos";

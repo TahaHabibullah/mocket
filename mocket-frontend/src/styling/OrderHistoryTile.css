@@ -1,0 +1,38 @@
+.order-history-tile {
+    color: white;
+    display: grid;
+    margin: 10px 0;
+}
+
+.order-history-tile-header {
+    display: inline-block;
+}
+
+.order-history-tile-header-left {
+    float: left;
+}
+
+.order-history-tile-header-right {
+    float: right;
+}
+
+.order-history-tile-labels {
+    margin-top: 10px;
+    color: #888888;
+    display: flex;
+}
+
+.order-history-tile-label {
+    width: 33.33%;
+    padding-right: 10px;
+}
+
+.order-history-tile-values {
+    color: white;
+    display: flex;
+}
+
+.order-history-tile-value {
+    width: 33.33%;
+    padding-right: 10px;
+}

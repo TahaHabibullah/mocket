@@ -10,9 +10,10 @@ import { getOpenPositions, getPortfolioValue,
 import axios from "axios";
 import '../styling/App.css';
 import '../styling/Home.css';
+import OrderHistory from "./OrderHistory";
 
 const Home = () => {
-    const restEndpoint = '/database/user/getQuotes?id=';
+    const restEndpoint = 'http://localhost:8080/database/user/getQuotes?id=';
     const { user } = useContext(UserContext);
     const [quotes, setQuotes] = useState([]);
     const [error, setError] = useState(null);
@@ -31,7 +32,7 @@ const Home = () => {
             }
         }).catch(error => {
             setError("Failed to fetch from backend.");
-            console.log(error)
+            console.log(error);
         })
     }
 
@@ -60,6 +61,7 @@ const Home = () => {
                     ) : (
                         <div/>
                     )}
+                    <OrderHistory id={user.id}/>
                 </div>
             ) : (
                 <div/>

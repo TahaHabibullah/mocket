@@ -15,7 +15,7 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const PriceChart = ({ liveData, quoteData }) => {
-    const restEndpoint = '/trade-service/data/price';
+    const restEndpoint = 'http://localhost:8080/trade-service/data/price';
     const { symbol } = useParams();
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(liveData);

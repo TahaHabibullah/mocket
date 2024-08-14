@@ -1,0 +1,98 @@
+.order-history {
+    color: white;
+    margin: 20px max(5vw, calc((100vw - 1600px) / 2)) 0px;
+    padding-bottom: 20px;
+    display: grid;
+}
+
+.order-history-divider {
+    margin-top: 10px;
+    width: 100vw - 1600px;
+    height: 2px;
+    background-color: #1c1c1c;
+}
+
+.order-history-accordion {
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    height: 60px;
+    width: 100%;
+    outline: none;
+    transition: 0.3s;
+}
+
+.order-history-accordion:hover {
+    color: #888888;
+}
+
+.order-history-accordion:after {
+    content: '\02795';
+    color: white;
+    font-size: 18px;
+    padding: 0.5rem;
+    float: right;
+}
+  
+.order-history-active:after {
+    content: "\2796";
+    color: #888888;
+}
+
+.order-history-panel {
+    background-color: black;
+    max-height: 0;
+    border-radius: 8px;
+    border-color: #1c1c1c;
+    border-style: solid;
+    border-width: 0px;
+    border-top: 0;
+    overflow: hidden;
+    width: 100%;
+    transition: 0.3s;
+}
+
+@media (max-width: 1320px) {
+    .order-history {
+        margin: 20px 5% 0;
+        color: white;
+    }
+
+    .order-history-accordion {
+        font-size: max(30px, calc(10px + 2vmin));
+    }
+
+    .order-history-divider {
+        height: 1px;
+        margin-top: -10px;
+    }
+
+    .order-history-accordion:after {
+        font-size: max(10px, calc(5px + 1vmin));
+        padding: 0.5rem;
+    }
+
+    .order-history-panel {
+        margin-top: -9px;
+    }
+}
+
+@media (max-width: 767px) {
+    .order-history {
+        margin: 10px 5% 0;
+        color: white;
+    }
+
+    .order-history-accordion {
+        font-size: max(24px, calc(10px + 2vmin));
+    }
+
+    .order-history-divider {
+        height: 1px;
+        margin-top: -20px;
+    }
+
+    .order-history-panel {
+        margin-top: -19px;
+    }
+}

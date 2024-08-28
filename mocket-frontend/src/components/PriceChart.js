@@ -177,12 +177,10 @@ const PriceChart = ({ liveData, quoteData }) => {
             const prevTime = labels[liveIndex-1];
             var dataCopy = [...data];
             var labelsCopy = [...labels];
-            dataCopy[liveIndex] = liveData;
             labelsCopy[liveIndex] = currTime;
-            setData(dataCopy);
+            dataCopy[liveIndex] = liveData;
             setLabels(labelsCopy);
-            console.log("Prev time: " + prevTime);
-            console.log("Curr time: " + currTime);
+            setData(dataCopy);
             if(new Date(currTime) - new Date(prevTime) >= 300000) {
                 setLiveIndex(liveIndex < 78 ? liveIndex + 1 : 77);
             }
@@ -245,7 +243,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                     data=
                     {
                         {
-                            labels: labels, 
+                            labels: Array(labels ? labels.length : 0).fill(0),
                             datasets: 
                             [{
                                 data: data,

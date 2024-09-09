@@ -15,7 +15,7 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const PriceChart = ({ liveData, quoteData }) => {
-    const restEndpoint = 'http://localhost:8080/trade-service/data/price';
+    const restEndpoint = '/trade-service/data/price';
     const { symbol } = useParams();
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(liveData);
@@ -204,7 +204,6 @@ const PriceChart = ({ liveData, quoteData }) => {
         }
         return axios.post(restEndpoint, body)
         .then((response) => {
-            console.log(response.data);
             if(response.data.status === "error") {
                 setError("API limit exceeded. Try again later.");
             }

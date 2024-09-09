@@ -4,13 +4,12 @@ import axios from "axios";
 import Alert from "./Alert";
 
 const UserProvider = ({ children }) => {
-    const restEndpoint = `http://localhost:8080/database/user/${process.env.REACT_APP_USER}`
+    const restEndpoint = `/database/user/${process.env.REACT_APP_USER}`
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const callRestApi = async () => {
         axios.get(restEndpoint)
         .then((response) => {
-            console.log(response.data);
             setUser(response.data);
         }).catch(error => {
             setError("Failed to fetch from backend.");

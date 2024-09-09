@@ -6,14 +6,13 @@ import { checkInput } from "./Utils";
 import axios from "axios";
 
 const SymbolSearch = ( {setResults} ) => {
-    const restEndpoint = 'http://localhost:8080/trade-service/ticker/search';
+    const restEndpoint = '/trade-service/ticker/search';
     const [error, setError] = useState(null);
 
     const callRestApi = async (symbol) => {
         const body = {symbol: symbol, country: "United States", outputsize: 10}
         return axios.post(restEndpoint, body)
         .then((response) => {
-            console.log(response.data);
             if(response.data.status === "error") {
                 setError("Unexpected API failure.")
             }

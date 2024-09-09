@@ -6,7 +6,7 @@ import axios from "axios";
 import "../styling/Sell.css";
 
 const Sell = ({ symbol, positions, live }) => {
-    const restEndpoint = 'http://localhost:8080/database/user/closePos';
+    const restEndpoint = '/database/user/closePos';
     const { user, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
@@ -32,7 +32,6 @@ const Sell = ({ symbol, positions, live }) => {
         return axios.put(restEndpoint, body)
         .then((response) => {
             refetch();
-            console.log(response);
         }).catch(error => {
             setError("Failed to send data to backend.");
             console.log(error);

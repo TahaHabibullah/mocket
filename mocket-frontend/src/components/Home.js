@@ -13,7 +13,7 @@ import '../styling/Home.css';
 import OrderHistory from "./OrderHistory";
 
 const Home = () => {
-    const restEndpoint = 'http://localhost:8080/database/user/getQuotes?id=';
+    const restEndpoint = '/database/user/getQuotes?id=';
     const { user } = useContext(UserContext);
     const [quotes, setQuotes] = useState([]);
     const [error, setError] = useState(null);
@@ -21,7 +21,6 @@ const Home = () => {
     const callRestApi = async () => {
         return axios.get(restEndpoint + user.id)
         .then((response) => {
-            console.log(response.data);
             if(response.data.length > 0) {
                 if(checkQuoteListError(response.data)) {
                     setError("API limit exceeded. Try again later.");

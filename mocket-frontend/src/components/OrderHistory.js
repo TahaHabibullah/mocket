@@ -5,7 +5,7 @@ import OrderHistoryList from "./OrderHistoryList.js";
 import "../styling/OrderHistory.css";
 
 const OrderHistory = ({ id }) => {
-    const restEndpoint = 'http://localhost:8080/database/user/getHist?id=';
+    const restEndpoint = '/database/user/getHist?id=';
     const [error, setError] = useState(null);
     const [orderHist, setOrderHist] = useState(null);
 
@@ -26,7 +26,6 @@ const OrderHistory = ({ id }) => {
     const callRestApi = async () => {
         return axios.get(restEndpoint + id)
         .then((response) => {
-            console.log(response.data);
             if(response.data.length > 0) {
                 setOrderHist(response.data);
             }

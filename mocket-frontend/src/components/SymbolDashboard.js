@@ -13,8 +13,8 @@ import '../styling/App.css';
 
 const SymbolDashboard = () => {
     const { user } = useContext(UserContext);
-    const liveEndpoint = 'http://localhost:8080/trade-service/live/price?symbol=';
-    const restEndpoint = 'http://localhost:8080/trade-service/quote';
+    const liveEndpoint = '/trade-service/live/price?symbol=';
+    const restEndpoint = '/trade-service/quote';
     const { symbol } = useParams();
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
@@ -29,26 +29,21 @@ const SymbolDashboard = () => {
         if(marketOpen) {
             const source = new EventSource(liveEndpoint + symbol);
             source.onopen = () => {
-                console.log("LivePriceData: EventSource connection opened");
             }
 
             source.onmessage = (e) => {
-                console.log(e.data);
                 setLiveData(parsePrice(e.data));
             }
 
             source.onerror = () => {
                 setError("Failed to fetch live price.");
-                console.log("LivePriceData: Error occurred while fetching live price");
                 source.close();
             }
             return () => {
-                console.log("LivePriceData: EventSource connection closed");
                 source.close();
             }
         }
         else if(marketOpen === false) {
-            console.log("LivePriceData: Market is closed");
         }
 
     }, [marketOpen]);
@@ -57,7 +52,6 @@ const SymbolDashboard = () => {
         const body = {symbol};
         return axios.post(restEndpoint, body)
         .then((response) => {
-            console.log(response.data);
             if(response.data.timestamp === 0) {
                 setError("API limit exceeded. Try again later.");
             }

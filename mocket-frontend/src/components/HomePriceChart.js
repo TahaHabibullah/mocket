@@ -15,7 +15,7 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const HomePriceChart = ({ prevClose, total }) => {
-    const restEndpoint = 'http://localhost:8080/database/user/getGraph?id=';
+    const restEndpoint = '/database/user/getGraph?id=';
     const { user } = useContext(UserContext);
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
@@ -189,7 +189,6 @@ const HomePriceChart = ({ prevClose, total }) => {
         }
         return axios.get(restEndpoint + user.id + params)
         .then((response) => {
-            console.log(response.data);
             if(response.data.length < 1 && user.positions.length > 0) {
                 setError("API limit exceeded. Try again later.");
             }

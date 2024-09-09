@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,22 +31,26 @@ public class DBController {
 
     @PostMapping(DBConstant.USER)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public UserDTO postUser(@RequestBody UserDTO userDTO) {
         return userService.save(userDTO);
     }
 
     @PostMapping(DBConstant.USERS)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> postUsers(@RequestBody List<UserDTO> usersDTO) {
         return userService.saveAll(usersDTO);
     }
 
     @GetMapping(DBConstant.USERS)
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> getUsers() {
         return userService.findAll();
     }
 
     @GetMapping(DBConstant.GET_USER)
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
         UserDTO userDTO = userService.find(id);
         if (userDTO == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -53,12 +58,14 @@ public class DBController {
     }
 
     @GetMapping(DBConstant.GET_USERS)
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> getUsers(@PathVariable String ids) {
         List<String> listIds = List.of(ids.split(","));
         return userService.findAll(listIds);
     }
 
     @GetMapping(DBConstant.GET_COUNT)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long getCount() {
         return userService.count();
     }
@@ -86,27 +93,32 @@ public class DBController {
     }
 
     @DeleteMapping(DBConstant.USER)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long deleteUsers() {
         return userService.deleteAll();
     }
 
     @DeleteMapping(DBConstant.GET_USER)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long deleteUser(@PathVariable String id) {
         return userService.delete(id);
     }
 
     @DeleteMapping(DBConstant.GET_USERS)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long deleteUsers(@PathVariable String ids) {
         List<String> listIds = List.of(ids.split(","));
         return userService.deleteAll(listIds);
     }
 
     @PutMapping(DBConstant.USER)
+    @PreAuthorize("hasRole('ADMIN')")
     public UserDTO putUser(@RequestBody UserDTO userDTO) {
         return userService.update(userDTO);
     }
 
     @PutMapping(DBConstant.USERS)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long putUsers(@RequestBody List<UserDTO> usersDTO) {
         return userService.update(usersDTO);
     }

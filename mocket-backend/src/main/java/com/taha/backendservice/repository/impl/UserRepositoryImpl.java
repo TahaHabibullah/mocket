@@ -28,8 +28,6 @@ import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.ReturnDocument.AFTER;
 
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.text.ParseException;
@@ -45,8 +43,6 @@ public class UserRepositoryImpl implements UserRepository {
                                                                            .writeConcern(WriteConcern.MAJORITY)
                                                                            .build();
     private final MongoClient client;
-
-    private final static Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
     private MongoCollection<User> userCollection;
     private TradeService tradeService;
     public UserRepositoryImpl(MongoClient client, TradeService tradeService) {
@@ -80,6 +76,31 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User find(String id) {
         return userCollection.find(eq("_id", new ObjectId(id))).first();
+    }
+
+    @Override
+    public Optional<User> findByUsername(String username) {
+        return Optional.of(userCollection.find(eq("username", username)).first());
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        if(userCollection.find(eq("email", email)).first() != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public Boolean existsByUsername(String username) {
+        if(userCollection.find(eq("username", username)).first() != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override

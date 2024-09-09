@@ -1,30 +1,30 @@
 package com.taha.backendservice.model.db;
 
-import com.taha.backendservice.service.impl.UserServiceImpl;
-import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import org.bson.types.ObjectId;
+
+import java.util.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Objects;
 
 public class User {
     private ObjectId id;
     private String email;
+    private String username;
+    private String password;
     private double balance;
     private List<Position> positions;
 
+    private Set<Role> roles = new HashSet<>();
+
     public User() {}
 
-    private final static Logger logger = LoggerFactory.getLogger(User.class);
-
-    public User(ObjectId id, String email, double balance, List<Position> positions) {
+    public User(ObjectId id, String email, String username, String password, double balance, List<Position> positions) {
         this.id = id;
         this.email = email;
+        this.username = username;
+        this.password = password;
         this.balance = balance;
         this.positions = positions;
     }
@@ -103,6 +103,20 @@ public class User {
         this.email = email;
     }
 
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public double getBalance() {
         return balance;
     }
@@ -115,6 +129,13 @@ public class User {
     }
     public void setPositions(List<Position> positions) {
         this.positions = positions;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 
     @Override

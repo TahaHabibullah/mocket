@@ -1,6 +1,7 @@
 package com.taha.backendservice.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.db.Position;
@@ -15,6 +16,9 @@ public interface UserRepository {
     User save(User user);
     List<User> saveAll(List<User> users);
     User find(String id);
+    Optional<User> findByUsername(String email);
+    Boolean existsByEmail(String email);
+    Boolean existsByUsername(String username);
     List<User> findAll(List<String> ids);
     List<User> findAll();
     long count();

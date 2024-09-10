@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 import Alert from "./Alert";
 
+axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+
 const UserProvider = ({ children }) => {
     const restEndpoint = 'http://localhost:8080/database/user/';
     const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
     const [error, setError] = useState(null);
+    const id = localStorage.getItem('id');
     const callRestApi = async () => {
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        axios.get(restEndpoint + user.id, config)
+        axios.get(restEndpoint + id)
         .then((response) => {
             setUser(response.data);
         }).catch(error => {
@@ -21,8 +20,14 @@ const UserProvider = ({ children }) => {
         })
     }
 
+    useEffect(() => {
+        if(id) {
+            callRestApi();
+        }
+    }, [])
+
     return (
-        <UserContext.Provider value={{user, token, setToken, setToken, setUser: setUser, refetch: callRestApi}}>
+        <UserContext.Provider value={{user, refetch: callRestApi}}>
             {error ? (
                 <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (

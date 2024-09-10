@@ -12,7 +12,7 @@ import axios from "axios";
 import '../styling/App.css';
 
 const SymbolDashboard = () => {
-    const { user, token } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const liveEndpoint = 'http://localhost:8080/trade-service/live/price?symbol=';
     const restEndpoint = 'http://localhost:8080/trade-service/quote';
     const { symbol } = useParams();
@@ -50,10 +50,7 @@ const SymbolDashboard = () => {
 
     const callRestApi = async () => {
         const body = {symbol};
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        return axios.post(restEndpoint, body, config)
+        return axios.post(restEndpoint, body)
         .then((response) => {
             if(response.data.timestamp === 0) {
                 setError("API limit exceeded. Try again later.");

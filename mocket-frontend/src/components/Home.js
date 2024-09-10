@@ -14,15 +14,12 @@ import OrderHistory from "./OrderHistory";
 
 const Home = () => {
     const restEndpoint = 'http://localhost:8080/database/user/getQuotes?id=';
-    const { user, token } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [quotes, setQuotes] = useState([]);
     const [error, setError] = useState(null);
 
     const callRestApi = async () => {
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        return axios.get(restEndpoint + user.id, config)
+        return axios.get(restEndpoint + user.id)
         .then((response) => {
             if(response.data.length > 0) {
                 if(checkQuoteListError(response.data)) {

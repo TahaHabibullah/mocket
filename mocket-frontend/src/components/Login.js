@@ -1,16 +1,14 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import "../styling/Login.css";
 import "../styling/App.css";
-import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const restEndpoint = 'http://localhost:8080/auth/login';
-    const { user, setToken, setUser } = useContext(UserContext);
     const navigator = useNavigate();
 
     const handleClick = () => {
@@ -31,8 +29,10 @@ const Login = () => {
             axios.post(restEndpoint, body)
             .then((response) => {
                 console.log(response.data);
-                setToken(response.data.token);
-                setUser(response.data);
+                localStorage.setItem('token', response.data.token);
+                localStorage.setItem('id', response.data.id);
+                navigator("/dashboard");
+                window.location.reload();
             }).catch(error => {
                 setError("Failed to login.");
                 console.log(error);
@@ -43,12 +43,6 @@ const Login = () => {
     const handleRedirect = () => {
         navigator("/register");
     }
-
-    useEffect(() => {
-        if(user) {
-            navigator("/dashboard");
-        }
-    }, [user]);
 
     return (
         <div className="App">
@@ -75,7 +69,6 @@ const Login = () => {
                     <div>Don't have an account?</div>
                     <div className="mocket-login-newuser-button" onClick={handleRedirect}>Register Here</div>
                 </div>
-                
             </div>
         </div>
     )

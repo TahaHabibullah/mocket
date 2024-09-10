@@ -16,7 +16,7 @@ ChartJS.register(...registerables);
 
 const HomePriceChart = ({ prevClose, total }) => {
     const restEndpoint = 'http://localhost:8080/database/user/getGraph?id=';
-    const { user, token } = useContext(UserContext);
+    const { user } = useContext(UserContext);
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
     const [currDiff, setCurrDiff] = useState(getPriceDiff(prevClose, total));
@@ -175,9 +175,6 @@ const HomePriceChart = ({ prevClose, total }) => {
     const callRestApi = async () => {
         var params;
         const start_date = getStartDate(toggledIndex);
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
         if(toggledIndex === 0) {
             params = "&interval=5min&start_date=" + getLastBusinessDay();
         }
@@ -190,7 +187,7 @@ const HomePriceChart = ({ prevClose, total }) => {
         else {
             params = "&interval=1day&start_date=" + start_date;
         }
-        return axios.get(restEndpoint + user.id + params, config)
+        return axios.get(restEndpoint + user.id + params)
         .then((response) => {
             if(response.data.length < 1 && user.positions.length > 0) {
                 setError("API limit exceeded. Try again later.");

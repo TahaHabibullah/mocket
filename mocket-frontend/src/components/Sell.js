@@ -7,7 +7,7 @@ import "../styling/Sell.css";
 
 const Sell = ({ symbol, positions, live }) => {
     const restEndpoint = 'http://localhost:8080/database/user/closePos';
-    const { user, token, refetch } = useContext(UserContext);
+    const { user, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null);
@@ -29,10 +29,7 @@ const Sell = ({ symbol, positions, live }) => {
             quantity: document.getElementById("sell-in").value,
             price: live
         }
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        return axios.put(restEndpoint, body, config)
+        return axios.put(restEndpoint, body)
         .then((response) => {
             refetch();
         }).catch(error => {

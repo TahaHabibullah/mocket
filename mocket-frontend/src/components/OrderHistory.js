@@ -9,7 +9,6 @@ const OrderHistory = ({ id }) => {
     const restEndpoint = 'http://localhost:8080/database/user/getHist?id=';
     const [error, setError] = useState(null);
     const [orderHist, setOrderHist] = useState(null);
-    const { token } = useContext(UserContext);
 
     const handleToggle = () => {
         var acc = document.getElementById("hist");
@@ -26,10 +25,7 @@ const OrderHistory = ({ id }) => {
     }
 
     const callRestApi = async () => {
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        return axios.get(restEndpoint + id, config)
+        return axios.get(restEndpoint + id)
         .then((response) => {
             if(response.data.length > 0) {
                 setOrderHist(response.data);

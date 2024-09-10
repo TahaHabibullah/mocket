@@ -1,10 +1,9 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import { validEmail } from "./Utils";
 import "../styling/Register.css";
 import "../styling/App.css";
-import { UserContext } from "./UserContext";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -12,7 +11,6 @@ const Register = () => {
     const [alert, setAlert] = useState(null);
     const restEndpoint = 'http://localhost:8080/auth/register';
     const loginEndpoint = 'http://localhost:8080/auth/login';
-    const { user, setToken, setUser } = useContext(UserContext);
     const navigator = useNavigate();
 
     const handleClick = () => {
@@ -48,8 +46,10 @@ const Register = () => {
                 axios.post(loginEndpoint, loginBody)
                 .then((response) => {
                     console.log(response.data);
-                    setToken(response.data.token);
-                    setUser(response.data);
+                    localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('id', response.data.id);
+                    navigator("/dashboard");
+                    window.location.reload();
                 }).catch(error => {
                     setError("Failed to login.");
                     console.log(error);
@@ -64,12 +64,6 @@ const Register = () => {
     const handleRedirect = () => {
         navigator("/login");
     }
-
-    useEffect(() => {
-        if(user) {
-            navigator("/dashboard");
-        }
-    }, [user]);
 
     return (
         <div className="App">
@@ -99,7 +93,6 @@ const Register = () => {
                     <div>Already have an account?</div>
                     <div className="mocket-register-existing-button" onClick={handleRedirect}>Login Here</div>
                 </div>
-                
             </div>
         </div>
     )

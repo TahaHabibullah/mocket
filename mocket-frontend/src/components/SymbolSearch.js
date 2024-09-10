@@ -1,22 +1,17 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import Alert from "./Alert";
 import "../styling/SymbolSearch.css";
 import { FaSearch } from "react-icons/fa";
 import { checkInput } from "./Utils";
 import axios from "axios";
-import { UserContext } from "./UserContext";
 
 const SymbolSearch = ( {setResults} ) => {
     const restEndpoint = 'http://localhost:8080/trade-service/ticker/search';
     const [error, setError] = useState(null);
-    const { token } = useContext(UserContext);
 
     const callRestApi = async (symbol) => {
         const body = {symbol: symbol, country: "United States", outputsize: 10}
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
-        return axios.post(restEndpoint, body, config)
+        return axios.post(restEndpoint, body)
         .then((response) => {
             if(response.data.status === "error") {
                 setError("Unexpected API failure.")

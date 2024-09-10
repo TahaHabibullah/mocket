@@ -17,7 +17,6 @@ ChartJS.register(...registerables);
 
 const PriceChart = ({ liveData, quoteData }) => {
     const restEndpoint = 'http://localhost:8080/trade-service/data/price';
-    const { token } = useContext(UserContext);
     const { symbol } = useParams();
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(liveData);
@@ -192,9 +191,6 @@ const PriceChart = ({ liveData, quoteData }) => {
     const callRestApi = async () => {
         var body;
         const start_date = getStartDate(toggledIndex);
-        const config = { 
-            headers: { Authorization: `Bearer ${token}` }
-        }
         if(toggledIndex === 0) {
             body = {symbol: symbol, interval: "5min", start_date: quoteData.datetime, order: "ASC"};
         }
@@ -207,7 +203,7 @@ const PriceChart = ({ liveData, quoteData }) => {
         else {
             body = {symbol: symbol, interval: "1day", start_date: start_date, order: "ASC"};
         }
-        return axios.post(restEndpoint, body, config)
+        return axios.post(restEndpoint, body)
         .then((response) => {
             if(response.data.status === "error") {
                 setError("API limit exceeded. Try again later.");

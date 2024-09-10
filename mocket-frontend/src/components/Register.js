@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
+import MocketNavBar from "./MocketNavBar";
 import { validEmail } from "./Utils";
 import "../styling/Register.css";
 import "../styling/App.css";
+import "../styling/MocketNavBar.css";
 import { useNavigate } from "react-router-dom";
 
 const Register = () => {
@@ -77,6 +79,7 @@ const Register = () => {
             ) : (
                 <div/>
             )}
+            <MocketNavBar style="login"/>
             <div className="mocket-register">
                 <div className="mocket-register-header">Register New Account</div>
                 <div className="mocket-register-input-box">

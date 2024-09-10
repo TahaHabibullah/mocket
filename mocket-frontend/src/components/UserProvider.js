@@ -21,7 +21,7 @@ const UserProvider = ({ children }) => {
     }
 
     useEffect(() => {
-        if(id) {
+        if(id && localStorage.getItem('token')) {
             callRestApi();
         }
     }, [])

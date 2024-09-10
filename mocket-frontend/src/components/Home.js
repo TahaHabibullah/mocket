@@ -50,7 +50,7 @@ const Home = () => {
             )}
             {user ? (
                 <div>
-                    <MocketNavBar/>
+                    <MocketNavBar style="dashboard"/>
                     <HomePriceChart 
                         prevClose={getPortfolioPrevClose(getOpenPositions(user.positions), user.balance, quotes)} 
                         total={getPortfolioValue(getOpenPositions(user.positions), user.balance, quotes)}

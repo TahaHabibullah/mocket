@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
+import MocketNavBar from "./MocketNavBar";
 import "../styling/Login.css";
 import "../styling/App.css";
+import "../styling/MocketNavBar.css";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
@@ -56,6 +58,7 @@ const Login = () => {
             ) : (
                 <div/>
             )}
+            <MocketNavBar style="login"/>
             <div className="mocket-login">
                 <div className="mocket-login-header">Log into Mocket</div>
                 <div className="mocket-login-input-box">

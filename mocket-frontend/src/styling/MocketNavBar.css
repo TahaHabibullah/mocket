@@ -1,11 +1,21 @@
 .nav-bar {
-    list-style-type: none;
     margin: 0;
     padding: 10px 0;
     width: 100%;
     height: 60px;
-    display: flex;
+    display: inline-block;
     align-items: center;
+}
+
+.nav-bar-left {
+    float: left;
+    display: flex;
+    width: 75%;
+}
+
+.nav-bar-right {
+    float: right;
+    display: flex;
 }
 
 .nav-bar-brand {
@@ -13,7 +23,6 @@
     height: 60px;
     margin: 0px 5vw;
     text-decoration: none;
-    float: left;
 }
 
 .nav-bar-brand:hover {
@@ -21,7 +30,7 @@
 }
 
 .nav-bar-repo {
-    margin: 10px 20px 0px -15vw;
+    margin: 10px 20px 0px 0;
     width: 45px;
     height: 45px;
     text-decoration: none;
@@ -36,7 +45,74 @@
 .nav-bar-search {
     width: 100%;
     padding-top: 10px;
-    align-self: normal;
+}
+
+.nav-bar-logout {
+    margin: 10px 20px 0 0;
+    float: right;
+    width: 150px;
+    height: 3rem;
+    color: white;
+    background-color: black;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 2px;
+    transition: 0.3s;
+    font-size: 20px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+}
+
+.nav-bar-logout:hover {
+    color: black;
+    border-color: black;
+    background-color: rgb(35, 138, 255);
+}
+
+.nav-bar-login {
+    margin: 10px 20px 0 0;
+    float: right;
+    width: 150px;
+    height: 3rem;
+    color: white;
+    background-color: black;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 2px;
+    transition: 0.3s;
+    font-size: 20px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+}
+
+.nav-bar-login:hover {
+    border-color: #888888;
+    background-color: #222222;
+}
+
+.nav-bar-register {
+    margin: 10px 20px 0 0;
+    float: right;
+    width: 150px;
+    height: 3rem;
+    color: black;
+    background-color: rgb(35, 138, 255);
+    border-radius: 15px;
+    border-color: rgb(24, 95, 177);
+    border-style: solid;
+    border-width: 2px;
+    transition: 0.3s;
+    font-size: 20px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+}
+
+.nav-bar-register:hover {
+    color: black;
+    border-color: black;
+    background-color: rgb(29, 114, 212);
 }
 
 @media (max-width: 1320px) {

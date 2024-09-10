@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Alert from "./Alert";
 import axios from "axios";
 import OrderHistoryList from "./OrderHistoryList.js";
 import "../styling/OrderHistory.css";
+import { UserContext } from "./UserContext.js";
 
 const OrderHistory = ({ id }) => {
-    const restEndpoint = '/database/user/getHist?id=';
+    const restEndpoint = 'http://localhost:8080/database/user/getHist?id=';
     const [error, setError] = useState(null);
     const [orderHist, setOrderHist] = useState(null);
+    const { token } = useContext(UserContext);
 
     const handleToggle = () => {
         var acc = document.getElementById("hist");
@@ -24,7 +26,10 @@ const OrderHistory = ({ id }) => {
     }
 
     const callRestApi = async () => {
-        return axios.get(restEndpoint + id)
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        return axios.get(restEndpoint + id, config)
         .then((response) => {
             if(response.data.length > 0) {
                 setOrderHist(response.data);
@@ -42,7 +47,7 @@ const OrderHistory = ({ id }) => {
     return (
         <div>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}

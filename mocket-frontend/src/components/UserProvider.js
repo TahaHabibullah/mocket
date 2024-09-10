@@ -4,11 +4,15 @@ import axios from "axios";
 import Alert from "./Alert";
 
 const UserProvider = ({ children }) => {
-    const restEndpoint = `/database/user/${process.env.REACT_APP_USER}`
+    const restEndpoint = 'http://localhost:8080/database/user/';
     const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
     const [error, setError] = useState(null);
     const callRestApi = async () => {
-        axios.get(restEndpoint)
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        axios.get(restEndpoint + user.id, config)
         .then((response) => {
             setUser(response.data);
         }).catch(error => {
@@ -17,14 +21,10 @@ const UserProvider = ({ children }) => {
         })
     }
 
-    useEffect(() => {
-        callRestApi();
-    }, [])
-
     return (
-        <UserContext.Provider value={{user, refetch: callRestApi}}>
+        <UserContext.Provider value={{user, token, setToken, setToken, setUser: setUser, refetch: callRestApi}}>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}

@@ -1,14 +1,17 @@
 import React from "react";
 import "../styling/Alert.css";
 
-const Alert = ({ message, style, setError }) => {
+const Alert = ({ message, style, setAlert }) => {
     const handleClick = () => {
-        setError(null);
+        setAlert(null);
     }
 
     const getType = () => {
         if(style === "error") {
             return "Error:"
+        }
+        else if(style === "warning") {
+            return "Notice:"
         }
     }
 

@@ -1,4 +1,5 @@
 const regex = /^[a-zA-Z]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function isAlpha(text) {
     return regex.test(text);
@@ -332,4 +333,8 @@ export function checkQuoteListError(quoteList) {
         }
     }
     return false;
+}
+
+export function validEmail(email) {
+    return String(email).toLowerCase().match(emailRegex);
 }

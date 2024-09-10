@@ -15,8 +15,8 @@ ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const HomePriceChart = ({ prevClose, total }) => {
-    const restEndpoint = '/database/user/getGraph?id=';
-    const { user } = useContext(UserContext);
+    const restEndpoint = 'http://localhost:8080/database/user/getGraph?id=';
+    const { user, token } = useContext(UserContext);
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(total);
     const [currDiff, setCurrDiff] = useState(getPriceDiff(prevClose, total));
@@ -175,6 +175,9 @@ const HomePriceChart = ({ prevClose, total }) => {
     const callRestApi = async () => {
         var params;
         const start_date = getStartDate(toggledIndex);
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
         if(toggledIndex === 0) {
             params = "&interval=5min&start_date=" + getLastBusinessDay();
         }
@@ -187,7 +190,7 @@ const HomePriceChart = ({ prevClose, total }) => {
         else {
             params = "&interval=1day&start_date=" + start_date;
         }
-        return axios.get(restEndpoint + user.id + params)
+        return axios.get(restEndpoint + user.id + params, config)
         .then((response) => {
             if(response.data.length < 1 && user.positions.length > 0) {
                 setError("API limit exceeded. Try again later.");
@@ -206,7 +209,7 @@ const HomePriceChart = ({ prevClose, total }) => {
     return (
         <div>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}

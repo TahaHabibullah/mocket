@@ -6,8 +6,8 @@ import axios from "axios";
 import "../styling/Sell.css";
 
 const Sell = ({ symbol, positions, live }) => {
-    const restEndpoint = '/database/user/closePos';
-    const { user, refetch } = useContext(UserContext);
+    const restEndpoint = 'http://localhost:8080/database/user/closePos';
+    const { user, token, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null);
@@ -29,7 +29,10 @@ const Sell = ({ symbol, positions, live }) => {
             quantity: document.getElementById("sell-in").value,
             price: live
         }
-        return axios.put(restEndpoint, body)
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        return axios.put(restEndpoint, body, config)
         .then((response) => {
             refetch();
         }).catch(error => {
@@ -42,7 +45,7 @@ const Sell = ({ symbol, positions, live }) => {
         <div>
             <div>
                 {error ? (
-                    <Alert message={error} style={"error"} setError={setError}/>
+                    <Alert message={error} style={"error"} setAlert={setError}/>
                 ) : (
                     <div/>
                 )}

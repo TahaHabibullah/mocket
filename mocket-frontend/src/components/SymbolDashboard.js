@@ -12,9 +12,9 @@ import axios from "axios";
 import '../styling/App.css';
 
 const SymbolDashboard = () => {
-    const { user } = useContext(UserContext);
-    const liveEndpoint = '/trade-service/live/price?symbol=';
-    const restEndpoint = '/trade-service/quote';
+    const { user, token } = useContext(UserContext);
+    const liveEndpoint = 'http://localhost:8080/trade-service/live/price?symbol=';
+    const restEndpoint = 'http://localhost:8080/trade-service/quote';
     const { symbol } = useParams();
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
@@ -50,7 +50,10 @@ const SymbolDashboard = () => {
 
     const callRestApi = async () => {
         const body = {symbol};
-        return axios.post(restEndpoint, body)
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        return axios.post(restEndpoint, body, config)
         .then((response) => {
             if(response.data.timestamp === 0) {
                 setError("API limit exceeded. Try again later.");
@@ -70,7 +73,7 @@ const SymbolDashboard = () => {
         <div className="App">
             <MocketNavBar/>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}

@@ -13,13 +13,16 @@ import '../styling/Home.css';
 import OrderHistory from "./OrderHistory";
 
 const Home = () => {
-    const restEndpoint = '/database/user/getQuotes?id=';
-    const { user } = useContext(UserContext);
+    const restEndpoint = 'http://localhost:8080/database/user/getQuotes?id=';
+    const { user, token } = useContext(UserContext);
     const [quotes, setQuotes] = useState([]);
     const [error, setError] = useState(null);
 
     const callRestApi = async () => {
-        return axios.get(restEndpoint + user.id)
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        return axios.get(restEndpoint + user.id, config)
         .then((response) => {
             if(response.data.length > 0) {
                 if(checkQuoteListError(response.data)) {
@@ -44,7 +47,7 @@ const Home = () => {
     return (
         <div className="App">
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}

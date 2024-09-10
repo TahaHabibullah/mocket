@@ -6,8 +6,8 @@ import axios from "axios";
 import "../styling/Buy.css"
 
 const Buy = ({ symbol, balance, live }) => {
-    const restEndpoint = '/database/user/addPos';
-    const { user, refetch } = useContext(UserContext);
+    const restEndpoint = 'http://localhost:8080/database/user/addPos';
+    const { user, token, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null);
@@ -31,7 +31,10 @@ const Buy = ({ symbol, balance, live }) => {
                 buy: live
             }
         }
-        return axios.put(restEndpoint, body)
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
+        return axios.put(restEndpoint, body, config)
         .then((response) => {
             refetch();
         }).catch(error => {
@@ -44,7 +47,7 @@ const Buy = ({ symbol, balance, live }) => {
         <div>
             <div>
                 {error ? (
-                    <Alert message={error} style={"error"} setError={setError}/>
+                    <Alert message={error} style={"error"} setAlert={setError}/>
                 ) : (
                     <div/>
                 )}

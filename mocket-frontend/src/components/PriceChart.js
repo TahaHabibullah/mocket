@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState, useRef, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, 
@@ -10,12 +10,14 @@ import QuoteHeader from "./QuoteHeader";
 import Alert from "./Alert";
 import axios from "axios";
 import "../styling/PriceChart.css";
+import { UserContext } from "./UserContext";
 
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
 const PriceChart = ({ liveData, quoteData }) => {
-    const restEndpoint = '/trade-service/data/price';
+    const restEndpoint = 'http://localhost:8080/trade-service/data/price';
+    const { token } = useContext(UserContext);
     const { symbol } = useParams();
     const [data, setData] = useState(null);
     const [currData, setCurrData] = useState(liveData);
@@ -190,6 +192,9 @@ const PriceChart = ({ liveData, quoteData }) => {
     const callRestApi = async () => {
         var body;
         const start_date = getStartDate(toggledIndex);
+        const config = { 
+            headers: { Authorization: `Bearer ${token}` }
+        }
         if(toggledIndex === 0) {
             body = {symbol: symbol, interval: "5min", start_date: quoteData.datetime, order: "ASC"};
         }
@@ -202,7 +207,7 @@ const PriceChart = ({ liveData, quoteData }) => {
         else {
             body = {symbol: symbol, interval: "1day", start_date: start_date, order: "ASC"};
         }
-        return axios.post(restEndpoint, body)
+        return axios.post(restEndpoint, body, config)
         .then((response) => {
             if(response.data.status === "error") {
                 setError("API limit exceeded. Try again later.");
@@ -230,7 +235,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     return (
         <div>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}

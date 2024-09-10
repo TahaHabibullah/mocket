@@ -9,7 +9,7 @@ const MocketNavBar = () => {
     const [results, setResults] = useState(null);
     return (
         <ul className="nav-bar">
-            <a href="/"><img src={logo} alt="" className="nav-bar-brand"/></a>
+            <a href="/dashboard"><img src={logo} alt="" className="nav-bar-brand"/></a>
             <li className="nav-bar-search">
                 <SymbolSearch setResults={setResults}/>
                 {results && results.hasOwnProperty("data") && <SymbolResultsList results={results}/>}

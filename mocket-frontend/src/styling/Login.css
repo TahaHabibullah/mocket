@@ -89,14 +89,73 @@
 
 @media (max-width: 1320px) {
     .mocket-login {
-        top: 10%;
         left: max(5vw, calc((100vw - 600px) / 2));
+    }
+    .mocket-login-header {
+        text-align: center;
+        padding: 2rem;
+        font-size: 36px;
+    }
+    
+    .mocket-login-input-box {
+        margin-bottom: 15px;
+        background-color: black;
+        border-radius: 15px;
+        border-color: #888888;
+        border-style: solid;
+        border-width: 1px;
+        height: 3rem;
+        width: 500px;
+        box-shadow: 0px 0px 8px #1c1c1c;
+        display: flex;
+        align-items: center;
+    }
+    
+    .mocket-login-input {
+        background-color: transparent;
+        border: none;
+        height: 100%;
+        font-size: calc(10px + 1vmin);
+        width: 100%;
+        padding: 0 15px;
     }
 }
 
 @media (max-width: 767px) {
     .mocket-login {
-        top: 5%;
-        left: max(5vw, calc((100vw - 600px) / 2));
+        left: max(5vw, calc((100vw - 300px) / 2));
+        width: 300px;
+        height: 240px;
+    }
+    .mocket-login-header {
+        padding: 2rem 0 10px 0;
+        font-size: 24px;
+    }
+    
+    .mocket-login-input-box {
+        margin-bottom: 8px;
+        border-radius: 8px;
+        height: 1.5rem;
+        width: 250px;
+    }
+    
+    .mocket-login-input {
+        padding: 0 10px;
+    }
+
+    .mocket-login-button {
+        border-radius: 15px;
+        font-size: 16px;
+        width: 100%;
+        height: 30px;
+        margin: 10px 0;
+    }
+    
+    .mocket-login-newuser {
+        font-size: 10px;
+    }
+    
+    .mocket-login-newuser-button {
+        margin-left: 4px;
     }
 }

@@ -44,13 +44,11 @@ public class DBController {
     }
 
     @GetMapping(DBConstant.USERS)
-    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> getUsers() {
         return userService.findAll();
     }
 
     @GetMapping(DBConstant.GET_USER)
-    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
         UserDTO userDTO = userService.find(id);
         if (userDTO == null) return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
@@ -58,7 +56,6 @@ public class DBController {
     }
 
     @GetMapping(DBConstant.GET_USERS)
-    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> getUsers(@PathVariable String ids) {
         List<String> listIds = List.of(ids.split(","));
         return userService.findAll(listIds);

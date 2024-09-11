@@ -114,36 +114,32 @@
 @media (max-width: 1320px) {
     .nav-bar-brand {
         margin: 5px 3vw;
-        width: max(120px, 18vw);
-        height: max(30px, 4.5vw);
     }
     
     .nav-bar-repo {
         margin: 1.4vmin 10px 0px 0px;
-        height: max(20px, 3.5vw);
-        width: max(20px, 3.5vw);
     }
 
     .nav-bar-search {
-        padding-top: 10px;
+        padding-top: 20px;
     }
 
     .nav-bar-logout {
-        margin: 10px 15px 0 0;
+        margin: 20px 15px 0 0;
         width: 12vw;
         height: 4vmin;
         font-size: calc(6px + 1vmin);
     }
 
     .nav-bar-login {
-        margin: 10px 10px 0 0;
+        margin: 18px 10px 0 0;
         width: 12vw;
         height: 4vmin;
         font-size: calc(6px + 1vmin);
     }
 
     .nav-bar-register {
-        margin: 10px 10px 0 0;
+        margin: 18px 10px 0 0;
         width: 12vw;
         height: 4vmin;
         font-size: calc(6px + 1vmin);
@@ -153,10 +149,14 @@
 @media (max-width: 767px) {
     .nav-bar-brand {
         margin: 2px calc(10px + 1vw);
+        width: max(120px, 18vw);
+        height: max(30px, 4.5vw);
     }
     
     .nav-bar-repo {
         margin: 2.5vmin 5px 0px 0px;
+        height: max(20px, 3.5vw);
+        width: max(20px, 3.5vw);
     }
 
     .nav-bar-search {

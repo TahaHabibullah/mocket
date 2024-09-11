@@ -7,5 +7,5 @@ import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
     public JwtResponse login(LoginRequest loginRequest);
-    public ResponseEntity<?> signUp(SignupRequest signupRequest);
+    public ResponseEntity<?> register(SignupRequest signupRequest);
 }

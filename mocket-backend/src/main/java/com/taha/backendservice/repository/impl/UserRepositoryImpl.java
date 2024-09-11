@@ -79,8 +79,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByUsername(String username) {
-        return Optional.of(userCollection.find(eq("username", username)).first());
+    public Optional<User> findByEmail(String email) {
+        return Optional.of(userCollection.find(eq("email", email)).first());
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.taha.backendservice.service.impl;
 
 import com.taha.backendservice.constants.ERole;
+import com.taha.backendservice.controller.DBController;
 import com.taha.backendservice.model.auth.JwtResponse;
 import com.taha.backendservice.model.auth.LoginRequest;
 import com.taha.backendservice.model.auth.SignupRequest;
@@ -11,6 +12,8 @@ import com.taha.backendservice.repository.UserRepository;
 import com.taha.backendservice.security.jwt.JwtUtils;
 import com.taha.backendservice.security.service.UserDetailsImpl;
 import com.taha.backendservice.service.AuthService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -42,7 +45,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtResponse login(LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+                new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = jwtUtils.generateJwtToken(authentication);
@@ -54,21 +57,18 @@ public class AuthServiceImpl implements AuthService {
 
         return new JwtResponse(jwt,
                 userDetails.getId().toString(),
-                userDetails.getUsername(),
                 userDetails.getEmail(),
+                userDetails.getBalance(),
+                userDetails.getPositions(),
                 roles);
     }
 
     @Override
-    public ResponseEntity<?> signUp(SignupRequest signupRequest) {
+    public ResponseEntity<?> register(SignupRequest signupRequest) {
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity.ok("Error: Email is already in use");
         }
-        if (userRepository.existsByUsername(signupRequest.getUsername())) {
-            return ResponseEntity.ok("Error: Username is already taken");
-        }
         User user = new User(null, signupRequest.getEmail(),
-                signupRequest.getUsername(),
                 encoder.encode(signupRequest.getPassword()), 10000, new ArrayList<>());
 
         Set<String> strRoles = signupRequest.getRoles();
@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
                 if(role == "admin") {
                     Role adminRole = roleRepository.findByType(ERole.ROLE_ADMIN)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
-                    roles.add(adminRole);
+                    //roles.add(adminRole);
                 }
                 else {
                     Role userRole = roleRepository.findByType(ERole.ROLE_USER)

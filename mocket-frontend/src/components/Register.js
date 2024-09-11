@@ -15,7 +15,8 @@ const Register = () => {
     const loginEndpoint = 'http://localhost:8080/auth/login';
     const navigator = useNavigate();
 
-    const handleClick = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("pass").value;
         const confirm = document.getElementById("confirm").value;
@@ -82,16 +83,19 @@ const Register = () => {
             <MocketNavBar style="login"/>
             <div className="mocket-register">
                 <div className="mocket-register-header">Register New Account</div>
-                <div className="mocket-register-input-box">
-                    <input id="email" placeholder="Email" className="mocket-register-input"/>
-                </div>
-                <div className="mocket-register-input-box">
-                    <input id="pass" type="password" placeholder="Password" className="mocket-register-input"/>
-                </div>
-                <div className="mocket-register-input-box">
-                    <input id="confirm" type="password" placeholder="Confirm Password" className="mocket-register-input"/>
-                </div>
-                <button className="mocket-register-button" onClick={handleClick}>Register</button>
+                <form onSubmit={handleSubmit}>
+                    <div className="mocket-register-input-box">
+                        <input id="email" placeholder="Email" className="mocket-register-input"/>
+                    </div>
+                    <div className="mocket-register-input-box">
+                        <input id="pass" type="password" placeholder="Password" className="mocket-register-input"/>
+                    </div>
+                    <div className="mocket-register-input-box">
+                        <input id="confirm" type="password" placeholder="Confirm Password" className="mocket-register-input"/>
+                    </div>
+                    <button type="submit" className="mocket-register-button">Register</button>
+                </form>
+                
                 <div className="mocket-register-existing">
                     <div>Already have an account?</div>
                     <div className="mocket-register-existing-button" onClick={handleRedirect}>Login Here</div>

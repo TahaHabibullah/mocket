@@ -5,12 +5,13 @@ import Register from "./Register";
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import SymbolDashboard from "./SymbolDashboard";
 import { UserProvider } from "./UserProvider";
+import { expiredToken } from "./Utils";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/login"/>}/>
+        <Route path="/" element={expiredToken() ? <Navigate to="/login"/> : <Navigate to="/dashboard"/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
         <Route path="/dashboard" element={<UserProvider><Home/></UserProvider>}/>

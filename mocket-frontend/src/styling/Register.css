@@ -22,6 +22,7 @@
 }
 
 .mocket-register-input-box {
+    margin-bottom: 15px;
     background-color: black;
     border-radius: 15px;
     border-color: #888888;
@@ -84,4 +85,18 @@
 
 .mocket-register-existing-button:hover {
     color: rgb(0, 228, 0);
+}
+
+@media (max-width: 1320px) {
+    .mocket-register {
+        top: 10%;
+        left: max(5vw, calc((100vw - 600px) / 2));
+    }
+}
+
+@media (max-width: 767px) {
+    .mocket-register {
+        top: 5%;
+        left: max(5vw, calc((100vw - 600px) / 2));
+    }
 }

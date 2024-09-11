@@ -13,7 +13,8 @@ const Login = () => {
     const restEndpoint = 'http://localhost:8080/auth/login';
     const navigator = useNavigate();
 
-    const handleClick = () => {
+    const handleSubmit = (e) => {
+        e.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("pass").value;
         if(email.length < 1) {
@@ -61,13 +62,15 @@ const Login = () => {
             <MocketNavBar style="login"/>
             <div className="mocket-login">
                 <div className="mocket-login-header">Log into Mocket</div>
-                <div className="mocket-login-input-box">
-                    <input id="email" placeholder="Email" className="mocket-login-input"/>
-                </div>
-                <div className="mocket-login-input-box">
-                    <input id="pass" type="password" placeholder="Password" className="mocket-login-input"/>
-                </div>
-                <button className="mocket-login-button" onClick={handleClick}>Login</button>
+                <form onSubmit={handleSubmit}>
+                    <div className="mocket-login-input-box">
+                        <input id="email" placeholder="Email" className="mocket-login-input"/>
+                    </div>
+                    <div className="mocket-login-input-box">
+                        <input id="pass" type="password" placeholder="Password" className="mocket-login-input"/>
+                    </div>
+                    <button type="submit" className="mocket-login-button">Login</button>
+                </form>
                 <div className="mocket-login-newuser">
                     <div>Don't have an account?</div>
                     <div className="mocket-login-newuser-button" onClick={handleRedirect}>Register Here</div>

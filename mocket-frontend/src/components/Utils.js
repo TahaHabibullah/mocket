@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 const regex = /^[a-zA-Z]+$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -8,10 +10,31 @@ function isAlpha(text) {
 export function truncateOutput(text) {
     if(!text)
         return "";
-    else if(text.length < 23)
-        return text;
-    else
-        return text.substring(0, 20) + "...";
+
+    if(window.innerWidth < 767) {
+        if(text.length < 18) {
+            return text;
+        }
+        else {
+            return text.substring(0, 20) + "...";
+        }
+    }
+    else if(window.innerWidth < 1320) {
+        if(text.length < 23) {
+            return text;
+        }
+        else {
+            return text.substring(0, 20) + "...";
+        }
+    }
+    else { 
+        if(text.length < 33) {
+            return text;
+        }
+        else {
+            return text.substring(0, 30) + "...";
+        }
+    }
 }
 
 export function parsePrice(text) {
@@ -337,4 +360,19 @@ export function checkQuoteListError(quoteList) {
 
 export function validEmail(email) {
     return String(email).toLowerCase().match(emailRegex);
+}
+
+export function expiredToken() {
+    const currTime = Date.now() / 1000;
+    const token = localStorage.getItem('token');
+    if(token === null) {
+        return true;
+    }
+    const decoded = jwtDecode(token);
+    if(decoded.exp < currTime) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }

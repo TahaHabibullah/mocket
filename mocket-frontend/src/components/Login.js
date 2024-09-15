@@ -18,10 +18,10 @@ const Login = () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("pass").value;
         if(email.length < 1) {
-            setAlert("Please fill in email field.");
+            setAlert("Please fill in the email field.");
         }
         else if(password.length < 1) {
-            setAlert("Please fill in password field.");
+            setAlert("Please fill in the password field.");
         }
         else {
             setAlert(null);

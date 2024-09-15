@@ -10,6 +10,19 @@ afterEach(() => {
     jest.clearAllMocks();
 });
 
+beforeEach(() => {
+    axios.defaults = {
+        headers: {
+          common: {}
+        }
+      };
+    axios.defaults.headers.common['Authorization'] = "test";
+
+    jest.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => {
+        return "test";
+    });
+});
+
 test("fetches user data", async () => {
     const mockResponse = {
         "id": "66a8957e631f435b8dcc2d43",

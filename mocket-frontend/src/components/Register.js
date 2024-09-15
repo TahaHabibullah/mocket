@@ -21,13 +21,13 @@ const Register = () => {
         const password = document.getElementById("pass").value;
         const confirm = document.getElementById("confirm").value;
         if(email.length < 1) {
-            setAlert("Please fill in email field.");
+            setAlert("Please fill in the email field.");
         }
         else if(!validEmail(email)) {
             setAlert("Please enter a valid email.")
         }
         else if(password.length < 1) {
-            setAlert("Please fill in password field.");
+            setAlert("Please fill in the password field.");
         }
         else if(password !== confirm) {
             setAlert("Passwords do not match.")

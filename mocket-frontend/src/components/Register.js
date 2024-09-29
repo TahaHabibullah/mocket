@@ -3,17 +3,36 @@ import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
 import { validEmail } from "./Utils";
+import "../styling/Login.css";
 import "../styling/Register.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
 import { useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const Register = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const restEndpoint = 'http://localhost:8080/auth/register';
     const loginEndpoint = 'http://localhost:8080/auth/login';
+    const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
     const navigator = useNavigate();
+
+    const handleGoogleLogin = async (googleResp) => {
+        try {
+            const response = await axios.post(googleLoginEndpoint, {
+              token: googleResp.credential
+            });
+            console.log(response.data)
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('id', response.data.id);
+            navigator("/dashboard");
+            window.location.reload();
+          } catch (error) {
+            setError("Failed to login.");
+            console.error(error);
+          }
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -54,12 +73,14 @@ const Register = () => {
                     navigator("/dashboard");
                     window.location.reload();
                 }).catch(error => {
-                    setError("Failed to login.");
-                    console.log(error);
+                    const message = error.response.data;
+                    setError(message);
+                    console.log(message);
                 })
             }).catch(error => {
-                setError("Failed to register.");
-                console.log(error);
+                const message = error.response.data;
+                setError(message);
+                console.log(message);
             })
         }
     }
@@ -99,6 +120,19 @@ const Register = () => {
                 <div className="mocket-register-existing">
                     <div>Already have an account?</div>
                     <div className="mocket-register-existing-button" onClick={handleRedirect}>Login Here</div>
+                </div>
+                <div className="mocket-login-or">
+                    <div className="mocket-login-or-divider"/>
+                    <div className="mocket-login-or-header">OR</div>
+                    <div className="mocket-login-or-divider"/>
+                </div>
+                <div className="mocket-login-social">
+                    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                        <GoogleLogin
+                            onSuccess={handleGoogleLogin}
+                            onError={() => {setError("Failed to Login.")}}
+                        />
+                    </GoogleOAuthProvider>
                 </div>
             </div>
         </div>

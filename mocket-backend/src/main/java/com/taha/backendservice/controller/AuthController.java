@@ -4,6 +4,7 @@ import com.taha.backendservice.constants.AuthConstant;
 import com.taha.backendservice.model.auth.JwtResponse;
 import com.taha.backendservice.model.auth.LoginRequest;
 import com.taha.backendservice.model.auth.SignupRequest;
+import com.taha.backendservice.model.auth.SocialLoginRequest;
 import com.taha.backendservice.service.AuthService;
 import jakarta.validation.Valid;
 
@@ -15,7 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@CrossOrigin(origins = {"${domain.http}", "${domain.https}"})
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(AuthConstant.AUTH_ROOT_URI)
 public class AuthController {
@@ -23,8 +27,13 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping(AuthConstant.LOGIN)
-    public JwtResponse authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping(AuthConstant.SOCIAL_LOGIN_GOOGLE)
+    public ResponseEntity<?> authGoogleUser(@Valid @RequestBody SocialLoginRequest loginRequest) {
+        return authService.googleLogin(loginRequest);
     }
 
     @PostMapping(AuthConstant.REGISTER)

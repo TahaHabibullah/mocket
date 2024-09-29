@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {"${domain.http}", "${domain.https}"})
+@CrossOrigin()
 @RestController
 @RequestMapping(DBConstant.DB_ROOT_URI)
 public class DBController {

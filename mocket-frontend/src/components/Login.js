@@ -6,14 +6,32 @@ import "../styling/Login.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
 import { useNavigate } from "react-router-dom";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
 const Login = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const restEndpoint = 'http://localhost:8080/auth/login';
+    const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
     const navigator = useNavigate();
 
-    const handleSubmit = (e) => {
+    const handleGoogleLogin = async (googleResp) => {
+        try {
+            const response = await axios.post(googleLoginEndpoint, {
+              token: googleResp.credential
+            });
+            console.log(response.data)
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('id', response.data.id);
+            navigator("/dashboard");
+            window.location.reload();
+          } catch (error) {
+            setError("Failed to login.");
+            console.error(error);
+          }
+    }
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const email = document.getElementById("email").value;
         const password = document.getElementById("pass").value;
@@ -37,8 +55,9 @@ const Login = () => {
                 navigator("/dashboard");
                 window.location.reload();
             }).catch(error => {
-                setError("Failed to login.");
-                console.log(error);
+                const message = error.response.data;
+                setError(message);
+                console.log(message);
             })
         }
     }
@@ -74,6 +93,19 @@ const Login = () => {
                 <div className="mocket-login-newuser">
                     <div>Don't have an account?</div>
                     <div className="mocket-login-newuser-button" onClick={handleRedirect}>Register Here</div>
+                </div>
+                <div className="mocket-login-or">
+                    <div className="mocket-login-or-divider"/>
+                    <div className="mocket-login-or-header">OR</div>
+                    <div className="mocket-login-or-divider"/>
+                </div>
+                <div className="mocket-login-social">
+                    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                        <GoogleLogin
+                            onSuccess={handleGoogleLogin}
+                            onError={() => {setError("Failed to Login.")}}
+                        />
+                    </GoogleOAuthProvider>
                 </div>
             </div>
         </div>

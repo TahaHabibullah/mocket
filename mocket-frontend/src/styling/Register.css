@@ -5,7 +5,6 @@
     left: max(5vw, calc((100vw - 600px) / 2));
     display: grid;
     width: 600px;
-    height: 500px;
     background-color: black;
     border-radius: 15px;
     border-color: #888888;
@@ -71,6 +70,7 @@
 }
 
 .mocket-register-existing {
+    margin-bottom: 20px;
     display: flex;
     justify-content: center;
     font-size: 16px;
@@ -87,11 +87,11 @@
     color: rgb(0, 228, 0);
 }
 
+
 @media (max-width: 767px) {
     .mocket-register {
         left: max(5vw, calc((100vw - 300px) / 2));
         width: 300px;
-        height: 270px;
     }
     .mocket-register-header {
         padding: 2rem 0 10px 0;

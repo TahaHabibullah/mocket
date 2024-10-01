@@ -9,6 +9,7 @@ import TradeActions from "./TradeActions";
 import Alert from "./Alert";
 import { UserContext } from "./UserContext";
 import axios from "axios";
+import { SSE } from 'sse.js';
 import '../styling/App.css';
 
 const SymbolDashboard = () => {
@@ -27,7 +28,11 @@ const SymbolDashboard = () => {
 
     useEffect(() => {
         if(marketOpen) {
-            const source = new EventSource(liveEndpoint + symbol);
+            const source = new SSE(liveEndpoint + symbol, {
+                headers: {
+                    "Authorization": "Bearer " + localStorage.getItem('token')
+                }
+            });
             source.onopen = () => {
             }
 

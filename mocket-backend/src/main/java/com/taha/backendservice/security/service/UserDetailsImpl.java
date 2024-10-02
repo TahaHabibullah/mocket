@@ -23,17 +23,24 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private double balance;
     private List<Position> positions;
-
     private Collection<? extends GrantedAuthority> authorities;
+    private boolean verified;
 
-    public UserDetailsImpl(ObjectId id, String email, String password, double balance,
-                           List<Position> positions, Collection<? extends GrantedAuthority> authorities) {
+    public UserDetailsImpl(ObjectId id,
+                           String email,
+                           String password,
+                           double balance,
+                           List<Position> positions,
+                           Collection<? extends GrantedAuthority> authorities,
+                           boolean verified) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.balance = balance;
         this.positions = positions;
         this.authorities = authorities;
+        this.verified = verified;
+
     }
 
     public static UserDetailsImpl build(User user) {
@@ -47,7 +54,8 @@ public class UserDetailsImpl implements UserDetails {
                 user.getPassword(),
                 user.getBalance(),
                 user.getPositions(),
-                authorities);
+                authorities,
+                user.isVerified());
     }
 
     @Override
@@ -74,6 +82,8 @@ public class UserDetailsImpl implements UserDetails {
     public double getBalance() { return balance; }
 
     public List<Position> getPositions() { return positions; }
+
+    public boolean isVerified() { return verified; }
 
     @Override
     public boolean isAccountNonExpired() {

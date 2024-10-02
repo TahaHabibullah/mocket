@@ -14,6 +14,7 @@ const App = () => {
         <Route path="/" element={expiredToken() ? <Navigate to="/login"/> : <Navigate to="/dashboard"/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/register" element={<Register/>}/>
+        <Route path="/verify-email" element={<Login/>}/>
         <Route path="/dashboard" element={<UserProvider><Home/></UserProvider>}/>
         <Route path="/stocks/:symbol" element={<UserProvider><SymbolDashboard/></UserProvider>}/>
       </Routes>

@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 
 import java.time.Duration;
 
-@CrossOrigin()
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping(TradeConstant.TRADE_ROOT_URI)
 public class TradeController {

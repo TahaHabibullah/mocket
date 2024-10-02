@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
@@ -11,8 +12,12 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 const Login = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
+    const [success, setSuccess] = useState(null);
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get('token');
     const restEndpoint = 'http://localhost:8080/auth/login';
     const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
+    const verificationEndpoint = 'http://localhost:8080/auth/verify-email?token=';
     const navigator = useNavigate();
 
     const handleGoogleLogin = async (googleResp) => {
@@ -62,9 +67,27 @@ const Login = () => {
         }
     }
 
+    const handleVerification = () => {
+        axios.put(verificationEndpoint + token)
+            .then((response) => {
+                setSuccess(response.data);
+                console.log(response.data);
+            }).catch(error => {
+                const message = error.response.data;
+                setError(message);
+                console.log(message);
+            })
+    }
+
     const handleRedirect = () => {
         navigator("/register");
     }
+
+    useEffect(() => {
+        if(token) {
+            handleVerification();
+        }
+    }, [])
 
     return (
         <div className="App">
@@ -75,6 +98,11 @@ const Login = () => {
             )}
             {alert ? (
                 <Alert message={alert} style={"warning"} setAlert={setAlert}/>
+            ) : (
+                <div/>
+            )}
+            {success ? (
+                <Alert message={success} style={"success"} setAlert={setSuccess}/>
             ) : (
                 <div/>
             )}

@@ -9,4 +9,5 @@ public interface AuthService {
     public ResponseEntity<?> login(LoginRequest loginRequest);
     public ResponseEntity<?> googleLogin(SocialLoginRequest loginRequest);
     public ResponseEntity<?> register(SignupRequest signupRequest);
+    public ResponseEntity<?> verifyEmail(String token);
 }

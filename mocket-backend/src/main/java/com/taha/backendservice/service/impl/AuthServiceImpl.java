@@ -14,6 +14,7 @@ import com.taha.backendservice.model.db.Role;
 import com.taha.backendservice.model.db.User;
 import com.taha.backendservice.repository.RoleRepository;
 import com.taha.backendservice.repository.UserRepository;
+import com.taha.backendservice.repository.VerificationRepository;
 import com.taha.backendservice.security.jwt.JwtUtils;
 import com.taha.backendservice.security.service.UserDetailsImpl;
 import com.taha.backendservice.service.AuthService;
@@ -40,15 +41,17 @@ import java.util.stream.Collectors;
 @Component
 public class AuthServiceImpl implements AuthService {
     @Autowired
-    AuthenticationManager authenticationManager;
+    private AuthenticationManager authenticationManager;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    RoleRepository roleRepository;
+    private RoleRepository roleRepository;
     @Autowired
-    PasswordEncoder encoder;
+    private VerificationRepository verificationRepository;
     @Autowired
-    JwtUtils jwtUtils;
+    private PasswordEncoder encoder;
+    @Autowired
+    private JwtUtils jwtUtils;
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
@@ -62,6 +65,9 @@ public class AuthServiceImpl implements AuthService {
             String jwt = jwtUtils.generateJwtToken(authentication);
 
             UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+            if(!userDetails.isVerified()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email is not yet verified.");
+            }
             List<String> roles = userDetails.getAuthorities().stream()
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
@@ -86,7 +92,8 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> googleLogin(SocialLoginRequest loginRequest) {
         try {
-            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(),
+                                                                               new GsonFactory())
                     .setAudience(Collections.singletonList(clientId))
                     .build();
 
@@ -101,7 +108,13 @@ public class AuthServiceImpl implements AuthService {
                 if (userRepository.existsByEmail(email)) {
                     user = userRepository.findByEmail(email).get();
                 } else {
-                    user = new User(new ObjectId(), email, null, 10000, new ArrayList<>());
+                    user = new User(new ObjectId(),
+                                    email,
+                                    null,
+                                    10000,
+                                    new ArrayList<>(),
+                                    true);
+
                     Set<Role> roles = new HashSet<>();
                     Role userRole = roleRepository.findByType(ERole.ROLE_USER)
                             .orElseThrow(() -> new RuntimeException("Error: Role is not found"));
@@ -134,8 +147,8 @@ public class AuthServiceImpl implements AuthService {
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use.");
         }
-        User user = new User(null, signupRequest.getEmail(),
-                encoder.encode(signupRequest.getPassword()), 10000, new ArrayList<>());
+        User user = new User(new ObjectId(), signupRequest.getEmail(),
+                encoder.encode(signupRequest.getPassword()), 10000, new ArrayList<>(), false);
 
         Set<String> strRoles = signupRequest.getRoles();
         Set<Role> roles = new HashSet<>();
@@ -160,8 +173,28 @@ public class AuthServiceImpl implements AuthService {
             });
         }
         user.setRoles(roles);
-        userRepository.save(user);
+        int status = verificationRepository.initVerification(user);
+        if(status == 1) {
+            userRepository.save(user);
+            return ResponseEntity.ok("Check email for verification.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                   .body("Couldn't send email verification.");
+        }
+    }
 
-        return ResponseEntity.ok("User registered successfully");
+    @Override
+    public ResponseEntity<?> verifyEmail(String token) {
+        int status = verificationRepository.completeVerification(token);
+        if(status == 1) {
+            return ResponseEntity.ok("Email verified.");
+        }
+        else if(status == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Token.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Email verification failed.");
+        }
     }
 }

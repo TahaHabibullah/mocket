@@ -13,8 +13,8 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 const Register = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
+    const [success, setSuccess] = useState(null);
     const restEndpoint = 'http://localhost:8080/auth/register';
-    const loginEndpoint = 'http://localhost:8080/auth/login';
     const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
     const navigator = useNavigate();
 
@@ -60,23 +60,8 @@ const Register = () => {
             }
             axios.post(restEndpoint, body)
             .then((response) => {
+                setSuccess(response.data);
                 console.log(response.data);
-                const loginBody = {
-                    "email": email,
-                    "password": password
-                }
-                axios.post(loginEndpoint, loginBody)
-                .then((response) => {
-                    console.log(response.data);
-                    localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('id', response.data.id);
-                    navigator("/dashboard");
-                    window.location.reload();
-                }).catch(error => {
-                    const message = error.response.data;
-                    setError(message);
-                    console.log(message);
-                })
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
@@ -98,6 +83,11 @@ const Register = () => {
             )}
             {alert ? (
                 <Alert message={alert} style={"warning"} setAlert={setAlert}/>
+            ) : (
+                <div/>
+            )}
+            {success ? (
+                <Alert message={success} style={"success"} setAlert={setSuccess}/>
             ) : (
                 <div/>
             )}

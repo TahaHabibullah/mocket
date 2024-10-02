@@ -1,7 +1,6 @@
 package com.taha.backendservice.controller;
 
 import com.taha.backendservice.constants.AuthConstant;
-import com.taha.backendservice.model.auth.JwtResponse;
 import com.taha.backendservice.model.auth.LoginRequest;
 import com.taha.backendservice.model.auth.SignupRequest;
 import com.taha.backendservice.model.auth.SocialLoginRequest;
@@ -10,14 +9,7 @@ import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.io.IOException;
-import java.security.GeneralSecurityException;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -39,5 +31,10 @@ public class AuthController {
     @PostMapping(AuthConstant.REGISTER)
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
         return authService.register(signUpRequest);
+    }
+
+    @PutMapping(AuthConstant.VERIFY_EMAIL)
+    public ResponseEntity<?> verifyEmail(@RequestParam String token) {
+        return authService.verifyEmail(token);
     }
 }

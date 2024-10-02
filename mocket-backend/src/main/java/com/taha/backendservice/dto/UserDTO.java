@@ -11,18 +11,19 @@ public record UserDTO(String id,
                       @JsonIgnore
                       String password,
                       double balance,
-                      List<PositionDTO> positions) {
+                      List<PositionDTO> positions,
+                      boolean verified) {
 
     public UserDTO(User u) {
         this(u.getId() == null ? new ObjectId().toHexString() : u.getId().toHexString(), u.getEmail(),
                 u.getPassword(), u.getBalance(), u.getPositions() == null ? new ArrayList<>() :
-                u.getPositions().stream().map(PositionDTO::new).toList());
+                u.getPositions().stream().map(PositionDTO::new).toList(), u.isVerified());
     }
 
     public User toUser() {
         ObjectId _id = id == null ? new ObjectId() : new ObjectId(id);
         List<PositionDTO> _positions = positions == null ? new ArrayList<>() : this.positions;
-        return new User(_id, email, password, balance, _positions.stream().map(PositionDTO::toPosition).toList());
+        return new User(_id, email, password, balance, _positions.stream().map(PositionDTO::toPosition).toList(), verified);
     }
 }
 

@@ -14,17 +14,24 @@ public class User {
     private String password;
     private double balance;
     private List<Position> positions;
+    private boolean verified;
 
     private Set<Role> roles = new HashSet<>();
 
     public User() {}
 
-    public User(ObjectId id, String email, String password, double balance, List<Position> positions) {
+    public User(ObjectId id,
+                String email,
+                String password,
+                double balance,
+                List<Position> positions,
+                boolean verified) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.balance = balance;
         this.positions = positions;
+        this.verified = verified;
     }
     public void closePosition(String symbol, int quantity, double price) {
         List<Position> sympos = getSymPositions(symbol);
@@ -127,6 +134,9 @@ public class User {
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
+
+    public boolean isVerified() { return verified; }
+    public void setVerified(boolean verified) { this.verified = verified; }
 
     @Override
     public String toString() {

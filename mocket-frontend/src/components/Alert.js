@@ -13,6 +13,9 @@ const Alert = ({ message, style, setAlert }) => {
         else if(style === "warning") {
             return "Notice:"
         }
+        else if(style === "success") {
+            return "Success:"
+        }
     }
 
     return (

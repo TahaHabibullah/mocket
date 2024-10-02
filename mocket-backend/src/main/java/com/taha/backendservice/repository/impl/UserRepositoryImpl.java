@@ -57,7 +57,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        user.setId(new ObjectId());
         userCollection.insertOne(user);
         return user;
     }

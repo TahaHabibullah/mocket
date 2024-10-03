@@ -25,6 +25,8 @@ public interface UserRepository {
     long delete(String id);
     long deleteAll(List<String> ids);
     long deleteAll();
+    User verifyUser(String id);
+    User changePassword(String id, String newPassword);
     User update(User user);
     long update(List<User> users);
     User addPosition(String id, Position p);

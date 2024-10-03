@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
@@ -17,7 +16,7 @@ const Login = () => {
     const token = urlParams.get('token');
     const restEndpoint = 'http://localhost:8080/auth/login';
     const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
-    const verificationEndpoint = 'http://localhost:8080/auth/verify-email?token=';
+    const verificationEndpoint = 'http://localhost:8080/auth/verify-email';
     const navigator = useNavigate();
 
     const handleGoogleLogin = async (googleResp) => {
@@ -68,10 +67,10 @@ const Login = () => {
     }
 
     const handleVerification = () => {
-        axios.put(verificationEndpoint + token)
+        const body = { token };
+        axios.put(verificationEndpoint, body)
             .then((response) => {
                 setSuccess(response.data);
-                console.log(response.data);
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
@@ -79,8 +78,12 @@ const Login = () => {
             })
     }
 
-    const handleRedirect = () => {
+    const goToRegister = () => {
         navigator("/register");
+    }
+
+    const goToForgotPass = () => {
+        navigator("/forgot-password");
     }
 
     useEffect(() => {
@@ -116,11 +119,12 @@ const Login = () => {
                     <div className="mocket-login-input-box">
                         <input id="pass" type="password" placeholder="Password" className="mocket-login-input"/>
                     </div>
+                    <div className="mocket-login-forgot-button" onClick={goToForgotPass}>Forgot your password?</div>
                     <button type="submit" className="mocket-login-button">Login</button>
                 </form>
                 <div className="mocket-login-newuser">
                     <div>Don't have an account?</div>
-                    <div className="mocket-login-newuser-button" onClick={handleRedirect}>Register Here</div>
+                    <div className="mocket-login-newuser-button" onClick={goToRegister}>Register Here</div>
                 </div>
                 <div className="mocket-login-or">
                     <div className="mocket-login-or-divider"/>

@@ -14,8 +14,6 @@ import com.taha.backendservice.repository.VerificationRepository;
 import com.taha.backendservice.service.EmailVerificationService;
 import jakarta.annotation.PostConstruct;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -37,7 +35,6 @@ public class VerificationRepositoryImpl implements VerificationRepository {
     private UserRepository userRepository;
     @Autowired
     private EmailVerificationService emailVerificationService;
-    private static final Logger logger = LoggerFactory.getLogger(VerificationRepositoryImpl.class);
     public VerificationRepositoryImpl(MongoClient client) { this.client = client; }
 
     @PostConstruct
@@ -62,7 +59,6 @@ public class VerificationRepositoryImpl implements VerificationRepository {
             emailVerificationService.sendVerification(user.getEmail(), token);
             return 1;
         } catch (Exception e) {
-            logger.info(e.getMessage());
             return -1;
         }
 
@@ -70,7 +66,6 @@ public class VerificationRepositoryImpl implements VerificationRepository {
 
     @Override
     public int completeVerification(String token) {
-        logger.info(token);
         try {
             FindIterable<Verification> result = verificationCollection.find(eq("token", token));
             if(!result.iterator().hasNext()) {
@@ -78,14 +73,50 @@ public class VerificationRepositoryImpl implements VerificationRepository {
             }
 
             Verification verification = result.first();
-            User u = userRepository.find(verification.getUserId());
-            u.setVerified(true);
-            userRepository.update(u);
+            userRepository.verifyUser(verification.getUserId());
 
             verificationCollection.deleteOne(eq("_id", verification.getId()));
             return 1;
         } catch (Exception e) {
-            logger.info(e.getMessage());
+            return -1;
+        }
+    }
+
+    @Override
+    public int initForgotPassword(User user) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.HOUR, 24);
+        String token = UUID.randomUUID().toString();
+
+        try {
+            verificationCollection.insertOne(
+                    new Verification(new ObjectId(),
+                            token,
+                            user.getId().toString(),
+                            calendar.getTime()
+                    )
+            );
+            emailVerificationService.sendForgotPass(user.getEmail(), token);
+            return 1;
+        } catch (Exception e) {
+            return -1;
+        }
+    }
+
+    @Override
+    public int resetPassword(String token, String newPassword) {
+        try {
+            FindIterable<Verification> result = verificationCollection.find(eq("token", token));
+            if(!result.iterator().hasNext()) {
+                return 0;
+            }
+
+            Verification verification = result.first();
+            userRepository.changePassword(verification.getUserId(), newPassword);
+
+            verificationCollection.deleteOne(eq("_id", verification.getId()));
+            return 1;
+        } catch (Exception e) {
             return -1;
         }
     }

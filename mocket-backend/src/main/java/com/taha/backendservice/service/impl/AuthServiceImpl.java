@@ -5,11 +5,9 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
 import com.taha.backendservice.constants.ERole;
-import com.taha.backendservice.controller.DBController;
 import com.taha.backendservice.model.auth.JwtResponse;
 import com.taha.backendservice.model.auth.LoginRequest;
 import com.taha.backendservice.model.auth.SignupRequest;
-import com.taha.backendservice.model.auth.SocialLoginRequest;
 import com.taha.backendservice.model.db.Role;
 import com.taha.backendservice.model.db.User;
 import com.taha.backendservice.repository.RoleRepository;
@@ -18,10 +16,7 @@ import com.taha.backendservice.repository.VerificationRepository;
 import com.taha.backendservice.security.jwt.JwtUtils;
 import com.taha.backendservice.security.service.UserDetailsImpl;
 import com.taha.backendservice.service.AuthService;
-import feign.Response;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -33,8 +28,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -72,12 +65,7 @@ public class AuthServiceImpl implements AuthService {
                     .map(item -> item.getAuthority())
                     .collect(Collectors.toList());
 
-            return ResponseEntity.ok(new JwtResponse(jwt,
-                    userDetails.getId().toString(),
-                    userDetails.getEmail(),
-                    userDetails.getBalance(),
-                    userDetails.getPositions(),
-                    roles));
+            return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId().toString()));
         } catch(Exception e) {
             if(e.getMessage() == "Bad credentials") {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
@@ -90,14 +78,14 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public ResponseEntity<?> googleLogin(SocialLoginRequest loginRequest) {
+    public ResponseEntity<?> googleLogin(String token) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(),
                                                                                new GsonFactory())
                     .setAudience(Collections.singletonList(clientId))
                     .build();
 
-            GoogleIdToken idToken = verifier.verify(loginRequest.getToken());
+            GoogleIdToken idToken = verifier.verify(token);
 
             if (idToken != null) {
                 GoogleIdToken.Payload payload = idToken.getPayload();
@@ -125,15 +113,7 @@ public class AuthServiceImpl implements AuthService {
 
                 String jwt = jwtUtils.generateGoogleJwtToken(email);
 
-                return ResponseEntity.ok(new JwtResponse(jwt,
-                        user.getId().toString(),
-                        user.getEmail(),
-                        user.getBalance(),
-                        user.getPositions(),
-                        user.getRoles().stream().map(
-                                        item -> item.getType().toString())
-                                .collect(Collectors.toList())));
-
+                return ResponseEntity.ok(new JwtResponse(jwt, user.getId().toString()));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token.");
             }
@@ -195,6 +175,42 @@ public class AuthServiceImpl implements AuthService {
         }
         else {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Email verification failed.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> forgotPassword(String email) {
+        if (!userRepository.existsByEmail(email)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is not in use.");
+        }
+        User user = userRepository.findByEmail(email).get();
+
+        if(!user.isVerified()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email is not yet verified.");
+        }
+
+        int status = verificationRepository.initForgotPassword(user);
+        if(status == 1) {
+            return ResponseEntity.ok("Check email to reset password.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Couldn't send reset email.");
+        }
+    }
+
+    @Override
+    public ResponseEntity<?> resetPassword(String token, String newPassword) {
+        String encoded = encoder.encode(newPassword);
+        int status = verificationRepository.resetPassword(token, encoded);
+        if(status == 1) {
+            return ResponseEntity.ok("Password changed.");
+        }
+        else if(status == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Token.");
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password reset failed.");
         }
     }
 }

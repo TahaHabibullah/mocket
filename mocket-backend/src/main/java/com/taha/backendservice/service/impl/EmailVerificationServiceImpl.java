@@ -16,7 +16,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     @Autowired
     private JavaMailSender mailSender;
     @Value("${mocket.verification.email}")
-    private String verificationEmail;
+    private String fromEmail;
 
     private static final Logger logger = LoggerFactory.getLogger(EmailVerificationServiceImpl.class);
 
@@ -25,12 +25,26 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
         SimpleMailMessage message = new SimpleMailMessage();
         String verificationUrl = AuthConstant.VERIFICATION_URL + token;
 
-        message.setFrom(verificationEmail);
+        message.setFrom(fromEmail);
         message.setTo(to);
         message.setSubject("Mocket - Verify your email address");
         message.setText("Click the following link to verify your email: " + verificationUrl);
 
         mailSender.send(message);
         logger.info("Verification email sent to: " + to);
+    }
+
+    @Override
+    public void sendForgotPass(String to, String token) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        String verificationUrl = AuthConstant.RESET_PASS_URL + token;
+
+        message.setFrom(fromEmail);
+        message.setTo(to);
+        message.setSubject("Mocket - Reset forgotten password");
+        message.setText("Click the following link to reset your password: " + verificationUrl);
+
+        mailSender.send(message);
+        logger.info("Password reset email sent to: " + to);
     }
 }

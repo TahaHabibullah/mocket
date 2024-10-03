@@ -21,23 +21,17 @@ public class UserDetailsImpl implements UserDetails {
     private String email;
     @JsonIgnore
     private String password;
-    private double balance;
-    private List<Position> positions;
     private Collection<? extends GrantedAuthority> authorities;
     private boolean verified;
 
     public UserDetailsImpl(ObjectId id,
                            String email,
                            String password,
-                           double balance,
-                           List<Position> positions,
                            Collection<? extends GrantedAuthority> authorities,
                            boolean verified) {
         this.id = id;
         this.email = email;
         this.password = password;
-        this.balance = balance;
-        this.positions = positions;
         this.authorities = authorities;
         this.verified = verified;
 
@@ -52,8 +46,6 @@ public class UserDetailsImpl implements UserDetails {
                 user.getId(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getBalance(),
-                user.getPositions(),
                 authorities,
                 user.isVerified());
     }
@@ -78,10 +70,6 @@ public class UserDetailsImpl implements UserDetails {
     public String getUsername() {
         return email;
     }
-
-    public double getBalance() { return balance; }
-
-    public List<Position> getPositions() { return positions; }
 
     public boolean isVerified() { return verified; }
 

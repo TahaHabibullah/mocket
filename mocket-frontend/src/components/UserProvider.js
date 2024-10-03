@@ -10,6 +10,7 @@ const UserProvider = ({ children }) => {
     const id = localStorage.getItem('id');
     const token = localStorage.getItem('token');
     axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
     const callRestApi = async () => {
         axios.get(restEndpoint + id)
         .then((response) => {

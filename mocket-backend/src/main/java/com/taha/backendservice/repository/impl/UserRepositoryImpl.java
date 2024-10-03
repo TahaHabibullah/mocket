@@ -139,6 +139,21 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public User verifyUser(String id) {
+        User u = find(id);
+        u.setVerified(true);
+        return update(u);
+    }
+
+    @Override
+    public User changePassword(String id, String newPassword) {
+        User u = find(id);
+        u.setPassword(newPassword);
+        return update(u);
+    }
+
+
+    @Override
     public User update(User user) {
         FindOneAndReplaceOptions options = new FindOneAndReplaceOptions().returnDocument(AFTER);
         return userCollection.findOneAndReplace(eq("_id", user.getId()), user, options);

@@ -3,7 +3,6 @@ import Alert from "./Alert";
 import axios from "axios";
 import OrderHistoryList from "./OrderHistoryList.js";
 import "../styling/OrderHistory.css";
-import { UserContext } from "./UserContext.js";
 
 const OrderHistory = ({ id }) => {
     const restEndpoint = 'http://localhost:8080/database/user/getHist?id=';

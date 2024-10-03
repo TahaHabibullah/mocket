@@ -3,7 +3,7 @@ package com.taha.backendservice.controller;
 import com.taha.backendservice.constants.AuthConstant;
 import com.taha.backendservice.model.auth.LoginRequest;
 import com.taha.backendservice.model.auth.SignupRequest;
-import com.taha.backendservice.model.auth.SocialLoginRequest;
+import com.taha.backendservice.model.auth.Credentials;
 import com.taha.backendservice.service.AuthService;
 import jakarta.validation.Valid;
 
@@ -24,8 +24,8 @@ public class AuthController {
     }
 
     @PostMapping(AuthConstant.SOCIAL_LOGIN_GOOGLE)
-    public ResponseEntity<?> authGoogleUser(@Valid @RequestBody SocialLoginRequest loginRequest) {
-        return authService.googleLogin(loginRequest);
+    public ResponseEntity<?> authGoogleUser(@Valid @RequestBody Credentials credentials) {
+        return authService.googleLogin(credentials.getToken());
     }
 
     @PostMapping(AuthConstant.REGISTER)
@@ -34,7 +34,17 @@ public class AuthController {
     }
 
     @PutMapping(AuthConstant.VERIFY_EMAIL)
-    public ResponseEntity<?> verifyEmail(@RequestParam String token) {
-        return authService.verifyEmail(token);
+    public ResponseEntity<?> verifyEmail(@RequestBody Credentials credentials) {
+        return authService.verifyEmail(credentials.getToken());
+    }
+
+    @PostMapping(AuthConstant.FORGOT_PASS)
+    public ResponseEntity<?> forgotPassword(@RequestBody Credentials credentials) {
+        return authService.forgotPassword(credentials.getEmail());
+    }
+
+    @PutMapping(AuthConstant.RESET_PASS)
+    public ResponseEntity<?> resetPassword(@RequestBody Credentials credentials) {
+        return authService.resetPassword(credentials.getToken(), credentials.getPassword());
     }
 }

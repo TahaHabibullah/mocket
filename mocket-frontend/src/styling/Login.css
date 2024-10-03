@@ -83,8 +83,22 @@
     cursor: pointer;
 }
 
+.mocket-login-forgot-button {
+    width: fit-content;
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 16px;
+    text-decoration: underline;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
 .mocket-login-newuser-button:hover {
     color: rgb(0, 228, 0);
+}
+
+.mocket-login-forgot-button:hover {
+    color: rgb(255, 255, 35);
 }
 
 .mocket-login-or {

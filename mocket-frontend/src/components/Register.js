@@ -48,6 +48,9 @@ const Register = () => {
         else if(password.length < 1) {
             setAlert("Please fill in the password field.");
         }
+        else if(password.length < 8) {
+            setAlert("Password must be at least 8 characters.");
+        }
         else if(password !== confirm) {
             setAlert("Passwords do not match.")
         }

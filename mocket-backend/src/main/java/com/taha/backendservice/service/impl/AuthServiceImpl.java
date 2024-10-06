@@ -91,7 +91,6 @@ public class AuthServiceImpl implements AuthService {
                 GoogleIdToken.Payload payload = idToken.getPayload();
                 String email = payload.getEmail();
 
-
                 User user;
                 if (userRepository.existsByEmail(email)) {
                     user = userRepository.findByEmail(email).get();
@@ -126,6 +125,10 @@ public class AuthServiceImpl implements AuthService {
     public ResponseEntity<?> register(SignupRequest signupRequest) {
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use.");
+        }
+
+        if(signupRequest.getPassword().length() < 8) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 8 characters.");
         }
         User user = new User(new ObjectId(), signupRequest.getEmail(),
                 encoder.encode(signupRequest.getPassword()), 10000, new ArrayList<>(), false);
@@ -204,6 +207,10 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> resetPassword(String token, String newPassword) {
+        if(newPassword.length() < 8) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 8 characters.");
+        }
+
         String encoded = encoder.encode(newPassword);
         int status = verificationRepository.checkToken(token);
         if(status == 0) {

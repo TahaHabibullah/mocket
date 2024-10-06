@@ -20,7 +20,7 @@ const Alert = ({ message, style, setAlert }) => {
 
     return (
         <div id={0} className="alert">
-            <div className={"alert-" + style}>
+            <div className={"alert-type " + style}>
                 <div className="alert-message">
                     {getType()} {message}
                 </div>

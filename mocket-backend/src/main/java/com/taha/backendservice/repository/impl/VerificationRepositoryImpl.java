@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 import static com.mongodb.client.model.Filters.eq;
@@ -65,21 +66,10 @@ public class VerificationRepositoryImpl implements VerificationRepository {
     }
 
     @Override
-    public int completeVerification(String token) {
-        try {
-            FindIterable<Verification> result = verificationCollection.find(eq("token", token));
-            if(!result.iterator().hasNext()) {
-                return 0;
-            }
-
-            Verification verification = result.first();
-            userRepository.verifyUser(verification.getUserId());
-
-            verificationCollection.deleteOne(eq("_id", verification.getId()));
-            return 1;
-        } catch (Exception e) {
-            return -1;
-        }
+    public void completeVerification(String token) {
+        Verification verification = verificationCollection.find(eq("token", token)).first();
+        userRepository.verifyUser(verification.getUserId());
+        verificationCollection.deleteOne(eq("_id", verification.getId()));
     }
 
     @Override
@@ -104,7 +94,14 @@ public class VerificationRepositoryImpl implements VerificationRepository {
     }
 
     @Override
-    public int resetPassword(String token, String newPassword) {
+    public void resetPassword(String token, String newPassword) {
+        Verification verification = verificationCollection.find(eq("token", token)).first();
+        userRepository.changePassword(verification.getUserId(), newPassword);
+        verificationCollection.deleteOne(eq("_id", verification.getId()));
+    }
+
+    @Override
+    public int checkToken(String token) {
         try {
             FindIterable<Verification> result = verificationCollection.find(eq("token", token));
             if(!result.iterator().hasNext()) {
@@ -112,10 +109,13 @@ public class VerificationRepositoryImpl implements VerificationRepository {
             }
 
             Verification verification = result.first();
-            userRepository.changePassword(verification.getUserId(), newPassword);
-
-            verificationCollection.deleteOne(eq("_id", verification.getId()));
-            return 1;
+            if(verification.getExpiration().before(new Date())) {
+                verificationCollection.deleteOne(eq("_id", verification.getId()));
+                return 2;
+            }
+            else {
+                return 1;
+            }
         } catch (Exception e) {
             return -1;
         }

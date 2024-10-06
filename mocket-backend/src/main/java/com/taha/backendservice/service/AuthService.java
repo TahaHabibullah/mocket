@@ -11,4 +11,5 @@ public interface AuthService {
     public ResponseEntity<?> verifyEmail(String token);
     public ResponseEntity<?> forgotPassword(String email);
     public ResponseEntity<?> resetPassword(String token, String newPassword);
+    public ResponseEntity<?> checkToken(String token);
 }

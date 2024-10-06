@@ -47,4 +47,9 @@ public class AuthController {
     public ResponseEntity<?> resetPassword(@RequestBody Credentials credentials) {
         return authService.resetPassword(credentials.getToken(), credentials.getPassword());
     }
+
+    @PostMapping(AuthConstant.CHECK_TOKEN)
+    public ResponseEntity<?> checkToken(@RequestBody Credentials credentials) {
+        return authService.checkToken(credentials.getToken());
+    }
 }

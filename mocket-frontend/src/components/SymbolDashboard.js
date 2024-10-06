@@ -48,9 +48,6 @@ const SymbolDashboard = () => {
                 source.close();
             }
         }
-        else if(marketOpen === false) {
-        }
-
     }, [marketOpen]);
 
     const callRestApi = async () => {

@@ -166,16 +166,19 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> verifyEmail(String token) {
-        int status = verificationRepository.completeVerification(token);
-        if(status == 1) {
-            return ResponseEntity.ok("Email verified.");
+        int status = verificationRepository.checkToken(token);
+        if(status == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token.");
         }
-        else if(status == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Token.");
+        else if(status == 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token expired.");
         }
-        else {
+        else if(status == -1) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Email verification failed.");
         }
+
+        verificationRepository.completeVerification(token);
+        return ResponseEntity.ok("Email verified.");
     }
 
     @Override
@@ -202,15 +205,33 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> resetPassword(String token, String newPassword) {
         String encoded = encoder.encode(newPassword);
-        int status = verificationRepository.resetPassword(token, encoded);
-        if(status == 1) {
-            return ResponseEntity.ok("Password changed.");
+        int status = verificationRepository.checkToken(token);
+        if(status == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token.");
         }
-        else if(status == 0) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Token.");
+        else if(status == 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token expired.");
         }
-        else {
+        else if(status == -1) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Password reset failed.");
         }
+
+        verificationRepository.resetPassword(token, encoded);
+        return ResponseEntity.ok("Password changed.");
+    }
+
+    @Override
+    public ResponseEntity<?> checkToken(String token) {
+        int status = verificationRepository.checkToken(token);
+        if(status == 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid token.");
+        }
+        else if(status == 2) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Token expired.");
+        }
+        else if(status == -1) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Unknown error occurred.");
+        }
+        return ResponseEntity.ok("Valid token.");
     }
 }

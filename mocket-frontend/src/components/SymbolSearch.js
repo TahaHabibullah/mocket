@@ -10,7 +10,11 @@ const SymbolSearch = ( {setResults} ) => {
     const [error, setError] = useState(null);
 
     const callRestApi = async (symbol) => {
-        const body = {symbol: symbol, country: "United States", outputsize: 10}
+        const body = {
+            "symbol": symbol, 
+            "country": "United States", 
+            "outputSize": 10
+        }
         return axios.post(restEndpoint, body)
         .then((response) => {
             if(response.data.status === "error") {
@@ -27,8 +31,13 @@ const SymbolSearch = ( {setResults} ) => {
 
     const handleChange = (e) => {
         e.preventDefault();
-        const val = checkInput(e.target.value);
-        callRestApi(val);
+        const val = e.target.value;
+        if(checkInput(val)) {
+            callRestApi(val);
+        }
+        else {
+            setResults([]);
+        }
     }
 
     return (

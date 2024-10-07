@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useContext } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 import { useMediaQuery } from 'react-responsive';
 import { parseTimeSeriesData, parseTimeSeriesLabels, parseLabel, 
@@ -10,7 +10,6 @@ import QuoteHeader from "./QuoteHeader";
 import Alert from "./Alert";
 import axios from "axios";
 import "../styling/PriceChart.css";
-import { UserContext } from "./UserContext";
 
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);

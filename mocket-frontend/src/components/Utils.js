@@ -63,9 +63,9 @@ export function parseVolume(vol) {
 
 export function checkInput(text) {
     if(text.length < 1 || !isAlpha(text))
-        return '1';
+        return false;
     else
-        return text;
+        return true;
 }
 
 export function parseTimeSeriesData(data) {

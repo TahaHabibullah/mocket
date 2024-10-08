@@ -188,6 +188,11 @@
         height: 30px;
         margin: 10px 0;
     }
+
+    .mocket-login-forgot-button {
+        font-size: 10px;
+        margin-bottom: 5px;
+    }
     
     .mocket-login-newuser {
         font-size: 10px;

@@ -16,9 +16,10 @@ public interface UserRepository {
     User save(User user);
     List<User> saveAll(List<User> users);
     User find(String id);
+    Optional<User> findById(String id);
+    Boolean existsById(String id);
     Optional<User> findByEmail(String email);
     Boolean existsByEmail(String email);
-    Boolean existsByUsername(String username);
     List<User> findAll(List<String> ids);
     List<User> findAll();
     long count();

@@ -29,16 +29,16 @@ public class JwtUtils {
         UserDetailsImpl userPrincipal = (UserDetailsImpl) authentication.getPrincipal();
 
         return Jwts.builder()
-                .setSubject((userPrincipal.getUsername()))
+                .setSubject((userPrincipal.getId().toString()))
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + expiration))
                 .signWith(key(), SignatureAlgorithm.HS256)
                 .compact();
     }
 
-    public String generateGoogleJwtToken(String email) {
+    public String generateGoogleJwtToken(String userId) {
         return Jwts.builder()
-                .setSubject(email)
+                .setSubject(userId)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date((new Date()).getTime() + expiration))
                 .signWith(key(), SignatureAlgorithm.HS256)

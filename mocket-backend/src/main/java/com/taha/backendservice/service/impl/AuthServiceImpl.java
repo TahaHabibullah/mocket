@@ -61,9 +61,6 @@ public class AuthServiceImpl implements AuthService {
             if(!userDetails.isVerified()) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email is not yet verified.");
             }
-            List<String> roles = userDetails.getAuthorities().stream()
-                    .map(item -> item.getAuthority())
-                    .collect(Collectors.toList());
 
             return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId().toString()));
         } catch(Exception e) {
@@ -110,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
                     userRepository.save(user);
                 }
 
-                String jwt = jwtUtils.generateGoogleJwtToken(email);
+                String jwt = jwtUtils.generateGoogleJwtToken(user.getId().toString());
 
                 return ResponseEntity.ok(new JwtResponse(jwt, user.getId().toString()));
             } else {
@@ -193,6 +190,9 @@ public class AuthServiceImpl implements AuthService {
 
         if(!user.isVerified()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email is not yet verified.");
+        }
+        else if(user.getPassword() == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account must log in using Google.");
         }
 
         int status = verificationRepository.initForgotPassword(user);

@@ -55,7 +55,6 @@ const Login = () => {
             .then((response) => {
                 console.log(response.data);
                 localStorage.setItem('token', response.data.token);
-                localStorage.setItem('id', response.data.id);
                 navigator("/dashboard");
                 window.location.reload();
             }).catch(error => {

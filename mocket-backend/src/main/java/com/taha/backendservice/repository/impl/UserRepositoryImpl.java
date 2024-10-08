@@ -78,13 +78,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return Optional.of(userCollection.find(eq("email", email)).first());
+    public Optional<User> findById(String id) {
+        return Optional.of(userCollection.find(eq("_id", new ObjectId(id))).first());
     }
 
     @Override
-    public Boolean existsByEmail(String email) {
-        if(userCollection.find(eq("email", email)).first() != null) {
+    public Boolean existsById(String id) {
+        if(userCollection.find(eq("_id", new ObjectId(id))).first() != null) {
             return true;
         }
         else {
@@ -93,8 +93,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Boolean existsByUsername(String username) {
-        if(userCollection.find(eq("username", username)).first() != null) {
+    public Optional<User> findByEmail(String email) {
+        return Optional.of(userCollection.find(eq("email", email)).first());
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        if(userCollection.find(eq("email", email)).first() != null) {
             return true;
         }
         else {

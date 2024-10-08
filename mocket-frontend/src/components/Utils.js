@@ -376,3 +376,7 @@ export function expiredToken() {
         return false;
     }
 }
+
+export function getUserId(token) {
+    return jwtDecode(token).sub;
+}

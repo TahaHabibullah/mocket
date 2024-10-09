@@ -8,10 +8,16 @@ import "../styling/MocketNavBar.css";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
+const MAX_ATTEMPTS = process.env.REACT_APP_MAX_ATTEMPTS;
+const LOCK_DURATION = process.env.REACT_APP_LOCK_DURATION;
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
 const Login = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [attempts, setAttempts] = useState(0);
+    const [lockTime, setLockTime] = useState(null);
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const restEndpoint = 'http://localhost:8080/auth/login';
@@ -37,6 +43,10 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(isLocked()) {
+            setError("Login locked. Try again later.");
+            return;
+        }
         const email = document.getElementById("email").value;
         const password = document.getElementById("pass").value;
         if(email.length < 1) {
@@ -58,6 +68,7 @@ const Login = () => {
                 navigator("/dashboard");
                 window.location.reload();
             }).catch(error => {
+                incrementAttempts();
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
@@ -77,6 +88,41 @@ const Login = () => {
             })
     }
 
+    const isLocked = () => {
+        if(attempts >= MAX_ATTEMPTS) {
+            if(lockTime) {
+                const curr = new Date().getTime();
+                const start = new Date(lockTime).getTime();
+                if(curr - start <= LOCK_DURATION) {
+                    return true;
+                }
+                else {
+                    resetAttempts();
+                }
+            }
+        }
+        return false;
+    }
+
+    const incrementAttempts = () => {
+        const att = attempts + 1;
+        setAttempts(att);
+        localStorage.setItem('loginAttempts', att);
+
+        if(att >= MAX_ATTEMPTS) {
+            const curr = new Date();
+            setLockTime(curr);
+            localStorage.setItem('lockTime', curr);
+        }
+    }
+
+    const resetAttempts = () => {
+        setAttempts(0);
+        setLockTime(null);
+        localStorage.removeItem('loginAttempts');
+        localStorage.removeItem('lockTime');
+    }
+
     const goToRegister = () => {
         navigator("/register");
     }
@@ -86,6 +132,16 @@ const Login = () => {
     }
 
     useEffect(() => {
+        const savedAttempts = localStorage.getItem('loginAttempts');
+        const savedTime = localStorage.getItem('lockTime');
+
+        if(savedAttempts) {
+            setAttempts(savedAttempts);
+        }
+        if(savedTime) {
+            setLockTime(savedTime);
+        }
+
         if(token) {
             handleVerification();
         }
@@ -131,7 +187,7 @@ const Login = () => {
                     <div className="mocket-login-or-divider"/>
                 </div>
                 <div className="mocket-login-social">
-                    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                    <GoogleOAuthProvider clientId={CLIENT_ID}>
                         <GoogleLogin
                             onSuccess={handleGoogleLogin}
                             onError={() => {setError("Failed to Login.")}}

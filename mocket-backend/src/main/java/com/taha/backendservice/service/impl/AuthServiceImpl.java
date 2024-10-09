@@ -17,6 +17,8 @@ import com.taha.backendservice.security.jwt.JwtUtils;
 import com.taha.backendservice.security.service.UserDetailsImpl;
 import com.taha.backendservice.service.AuthService;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -29,7 +31,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Component
 public class AuthServiceImpl implements AuthService {
@@ -45,12 +46,25 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder encoder;
     @Autowired
     private JwtUtils jwtUtils;
+    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
     @Override
     public ResponseEntity<?> login(LoginRequest loginRequest) {
         try {
+            int status = userRepository.checkUserStatus(loginRequest.getEmail());
+            if(status == -1) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account doesn't exist.");
+            }
+            else if(status == 0) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body("Account currently locked. Try again later.");
+            }
+            else if(status == 2) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account must log in using Google.");
+            }
+
             Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 
@@ -62,9 +76,16 @@ public class AuthServiceImpl implements AuthService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Email is not yet verified.");
             }
 
-            return ResponseEntity.ok(new JwtResponse(jwt, userDetails.getId().toString()));
+            userRepository.clearLoginFails(userDetails.getId().toString());
+            return ResponseEntity.ok(new JwtResponse(jwt));
+
         } catch(Exception e) {
             if(e.getMessage() == "Bad credentials") {
+                User user = userRepository.incrementLoginFails(loginRequest.getEmail());
+                if(user.isLocked()) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body("Too many failed attempts. Account locked.");
+                }
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password.");
             }
             else if(e.getMessage() == null) {
@@ -92,12 +113,7 @@ public class AuthServiceImpl implements AuthService {
                 if (userRepository.existsByEmail(email)) {
                     user = userRepository.findByEmail(email).get();
                 } else {
-                    user = new User(new ObjectId(),
-                                    email,
-                                    null,
-                                    10000,
-                                    new ArrayList<>(),
-                                    true);
+                    user = new User(new ObjectId(), email, null, 10000, new ArrayList<>(), true, 0, false, null);
 
                     Set<Role> roles = new HashSet<>();
                     Role userRole = roleRepository.findByType(ERole.ROLE_USER)
@@ -108,8 +124,8 @@ public class AuthServiceImpl implements AuthService {
                 }
 
                 String jwt = jwtUtils.generateGoogleJwtToken(user.getId().toString());
+                return ResponseEntity.ok(new JwtResponse(jwt));
 
-                return ResponseEntity.ok(new JwtResponse(jwt, user.getId().toString()));
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token.");
             }
@@ -127,8 +143,8 @@ public class AuthServiceImpl implements AuthService {
         if(signupRequest.getPassword().length() < 8) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 8 characters.");
         }
-        User user = new User(new ObjectId(), signupRequest.getEmail(),
-                encoder.encode(signupRequest.getPassword()), 10000, new ArrayList<>(), false);
+        User user = new User(new ObjectId(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()),
+                    10000, new ArrayList<>(), false, 0, false, null);
 
         Set<String> strRoles = signupRequest.getRoles();
         Set<Role> roles = new HashSet<>();

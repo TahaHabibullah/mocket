@@ -28,6 +28,9 @@ public interface UserRepository {
     long deleteAll();
     User verifyUser(String id);
     User changePassword(String id, String newPassword);
+    User incrementLoginFails(String email);
+    int checkUserStatus(String email);
+    User clearLoginFails(String id);
     User update(User user);
     long update(List<User> users);
     User addPosition(String id, Position p);

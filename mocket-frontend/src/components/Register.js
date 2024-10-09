@@ -10,6 +10,8 @@ import "../styling/MocketNavBar.css";
 import { useNavigate } from "react-router-dom";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
+const CLIENT_ID = process.env.REACT_APP_GOOGLE_CLIENT_ID;
+
 const Register = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
@@ -52,7 +54,7 @@ const Register = () => {
             setAlert("Password must be at least 8 characters.");
         }
         else if(password !== confirm) {
-            setAlert("Passwords do not match.")
+            setAlert("Passwords do not match.");
         }
         else {
             setAlert(null);
@@ -118,7 +120,7 @@ const Register = () => {
                     <div className="mocket-login-or-divider"/>
                 </div>
                 <div className="mocket-login-social">
-                    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}>
+                    <GoogleOAuthProvider clientId={CLIENT_ID}>
                         <GoogleLogin
                             onSuccess={handleGoogleLogin}
                             onError={() => {setError("Failed to Login.")}}

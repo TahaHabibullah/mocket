@@ -28,6 +28,7 @@ import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.ReturnDocument.AFTER;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.text.ParseException;
@@ -45,6 +46,8 @@ public class UserRepositoryImpl implements UserRepository {
     private final MongoClient client;
     private MongoCollection<User> userCollection;
     private TradeService tradeService;
+    @Value("${mocket.login.lock.duration}")
+    private long duration;
     public UserRepositoryImpl(MongoClient client, TradeService tradeService) {
         this.client = client;
         this.tradeService = tradeService;
@@ -157,6 +160,58 @@ public class UserRepositoryImpl implements UserRepository {
         return update(u);
     }
 
+    @Override
+    public User incrementLoginFails(String email) {
+        User u = findByEmail(email).get();
+        if(u.isLocked()) {
+            u.setLockTime(new Date());
+        }
+        else if(u.getFailedLoginAttempts() == 5)  {
+            u.setLocked(true);
+            u.setLockTime(new Date());
+        }
+        else {
+            u.setFailedLoginAttempts(u.getFailedLoginAttempts() + 1);
+        }
+        return update(u);
+    }
+
+    @Override
+    public int checkUserStatus(String email) {
+        if(existsByEmail(email)) {
+            User u = findByEmail(email).get();
+            if(u.getPassword() == null) {
+                return 2;
+            }
+            if(u.isLocked()) {
+                long lockTime = u.getLockTime().getTime();
+                long currTime = System.currentTimeMillis();
+                if(currTime - lockTime >= duration) {
+                    u.setLocked(false);
+                    u.setFailedLoginAttempts(0);
+                    u.setLockTime(null);
+                    update(u);
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else {
+                return 1;
+            }
+        }
+        else {
+            return -1;
+        }
+    }
+
+    @Override
+    public User clearLoginFails(String id) {
+        User u = find(id);
+        u.setFailedLoginAttempts(0);
+        return update(u);
+    }
 
     @Override
     public User update(User user) {

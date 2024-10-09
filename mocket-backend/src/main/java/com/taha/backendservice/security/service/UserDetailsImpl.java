@@ -1,6 +1,7 @@
 package com.taha.backendservice.security.service;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -23,18 +24,26 @@ public class UserDetailsImpl implements UserDetails {
     private String password;
     private Collection<? extends GrantedAuthority> authorities;
     private boolean verified;
+    private int failedLoginAttempts;
+    private boolean locked;
+    private Date lockTime;
 
     public UserDetailsImpl(ObjectId id,
                            String email,
                            String password,
                            Collection<? extends GrantedAuthority> authorities,
-                           boolean verified) {
+                           boolean verified,
+                           int failedLoginAttempts,
+                           boolean locked,
+                           Date lockTime) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.authorities = authorities;
         this.verified = verified;
-
+        this.failedLoginAttempts = failedLoginAttempts;
+        this.locked = locked;
+        this.lockTime = lockTime;
     }
 
     public static UserDetailsImpl build(User user) {
@@ -47,7 +56,10 @@ public class UserDetailsImpl implements UserDetails {
                 user.getEmail(),
                 user.getPassword(),
                 authorities,
-                user.isVerified());
+                user.isVerified(),
+                user.getFailedLoginAttempts(),
+                user.isLocked(),
+                user.getLockTime());
     }
 
     @Override
@@ -73,11 +85,16 @@ public class UserDetailsImpl implements UserDetails {
 
     public boolean isVerified() { return verified; }
 
+    public int getFailedLoginAttempts() { return failedLoginAttempts; }
+
+    public boolean isLocked() { return locked; }
+
+    public Date getLockTime() { return lockTime; }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
     }
-
     @Override
     public boolean isAccountNonLocked() {
         return true;

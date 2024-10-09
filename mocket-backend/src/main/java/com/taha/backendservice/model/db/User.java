@@ -15,6 +15,9 @@ public class User {
     private double balance;
     private List<Position> positions;
     private boolean verified;
+    private int failedLoginAttempts;
+    private boolean locked;
+    private Date lockTime;
 
     private Set<Role> roles = new HashSet<>();
 
@@ -25,13 +28,19 @@ public class User {
                 String password,
                 double balance,
                 List<Position> positions,
-                boolean verified) {
+                boolean verified,
+                int failedLoginAttempts,
+                boolean locked,
+                Date lockTime) {
         this.id = id;
         this.email = email;
         this.password = password;
         this.balance = balance;
         this.positions = positions;
         this.verified = verified;
+        this.failedLoginAttempts = failedLoginAttempts;
+        this.locked = locked;
+        this.lockTime = lockTime;
     }
     public void closePosition(String symbol, int quantity, double price) {
         List<Position> sympos = getSymPositions(symbol);
@@ -137,6 +146,15 @@ public class User {
 
     public boolean isVerified() { return verified; }
     public void setVerified(boolean verified) { this.verified = verified; }
+
+    public int getFailedLoginAttempts() { return failedLoginAttempts; }
+    public void setFailedLoginAttempts(int failedLoginAttempts) { this.failedLoginAttempts = failedLoginAttempts; }
+
+    public boolean isLocked() { return locked; }
+    public void setLocked(boolean locked) { this.locked = locked; }
+
+    public Date getLockTime() { return lockTime; }
+    public void setLockTime(Date lockTime) { this.lockTime = lockTime; }
 
     @Override
     public String toString() {

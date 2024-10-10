@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<OrderData> getOrderHist(String id) throws TradeException {
+    public List<List<OrderData>> getOrderHist(String id) throws TradeException {
         logger.info("Retrieving order history for user with id=" + id);
         return userRepository.getOrderHist(id);
     }

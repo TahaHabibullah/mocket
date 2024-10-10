@@ -353,19 +353,32 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<OrderData> getOrderHist(String id) {
+    public List<List<OrderData>> getOrderHist(String id) {
         User u = find(id);
-        List<OrderData> result = new ArrayList<>();
+        List<OrderData> list = new ArrayList<>();
         List<Position> positions = u.getPositions();
         for(Position p : positions) {
             OrderData temp = new OrderData(p.getSymbol(), p.getOpenTimestamp(), p.getBuy(), p.getQuantity());
-            result.add(temp);
+            list.add(temp);
             if(!p.isOpen()) {
                 temp = new OrderData(p.getSymbol(), p.getCloseTimestamp(), p.getBuy(), p.getSell(), p.getQuantity());
-                result.add(temp);
+                list.add(temp);
             }
         }
-        Collections.sort(result, (o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+        Collections.sort(list, (o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+
+        List<List<OrderData>> result = new ArrayList<>();
+        List<OrderData> temp = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++) {
+            if(i == 0 || i % 10 != 0) {
+                temp.add(list.get(i));
+            }
+            else {
+                result.add(temp);
+                temp = new ArrayList<>();
+            }
+        }
+        result.add(temp);
         return result;
     }
 

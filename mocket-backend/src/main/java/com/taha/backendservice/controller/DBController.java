@@ -85,7 +85,7 @@ public class DBController {
     }
 
     @GetMapping(DBConstant.GET_HIST)
-    public List<OrderData> getOrderHist(@RequestParam String id) throws TradeException {
+    public List<List<OrderData>> getOrderHist(@RequestParam String id) throws TradeException {
         return userService.getOrderHist(id);
     }
 

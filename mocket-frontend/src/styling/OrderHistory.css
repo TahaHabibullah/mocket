@@ -52,6 +52,36 @@
     transition: 0.3s;
 }
 
+.order-history-pagination {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+}
+
+.order-history-pagination-button {
+    background: none;
+    color: white;
+    border: none;
+    font-size: 24px;
+    font-weight: bold;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.order-history-pagination-button:hover {
+    color: #888888;
+}
+
+.order-history-pagination-button:disabled {
+    color: #1c1c1c;
+}
+
+.order-history-pagination-count {
+    padding: 0 20px;
+    display: flex;
+    font-size: 30px;
+}
+
 @media (max-width: 1320px) {
     .order-history {
         margin: 20px 5% 0;

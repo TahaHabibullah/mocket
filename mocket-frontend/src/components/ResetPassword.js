@@ -35,8 +35,8 @@ const ResetPassword = () => {
         if(password.length < 1) {
             setAlert("Please fill in the password field.");
         }
-        else if(password.length < 8) {
-            setAlert("Password must be at least 8 characters.");
+        else if(password.length < 8 || password.length > 30) {
+            setAlert("Password must be 8-30 characters long.");
         }
         else if(password !== confirm) {
             setAlert("Passwords do not match.")

@@ -27,7 +27,6 @@ const OrderHistory = ({ id }) => {
     const callRestApi = async () => {
         return axios.get(restEndpoint + id)
         .then((response) => {
-            console.log(response.data);
             if(response.data.length > 0) {
                 setOrderHist(response.data);
             }

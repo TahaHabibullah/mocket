@@ -140,8 +140,8 @@ public class AuthServiceImpl implements AuthService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already in use.");
         }
 
-        if(signupRequest.getPassword().length() < 8) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 8 characters.");
+        if(signupRequest.getPassword().length() < 8 || signupRequest.getPassword().length() > 30) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be 8-30 characters long.");
         }
         User user = new User(new ObjectId(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()),
                     10000, new ArrayList<>(), false, 0, false, null);
@@ -223,8 +223,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public ResponseEntity<?> resetPassword(String token, String newPassword) {
-        if(newPassword.length() < 8) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be at least 8 characters.");
+        if(newPassword.length() < 8 || newPassword.length() > 30) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be 8-30 characters long.");
         }
 
         String encoded = encoder.encode(newPassword);

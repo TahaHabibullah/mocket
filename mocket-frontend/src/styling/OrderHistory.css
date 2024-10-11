@@ -58,6 +58,12 @@
     justify-content: center;
 }
 
+.order-history-pagination-count {
+    padding: 0 20px;
+    display: flex;
+    font-size: 30px;
+}
+
 .order-history-pagination-button {
     background: none;
     color: white;
@@ -74,12 +80,6 @@
 
 .order-history-pagination-button:disabled {
     color: #1c1c1c;
-}
-
-.order-history-pagination-count {
-    padding: 0 20px;
-    display: flex;
-    font-size: 30px;
 }
 
 @media (max-width: 1320px) {
@@ -105,6 +105,14 @@
     .order-history-panel {
         margin-top: -9px;
     }
+
+    .order-history-pagination {
+        margin: 5px 0 15px 0;
+    }
+    
+    .order-history-pagination-count {
+        font-size: 24px;
+    }
 }
 
 @media (max-width: 767px) {
@@ -124,5 +132,18 @@
 
     .order-history-panel {
         margin-top: -19px;
+    }
+
+    .order-history-pagination {
+        margin: 5px 0 25px 0;
+    }
+    
+    .order-history-pagination-count {
+        padding: 0 10px;
+        font-size: 16px;
+    }
+
+    .order-history-pagination-button {
+        font-size: 17px;
     }
 }

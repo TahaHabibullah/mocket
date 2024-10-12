@@ -13,12 +13,11 @@ import com.taha.backendservice.model.db.User;
 import com.taha.backendservice.repository.RoleRepository;
 import com.taha.backendservice.repository.UserRepository;
 import com.taha.backendservice.repository.VerificationRepository;
+import com.taha.backendservice.security.EncryptionUtils;
 import com.taha.backendservice.security.jwt.JwtUtils;
 import com.taha.backendservice.security.service.UserDetailsImpl;
 import com.taha.backendservice.service.AuthService;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -27,6 +26,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +46,8 @@ public class AuthServiceImpl implements AuthService {
     private PasswordEncoder encoder;
     @Autowired
     private JwtUtils jwtUtils;
-    private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+    @Autowired
+    private EncryptionUtils encryptionUtils;
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String clientId;
 
@@ -104,7 +105,6 @@ public class AuthServiceImpl implements AuthService {
                     .build();
 
             GoogleIdToken idToken = verifier.verify(token);
-
             if (idToken != null) {
                 GoogleIdToken.Payload payload = idToken.getPayload();
                 String email = payload.getEmail();
@@ -113,7 +113,9 @@ public class AuthServiceImpl implements AuthService {
                 if (userRepository.existsByEmail(email)) {
                     user = userRepository.findByEmail(email).get();
                 } else {
-                    user = new User(new ObjectId(), email, null, 10000, new ArrayList<>(), true, 0, false, null);
+                    String encrypted = encryptionUtils.encrypt(email);
+                    user = new User(new ObjectId(), encrypted, null,
+                            10000, new ArrayList<>(), true, 0, false, null);
 
                     Set<Role> roles = new HashSet<>();
                     Role userRole = roleRepository.findByType(ERole.ROLE_USER)
@@ -143,8 +145,10 @@ public class AuthServiceImpl implements AuthService {
         if(signupRequest.getPassword().length() < 8 || signupRequest.getPassword().length() > 30) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password must be 8-30 characters long.");
         }
-        User user = new User(new ObjectId(), signupRequest.getEmail(), encoder.encode(signupRequest.getPassword()),
-                    10000, new ArrayList<>(), false, 0, false, null);
+
+        String encrypted = encryptionUtils.encrypt(signupRequest.getEmail());
+        User user = new User(new ObjectId(), encrypted, encoder.encode(signupRequest.getPassword()),
+                        10000, new ArrayList<>(), false, 0, false, null);
 
         Set<String> strRoles = signupRequest.getRoles();
         Set<Role> roles = new HashSet<>();

@@ -1,6 +1,7 @@
 package com.taha.backendservice.service.impl;
 
 import com.taha.backendservice.constants.AuthConstant;
+import com.taha.backendservice.security.EncryptionUtils;
 import com.taha.backendservice.service.EmailVerificationService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -24,6 +25,8 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     private JavaMailSender mailSender;
     @Autowired
     private TemplateEngine templateEngine;
+    @Autowired
+    private EncryptionUtils encryptionUtils;
     @Value("${mocket.verification.email}")
     private String fromEmail;
     @Value("${mocket.privacy.policy}")
@@ -36,11 +39,12 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
 
+        String email = encryptionUtils.decrypt(to);
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("url", verificationUrl);
         templateModel.put("ppUrl", privacyPolicy);
 
-        helper.setTo(to);
+        helper.setTo(email);
         helper.setSubject("Mocket - Verify your email address");
         helper.setFrom(fromEmail);
 
@@ -62,11 +66,12 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
 
+        String email = encryptionUtils.decrypt(to);
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("url", resetUrl);
         templateModel.put("ppUrl", privacyPolicy);
 
-        helper.setTo(to);
+        helper.setTo(email);
         helper.setSubject("Mocket - Reset your password");
         helper.setFrom(fromEmail);
 

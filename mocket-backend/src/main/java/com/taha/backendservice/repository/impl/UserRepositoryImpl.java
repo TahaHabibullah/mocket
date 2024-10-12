@@ -19,6 +19,7 @@ import com.taha.backendservice.model.price.PriceData;
 import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.repository.UserRepository;
+import com.taha.backendservice.security.EncryptionUtils;
 import com.taha.backendservice.service.TradeService;
 import org.bson.BsonDocument;
 import org.bson.types.ObjectId;
@@ -28,6 +29,7 @@ import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.ReturnDocument.AFTER;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
@@ -46,6 +48,8 @@ public class UserRepositoryImpl implements UserRepository {
     private final MongoClient client;
     private MongoCollection<User> userCollection;
     private TradeService tradeService;
+    @Autowired
+    private EncryptionUtils encryptionUtils;
     @Value("${mocket.login.lock.duration}")
     private long duration;
     public UserRepositoryImpl(MongoClient client, TradeService tradeService) {
@@ -97,12 +101,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByEmail(String email) {
-        return Optional.of(userCollection.find(eq("email", email)).first());
+        String encrypted = encryptionUtils.encrypt(email);
+        return Optional.of(userCollection.find(eq("email", encrypted)).first());
     }
 
     @Override
     public Boolean existsByEmail(String email) {
-        if(userCollection.find(eq("email", email)).first() != null) {
+        String encrypted = encryptionUtils.encrypt(email);
+        if(userCollection.find(eq("email", encrypted)).first() != null) {
             return true;
         }
         else {

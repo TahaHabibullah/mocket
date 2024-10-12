@@ -1,3 +1,7 @@
+body {
+    overflow-y: scroll;
+}
+
 .home-header {
     margin: 0;
     padding: 0;

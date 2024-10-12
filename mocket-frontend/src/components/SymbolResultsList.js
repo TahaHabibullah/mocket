@@ -12,7 +12,7 @@ const SymbolResultsList = ({ results }) => {
                 return <SymbolResultsItem name={data.instrument_name} symbol={data.symbol} key={index}/>
                 })}
         </div>
-    )
-}
+    );
+};
 
 export default SymbolResultsList;

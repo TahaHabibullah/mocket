@@ -4,7 +4,6 @@
 
 .positions-list-header {
     margin: 20px max(5vw, calc((100vw - 1600px) / 2)) 10px;
-    font-size: 36px;
     color: white;
 }
 

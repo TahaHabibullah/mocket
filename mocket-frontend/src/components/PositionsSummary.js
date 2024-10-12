@@ -25,7 +25,7 @@ const PositionsSummary = ({ positions, live }) => {
                 <div className="pos-summary-values-right">{getTotalReturn(positions, live)}</div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default PositionsSummary;

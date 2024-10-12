@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
+import Footer from "./Footer";
 import { validEmail } from "./Utils";
 import "../styling/ForgotPassword.css";
 import "../styling/App.css";
@@ -34,13 +35,13 @@ const ForgotPassword = () => {
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
-            })
+            });
         }
-    }
+    };
 
     const handleRedirect = () => {
         navigator("/login");
-    }
+    };
 
     return (
         <div className="App">
@@ -73,8 +74,9 @@ const ForgotPassword = () => {
                     <div className="mocket-forgot-remembered-button" onClick={handleRedirect}>Login here</div>
                 </div>
             </div>
+            <Footer/>
         </div>
-    )
-}
+    );
+};
 
 export default ForgotPassword;

@@ -26,8 +26,8 @@ const SymbolSearch = ( {setResults} ) => {
         }).catch(error => {
             setError("Failed to fetch search results.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     const handleChange = (e) => {
         e.preventDefault();
@@ -38,7 +38,7 @@ const SymbolSearch = ( {setResults} ) => {
         else {
             setResults([]);
         }
-    }
+    };
 
     return (
         <div>
@@ -52,7 +52,7 @@ const SymbolSearch = ( {setResults} ) => {
                 <input placeholder="Search" onChange={handleChange}/>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default SymbolSearch;

@@ -159,13 +159,13 @@ const PriceChart = ({ liveData, quoteData }) => {
 
     const handleToggle = (i) => {
         setToggledIndex(i);
-    }
+    };
     const getButtonStyle = (i) => {
         return i === toggledIndex ? 'price-chart-interval-button-toggled' : 'price-chart-interval-button-untoggled';
-    }
+    };
     const getDiffStyle = () => {
         return currDiff[0] === '+' ? 'quote-header-diff-green' : 'quote-header-diff-red'
-    }
+    };
 
     useEffect (() => {
         callRestApi();
@@ -185,7 +185,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                 setLiveIndex(liveIndex < 78 ? liveIndex + 1 : 77);
             }
         }
-    }, [liveData])
+    }, [liveData]);
 
     const callRestApi = async () => {
         var body;
@@ -225,7 +225,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             setError("Failed to fetch data from API.");
             console.log(error);
         })
-    }
+    };
 
     return (
         <div>
@@ -279,7 +279,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             </div>
             <div className="price-chart-divider"/>
         </div>
-    )
-}
+    );
+};
 
 export default PriceChart;

@@ -18,14 +18,14 @@ const UserProvider = ({ children }) => {
         }).catch(error => {
             setError("Failed to fetch from backend.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     useEffect(() => {
         if(token) {
             callRestApi();
         }
-    }, [])
+    }, []);
 
     return (
         <UserContext.Provider value={{user, refetch: callRestApi}}>
@@ -37,6 +37,6 @@ const UserProvider = ({ children }) => {
             {children}
         </UserContext.Provider>
     );
-}
+};
 
 export { UserProvider };

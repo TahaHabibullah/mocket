@@ -3,6 +3,7 @@ import MocketNavBar from "./MocketNavBar";
 import PositionsList from "./PositionsList";
 import HomePriceChart from "./HomePriceChart";
 import Alert from "./Alert";
+import Footer from "./Footer";
 import { UserContext } from "./UserContext";
 import { getOpenPositions, getPortfolioValue, 
          getPortfolioPrevClose, getCombinedPositions, 
@@ -32,14 +33,14 @@ const Home = () => {
         }).catch(error => {
             setError("Failed to fetch from backend.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     useEffect(() => {
         if(user) {
             callRestApi();
         }
-    }, [user])
+    }, [user]);
 
     return (
         <div className="App">
@@ -65,8 +66,9 @@ const Home = () => {
             ) : (
                 <div/>
             )}
+            <Footer/>
         </div>
-    )
-}
+    );
+};
 
 export default Home;

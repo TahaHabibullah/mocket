@@ -7,6 +7,7 @@ import MocketNavBar from "./MocketNavBar";
 import PositionsSummary from "./PositionsSummary";
 import TradeActions from "./TradeActions";
 import Alert from "./Alert";
+import Footer from "./Footer";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 import { SSE } from 'sse.js';
@@ -24,7 +25,7 @@ const SymbolDashboard = () => {
 
     useEffect(() => {
         callRestApi();
-    }, [])
+    }, []);
 
     useEffect(() => {
         if(marketOpen) {
@@ -65,8 +66,8 @@ const SymbolDashboard = () => {
         }).catch(error => {
             setError("Failed to fetch data from API.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     return (
         <div className="App">
@@ -90,8 +91,9 @@ const SymbolDashboard = () => {
             ) : (
                 <div/>
             )}
+            <Footer/>
         </div>
-    )
-}
+    );
+};
 
 export default SymbolDashboard;

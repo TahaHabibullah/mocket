@@ -45,7 +45,7 @@ const QuoteDataGrid = ({ data }) => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default QuoteDataGrid;

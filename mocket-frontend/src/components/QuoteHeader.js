@@ -12,7 +12,7 @@ const QuoteHeader = ({ live, data }) => {
             </div>
             <div data-testid="price" className="quote-header-price">${live}</div>
         </div>
-    )
-}
+    );
+};
 
 export default QuoteHeader;

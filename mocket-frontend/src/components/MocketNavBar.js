@@ -14,17 +14,17 @@ const MocketNavBar = ({ style }) => {
         localStorage.clear();
         navigator("/login");
         window.location.reload();
-    }
+    };
 
     const handleLoginRedirect = () => {
         navigator("/login");
         window.location.reload();
-    }
+    };
 
     const handleRegisterRedirect = () => {
         navigator("/register");
         window.location.reload();
-    }
+    };
 
     return (
         style === "dashboard" ? (
@@ -57,6 +57,6 @@ const MocketNavBar = ({ style }) => {
             </div>
         )
     );
-}
+};
 
 export default MocketNavBar;

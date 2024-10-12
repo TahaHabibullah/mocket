@@ -22,7 +22,7 @@ const OrderHistory = ({ id }) => {
             panel.style.maxHeight = panel.scrollHeight + "px";
             panel.style.borderWidth = "1px";
         }
-    }
+    };
 
     const callRestApi = async () => {
         return axios.get(restEndpoint + id)
@@ -33,20 +33,20 @@ const OrderHistory = ({ id }) => {
         }).catch(error => {
             setError("Failed to fetch from backend.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     const nextPage = () => {
         if (curr < orderHist.length) {
             setCurr(curr + 1);
         }   
-    }
+    };
     
     const prevPage = () => {
         if (curr > 1) {
             setCurr(curr - 1);
         }
-    }
+    };
 
     useEffect(() => {
         callRestApi();
@@ -59,7 +59,7 @@ const OrderHistory = ({ id }) => {
             panel.style.maxHeight = panel.scrollHeight + "px";
             panel.style.borderWidth = "1px";
         }
-    }, [curr])
+    }, [curr]);
 
     return (
         <div>
@@ -101,6 +101,6 @@ const OrderHistory = ({ id }) => {
             )}
         </div>
     );
-}
+};
 
 export default OrderHistory;

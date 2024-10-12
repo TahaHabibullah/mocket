@@ -160,13 +160,13 @@ const HomePriceChart = ({ prevClose, total }) => {
 
     const handleToggle = (i) => {
         setToggledIndex(i);
-    }
+    };
     const getButtonStyle = (i) => {
         return i === toggledIndex ? 'price-chart-interval-button-toggled' : 'price-chart-interval-button-untoggled';
-    }
+    };
     const getDiffStyle = () => {
         return currDiff[0] === '+' ? 'quote-header-diff-green' : 'quote-header-diff-red'
-    }
+    };
 
     useEffect (() => {
         callRestApi();
@@ -200,8 +200,8 @@ const HomePriceChart = ({ prevClose, total }) => {
         }).catch(error => {
             setError("Failed to fetch data from API.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     return (
         <div>
@@ -257,7 +257,7 @@ const HomePriceChart = ({ prevClose, total }) => {
             </div>
             <div className="price-chart-divider"/>
         </div>
-    )
-}
+    );
+};
 
 export default HomePriceChart;

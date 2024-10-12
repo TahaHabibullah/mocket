@@ -35,8 +35,8 @@ const Sell = ({ symbol, positions, live }) => {
         }).catch(error => {
             setError("Failed to send data to backend.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     return (
         <div>
@@ -83,7 +83,7 @@ const Sell = ({ symbol, positions, live }) => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Sell;

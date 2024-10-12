@@ -20,7 +20,7 @@ const Buy = ({ symbol, balance, live }) => {
         else {
             setBtnDisabled(true);
         }
-    }
+    };
 
     const handleClick = async () => {
         const body = {
@@ -37,8 +37,8 @@ const Buy = ({ symbol, balance, live }) => {
         }).catch(error => {
             setError("Failed to send data to backend.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     return (
         <div>
@@ -85,7 +85,7 @@ const Buy = ({ symbol, balance, live }) => {
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Buy;

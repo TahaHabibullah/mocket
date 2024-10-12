@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
+import Footer from "./Footer";
 import { validEmail } from "./Utils";
 import "../styling/Login.css";
 import "../styling/Register.css";
@@ -25,16 +26,14 @@ const Register = () => {
             const response = await axios.post(googleLoginEndpoint, {
               token: googleResp.credential
             });
-            console.log(response.data)
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('id', response.data.id);
             navigator("/dashboard");
             window.location.reload();
-          } catch (error) {
+        } catch (error) {
             setError("Failed to login.");
             console.error(error);
-          }
-    }
+        }
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -69,13 +68,13 @@ const Register = () => {
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
-            })
+            });
         }
-    }
+    };
 
     const handleRedirect = () => {
         navigator("/login");
-    }
+    };
 
     return (
         <div className="App">
@@ -128,8 +127,9 @@ const Register = () => {
                     </GoogleOAuthProvider>
                 </div>
             </div>
+            <Footer/>
         </div>
-    )
-}
+    );
+};
 
 export default Register;

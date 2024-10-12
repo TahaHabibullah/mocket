@@ -70,7 +70,7 @@ const TradeActions = ({ symbol, positions, live }) => {
             }
             sellOpen = !sellOpen;
         }
-    }
+    };
 
     const handleToggleLone = () => {
         var panel = acc[0].nextElementSibling;
@@ -84,7 +84,7 @@ const TradeActions = ({ symbol, positions, live }) => {
             panel.style.borderWidth = "1px";
         }
         buyOpen = !buyOpen;
-    }
+    };
 
     return (
         <div>
@@ -112,7 +112,7 @@ const TradeActions = ({ symbol, positions, live }) => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default TradeActions;

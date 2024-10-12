@@ -4,12 +4,9 @@ import com.taha.backendservice.constants.AuthConstant;
 import com.taha.backendservice.service.EmailVerificationService;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -29,22 +26,8 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     private TemplateEngine templateEngine;
     @Value("${mocket.verification.email}")
     private String fromEmail;
-
-    private static final Logger logger = LoggerFactory.getLogger(EmailVerificationServiceImpl.class);
-
-    /*@Override
-    public void sendVerification(String to, String token) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        String verificationUrl = AuthConstant.VERIFICATION_URL + token;
-
-        message.setFrom(fromEmail);
-        message.setTo(to);
-        message.setSubject("Mocket - Verify your email address");
-        message.setText("Click the following link to verify your email: " + verificationUrl);
-
-        mailSender.send(message);
-        logger.info("Verification email sent to: " + to);
-    }*/
+    @Value("${mocket.privacy.policy}")
+    private String privacyPolicy;
 
     @Override
     public void sendVerification(String to, String token) throws MessagingException {
@@ -55,6 +38,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
 
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("url", verificationUrl);
+        templateModel.put("ppUrl", privacyPolicy);
 
         helper.setTo(to);
         helper.setSubject("Mocket - Verify your email address");
@@ -80,6 +64,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
 
         Map<String, Object> templateModel = new HashMap<>();
         templateModel.put("url", resetUrl);
+        templateModel.put("ppUrl", privacyPolicy);
 
         helper.setTo(to);
         helper.setSubject("Mocket - Reset your password");

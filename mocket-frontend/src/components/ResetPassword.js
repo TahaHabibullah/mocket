@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
+import Footer from "./Footer";
 import "../styling/ResetPassword.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
@@ -25,8 +26,8 @@ const ResetPassword = () => {
             const message = error.response.data;
             setError(message);
             console.log(message);
-        })
-    }
+        });
+    };
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -55,13 +56,13 @@ const ResetPassword = () => {
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
-            })
+            });
         }
-    }
+    };
 
     useEffect(() => {
         callRestApi();
-    }, [])
+    }, []);
 
     return (
         <div className="App">
@@ -97,8 +98,9 @@ const ResetPassword = () => {
             ) : (
                 <div/>
             )}
+            <Footer/>
         </div>
-    )
-}
+    );
+};
 
 export default ResetPassword;

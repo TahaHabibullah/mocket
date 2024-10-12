@@ -59,7 +59,7 @@ const OrderHistoryTile = ({ data }) => {
             </div>
         )}
         </div>
-    )
-}
+    );
+};
 
 export default OrderHistoryTile;

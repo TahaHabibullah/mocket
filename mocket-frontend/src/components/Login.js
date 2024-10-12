@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
+import Footer from "./Footer";
 import "../styling/Login.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
@@ -30,16 +31,14 @@ const Login = () => {
             const response = await axios.post(googleLoginEndpoint, {
               token: googleResp.credential
             });
-            console.log(response.data)
             localStorage.setItem('token', response.data.token);
-            localStorage.setItem('id', response.data.id);
             navigator("/dashboard");
             window.location.reload();
-          } catch (error) {
+        } catch (error) {
             setError("Failed to login.");
             console.error(error);
-          }
-    }
+        }
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -72,9 +71,9 @@ const Login = () => {
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
-            })
+            });
         }
-    }
+    };
 
     const handleVerification = () => {
         const body = { token };
@@ -85,8 +84,8 @@ const Login = () => {
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
-            })
-    }
+            });
+    };
 
     const isLocked = () => {
         if(attempts >= MAX_ATTEMPTS) {
@@ -102,7 +101,7 @@ const Login = () => {
             }
         }
         return false;
-    }
+    };
 
     const incrementAttempts = () => {
         const att = attempts + 1;
@@ -114,22 +113,22 @@ const Login = () => {
             setLockTime(curr);
             localStorage.setItem('lockTime', curr);
         }
-    }
+    };
 
     const resetAttempts = () => {
         setAttempts(0);
         setLockTime(null);
         localStorage.removeItem('loginAttempts');
         localStorage.removeItem('lockTime');
-    }
+    };
 
     const goToRegister = () => {
         navigator("/register");
-    }
+    };
 
     const goToForgotPass = () => {
         navigator("/forgot-password");
-    }
+    };
 
     useEffect(() => {
         const savedAttempts = localStorage.getItem('loginAttempts');
@@ -145,7 +144,7 @@ const Login = () => {
         if(token) {
             handleVerification();
         }
-    }, [])
+    }, []);
 
     return (
         <div className="App">
@@ -195,8 +194,9 @@ const Login = () => {
                     </GoogleOAuthProvider>
                 </div>
             </div>
+            <Footer/>
         </div>
-    )
-}
+    );
+};
 
 export default Login;

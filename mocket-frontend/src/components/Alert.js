@@ -4,7 +4,7 @@ import "../styling/Alert.css";
 const Alert = ({ message, style, setAlert }) => {
     const handleClick = () => {
         setAlert(null);
-    }
+    };
 
     const getType = () => {
         if(style === "error") {
@@ -16,7 +16,7 @@ const Alert = ({ message, style, setAlert }) => {
         else if(style === "success") {
             return "Success:"
         }
-    }
+    };
 
     return (
         <div id={0} className="alert">
@@ -27,7 +27,7 @@ const Alert = ({ message, style, setAlert }) => {
                 <span className="alert-dismiss" onClick={handleClick}>&times;</span>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Alert;

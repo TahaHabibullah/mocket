@@ -7,12 +7,15 @@ import { validEmail } from "./Utils";
 import "../styling/ForgotPassword.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
+import "../styling/Login.css";
 import { useNavigate } from "react-router-dom";
 
 const ForgotPassword = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonClass, setButtonClass] = useState("");
     const navigator = useNavigate();
     const restEndpoint = 'http://localhost:8080/auth/forgot-password';
 
@@ -26,15 +29,22 @@ const ForgotPassword = () => {
             setAlert("Please enter a valid email.")
         }
         else {
+            setIsLoading(true);
             setAlert(null);
             const body = { email };
             axios.post(restEndpoint, body)
             .then((response) => {
                 setSuccess(response.data);
+                setButtonClass("success");
+                setTimeout(() => setButtonClass(""), 200);
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
+                setButtonClass("error");
+                setTimeout(() => setButtonClass(""), 200);
+            }).finally(() => {
+                setIsLoading(false);
             });
         }
     };
@@ -67,7 +77,13 @@ const ForgotPassword = () => {
                     <div className="mocket-forgot-input-box">
                         <input id="email" placeholder="Enter your email here" className="mocket-forgot-input"/>
                     </div>
-                    <button type="submit" className="mocket-forgot-button">Submit</button>
+                    <button type="submit" className={`mocket-login-button ${buttonClass}`} disabled={isLoading}>
+                        {isLoading ? (
+                            <div className="login-loading-spinner"/>
+                        ) : (
+                            'Submit'
+                        )}
+                    </button>
                 </form>
                 <div className="mocket-forgot-remembered">
                     <div>Remembered your password?</div>

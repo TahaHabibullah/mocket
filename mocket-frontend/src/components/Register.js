@@ -17,6 +17,8 @@ const Register = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [success, setSuccess] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonClass, setButtonClass] = useState("");
     const restEndpoint = 'http://localhost:8080/auth/register';
     const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
     const navigator = useNavigate();
@@ -56,6 +58,7 @@ const Register = () => {
             setAlert("Passwords do not match.");
         }
         else {
+            setIsLoading(true);
             setAlert(null);
             const body = {
                 "email": email,
@@ -65,9 +68,15 @@ const Register = () => {
             axios.post(restEndpoint, body)
             .then((response) => {
                 setSuccess(response.data);
+                setButtonClass("success");
+                setTimeout(() => setButtonClass(""), 200);
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
+                setButtonClass("error");
+                setTimeout(() => setButtonClass(""), 200);
+            }).finally(() => {
+                setIsLoading(false);
             });
         }
     };
@@ -106,7 +115,13 @@ const Register = () => {
                     <div className="mocket-register-input-box">
                         <input id="confirm" type="password" placeholder="Confirm Password" className="mocket-register-input"/>
                     </div>
-                    <button type="submit" className="mocket-register-button">Register</button>
+                    <button type="submit" className={`mocket-login-button ${buttonClass}`} disabled={isLoading}>
+                        {isLoading ? (
+                            <div className="login-loading-spinner"/>
+                        ) : (
+                            'Register'
+                        )}
+                    </button>
                 </form>
                 
                 <div className="mocket-register-existing">

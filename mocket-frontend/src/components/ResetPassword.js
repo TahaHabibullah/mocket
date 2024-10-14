@@ -6,12 +6,15 @@ import Footer from "./Footer";
 import "../styling/ResetPassword.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
+import "../styling/Login.css";
 
 const ResetPassword = () => {
     const [error, setError] = useState(null);
     const [alert, setAlert] = useState(null);
     const [success, setSuccess] = useState(null);
     const [valid, setValid] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonClass, setButtonClass] = useState("");
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const checkEndpoint = 'http://localhost:8080/auth/check-token';
@@ -43,6 +46,7 @@ const ResetPassword = () => {
             setAlert("Passwords do not match.")
         }
         else {
+            setIsLoading(true);
             setAlert(null);
             const body = {
                 "token": token,
@@ -51,10 +55,16 @@ const ResetPassword = () => {
             axios.put(restEndpoint, body)
             .then((response) => {
                 setSuccess(response.data);
+                setButtonClass("success");
+                setTimeout(() => setButtonClass(""), 200);
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
+                setButtonClass("error");
+                setTimeout(() => setButtonClass(""), 200);
+            }).finally(() => {
+                setIsLoading(false);
             });
         }
     };
@@ -91,7 +101,13 @@ const ResetPassword = () => {
                         <div className="mocket-reset-input-box">
                             <input id="confirm" type="password" placeholder="Confirm Password" className="mocket-reset-input"/>
                         </div>
-                        <button type="submit" className="mocket-reset-button">Submit</button>
+                        <button type="submit" className={`mocket-reset-button ${buttonClass}`} disabled={isLoading}>
+                            {isLoading ? (
+                                <div className="login-loading-spinner"/>
+                            ) : (
+                                'Submit'
+                            )}
+                        </button>
                     </form>
                 </div>
             ) : (

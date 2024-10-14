@@ -19,6 +19,8 @@ const Login = () => {
     const [success, setSuccess] = useState(null);
     const [attempts, setAttempts] = useState(0);
     const [lockTime, setLockTime] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonClass, setButtonClass] = useState("");
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
     const restEndpoint = 'http://localhost:8080/auth/login';
@@ -43,6 +45,8 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if(isLocked()) {
+            setButtonClass("error");
+            setTimeout(() => setButtonClass(""), 200);
             setError("Login locked. Try again later.");
             return;
         }
@@ -55,6 +59,7 @@ const Login = () => {
             setAlert("Please fill in the password field.");
         }
         else {
+            setIsLoading(true);
             setAlert(null);
             const body = {
                 "email": email,
@@ -71,6 +76,10 @@ const Login = () => {
                 const message = error.response.data;
                 setError(message);
                 console.log(message);
+                setButtonClass("error");
+                setTimeout(() => setButtonClass(""), 200);
+            }).finally(() => {
+                setIsLoading(false);
             });
         }
     };
@@ -174,7 +183,13 @@ const Login = () => {
                         <input id="pass" type="password" placeholder="Password" className="mocket-login-input"/>
                     </div>
                     <div className="mocket-login-forgot-button" onClick={goToForgotPass}>Forgot your password?</div>
-                    <button type="submit" className="mocket-login-button">Login</button>
+                    <button type="submit" className={`mocket-login-button ${buttonClass}`} disabled={isLoading}>
+                        {isLoading ? (
+                            <div className="login-loading-spinner"/>
+                        ) : (
+                            'Login'
+                        )}
+                    </button>
                 </form>
                 <div className="mocket-login-newuser">
                     <div>Don't have an account?</div>

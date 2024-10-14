@@ -69,6 +69,12 @@
     border-color: black;
 }
 
+.mocket-register-button:disabled {
+    color: #cccccc;
+    background-color: #1c1c1c;
+    border-color: #888888;
+}
+
 .mocket-register-existing {
     margin-bottom: 20px;
     display: flex;

@@ -11,6 +11,7 @@ const Sell = ({ symbol, positions, live }) => {
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const handleChange = (e) => {
         const val = e.target.value;
         if(sellInputValid(val, getTotalShares(positions))) {
@@ -23,6 +24,7 @@ const Sell = ({ symbol, positions, live }) => {
     }
 
     const handleClick = async () => {
+        setIsLoading(true);
         const body = {
             userId: user.id,
             symbol: symbol,
@@ -35,6 +37,8 @@ const Sell = ({ symbol, positions, live }) => {
         }).catch(error => {
             setError("Failed to send data to backend.");
             console.log(error);
+        }).finally(() => {
+            setIsLoading(false);
         });
     };
 
@@ -77,9 +81,13 @@ const Sell = ({ symbol, positions, live }) => {
                 <button 
                     id="sell" 
                     className="sell-button" 
-                    disabled={btnDisabled} 
+                    disabled={btnDisabled || isLoading} 
                     onClick={handleClick}>
-                    Trade
+                        {isLoading ? (
+                            <div className="buy-loading-spinner"/>
+                        ) : (
+                            'Trade'
+                        )}
                 </button>
             </div>
         </div>

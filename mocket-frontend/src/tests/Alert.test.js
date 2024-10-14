@@ -4,7 +4,7 @@ import Alert from "../components/Alert.js";
 
 test("component renders correctly", async () => {
     const { container, getByText } = render(<Alert message="Unexpected failure." style="error" setAlert={() => {}}/>);
-    expect(container.querySelector(".alert-error")).toBeInTheDocument();
+    expect(container.querySelector(".alert-type.error")).toBeInTheDocument();
     expect(container.querySelector(".alert-dismiss")).toBeInTheDocument();
     expect(getByText(/Error/i)).toBeInTheDocument();
     expect(getByText(/Unexpected failure./i)).toBeInTheDocument();

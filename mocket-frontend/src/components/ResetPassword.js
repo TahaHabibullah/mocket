@@ -51,7 +51,6 @@ const ResetPassword = () => {
             axios.put(restEndpoint, body)
             .then((response) => {
                 setSuccess(response.data);
-                console.log(response.data);
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);

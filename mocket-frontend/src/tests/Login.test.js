@@ -50,7 +50,7 @@ test("does not call authentication on invalid input, alert shown", async () => {
 });
 
 test("alert shown when login fails", async () => {
-    axios.post.mockRejectedValue(new Error("error"));
+    axios.post.mockRejectedValue({ response: { data: "Failed to login." } });
     const { getByPlaceholderText, getByText } = render(<Login/>);
     fireEvent.change(getByPlaceholderText("Email"), {target: {value: "test@test.com"}});
     fireEvent.change(getByPlaceholderText("Password"), {target: {value: "test"}});

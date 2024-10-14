@@ -46,14 +46,14 @@ describe("parseVolume", () => {
 });
 
 describe("checkInput", () => {
-    it("returns 1 for empty string", async () => {
-        expect(checkInput("")).toBe("1");
+    it("returns false for empty string", async () => {
+        expect(checkInput("")).toBe(false);
     });
-    it("returns 1 for non-alphabetical string", async () => {
-        expect(checkInput("-34gasdfg-3498")).toBe("1");
+    it("returns false for non-alphabetical string", async () => {
+        expect(checkInput("-34gasdfg-3498")).toBe(false);
     });
-    it("returns input for passing string", async () => {
-        expect(checkInput("test")).toBe("test");
+    it("returns true for passing string", async () => {
+        expect(checkInput("test")).toBe(true);
     });
 });
 

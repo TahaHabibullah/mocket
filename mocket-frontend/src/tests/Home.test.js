@@ -80,13 +80,15 @@ test("uses context user data, fetches quote data, renders all children", async (
         }
     ];
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            }
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });
@@ -126,20 +128,22 @@ test("uses context user data, fetches quote data, does not render pos list", asy
     };
 
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        },
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 218.24,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:45"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            },
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 218.24,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:45"
+            }   
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });
@@ -187,13 +191,15 @@ test("uses context user data, fails to fetch quote data, alert shown, does not r
         }
     ];
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            }
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });
@@ -231,13 +237,15 @@ test("uses context user data, fetches empty quote data, alert shown, does not re
         ]
     };
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            }
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });

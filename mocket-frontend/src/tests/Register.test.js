@@ -32,8 +32,8 @@ test("calls register service on valid input", async () => {
     axios.post.mockResolvedValue({ data: mockResponse });
     const { container, getByPlaceholderText } = render(<Register/>);
     fireEvent.change(getByPlaceholderText("Email"), {target: {value: "test@test.com"}});
-    fireEvent.change(getByPlaceholderText("Password"), {target: {value: "test"}});
-    fireEvent.change(getByPlaceholderText("Confirm Password"), {target: {value: "test"}});
+    fireEvent.change(getByPlaceholderText("Password"), {target: {value: "testing1"}});
+    fireEvent.change(getByPlaceholderText("Confirm Password"), {target: {value: "testing1"}});
     fireEvent.click(container.querySelector(".mocket-register-button"));
     expect(axios.post).toHaveBeenCalledTimes(1);
 });
@@ -59,16 +59,22 @@ test("does not call register service on invalid input, alert shown", async () =>
     fireEvent.change(getByPlaceholderText("Password"), {target: {value: "test"}});
     fireEvent.change(getByPlaceholderText("Confirm Password"), {target: {value: ""}});
     await act(() => fireEvent.click(container.querySelector(".mocket-register-button")));
+    expect(getByText(/Password must be 8-30 characters long./i)).toBeInTheDocument();
+    expect(axios.post).toHaveBeenCalledTimes(0);
+    fireEvent.change(getByPlaceholderText("Email"), {target: {value: "test@test.com"}});
+    fireEvent.change(getByPlaceholderText("Password"), {target: {value: "testing1"}});
+    fireEvent.change(getByPlaceholderText("Confirm Password"), {target: {value: "testing2"}});
+    await act(() => fireEvent.click(container.querySelector(".mocket-register-button")));
     expect(getByText(/Passwords do not match./i)).toBeInTheDocument();
     expect(axios.post).toHaveBeenCalledTimes(0);
 });
 
 test("alert shown when register fails", async () => {
-    axios.post.mockRejectedValue(new Error("error"));
+    axios.post.mockRejectedValue({ response: { data: "Failed to register." } });
     const { container, getByPlaceholderText, getByText } = render(<Register/>);
     fireEvent.change(getByPlaceholderText("Email"), {target: {value: "test@test.com"}});
-    fireEvent.change(getByPlaceholderText("Password"), {target: {value: "test"}});
-    fireEvent.change(getByPlaceholderText("Confirm Password"), {target: {value: "test"}});
+    fireEvent.change(getByPlaceholderText("Password"), {target: {value: "testing1"}});
+    fireEvent.change(getByPlaceholderText("Confirm Password"), {target: {value: "testing1"}});
     await act(() => fireEvent.click(container.querySelector(".mocket-register-button")));
     expect(axios.post).toHaveBeenCalledTimes(1);
     expect(getByText(/Failed to register./i)).toBeInTheDocument();

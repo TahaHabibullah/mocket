@@ -5,7 +5,6 @@ import com.taha.backendservice.model.auth.LoginRequest;
 import com.taha.backendservice.model.auth.SignupRequest;
 import com.taha.backendservice.model.auth.Credentials;
 import com.taha.backendservice.service.AuthService;
-import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -19,17 +18,17 @@ public class AuthController {
     private AuthService authService;
 
     @PostMapping(AuthConstant.LOGIN)
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
     }
 
     @PostMapping(AuthConstant.SOCIAL_LOGIN_GOOGLE)
-    public ResponseEntity<?> authGoogleUser(@Valid @RequestBody Credentials credentials) {
+    public ResponseEntity<?> authGoogleUser(@RequestBody Credentials credentials) {
         return authService.googleLogin(credentials.getToken());
     }
 
     @PostMapping(AuthConstant.REGISTER)
-    public ResponseEntity<?> registerUser(@Valid @RequestBody SignupRequest signUpRequest) {
+    public ResponseEntity<?> registerUser(@RequestBody SignupRequest signUpRequest) {
         return authService.register(signUpRequest);
     }
 

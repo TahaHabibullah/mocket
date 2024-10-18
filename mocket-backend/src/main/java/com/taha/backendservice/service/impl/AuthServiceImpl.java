@@ -26,7 +26,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -132,6 +131,7 @@ public class AuthServiceImpl implements AuthService {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token.");
             }
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Google login failed.");
         }
     }
@@ -204,7 +204,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResponseEntity<?> forgotPassword(String email) {
         if (!userRepository.existsByEmail(email)) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is not in use.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Account doesn't exist.");
         }
         User user = userRepository.findByEmail(email).get();
 

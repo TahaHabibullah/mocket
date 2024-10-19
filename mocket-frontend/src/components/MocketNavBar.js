@@ -13,24 +13,29 @@ const MocketNavBar = ({ style }) => {
     const handleLogout = () => {
         localStorage.clear();
         navigator("/login");
-        window.location.reload();
     };
 
     const handleLoginRedirect = () => {
         navigator("/login");
-        window.location.reload();
     };
 
     const handleRegisterRedirect = () => {
         navigator("/register");
-        window.location.reload();
+    };
+
+    const handleDashboardRedirect = () => {
+        navigator("/dashboard");
+    };
+
+    const handleRootRedirect = () => {
+        navigator("/");
     };
 
     return (
         style === "dashboard" ? (
             <div className="nav-bar">
                 <div className="nav-bar-left">
-                    <a href="/dashboard"><img src={logo} alt="" className="nav-bar-brand"/></a>
+                    <a href="#" onClick={handleDashboardRedirect}><img src={logo} alt="" className="nav-bar-brand"/></a>
                     <div className="nav-bar-search">
                         <SymbolSearch setResults={setResults}/>
                         {results && results.hasOwnProperty("data") && <SymbolResultsList results={results}/>}
@@ -38,22 +43,21 @@ const MocketNavBar = ({ style }) => {
                 </div>
                 <div className="nav-bar-right">
                     <button className="nav-bar-logout" onClick={handleLogout}>Log Out</button>
-                    <a href="https://github.com/TahaHabibullah/" target="_blank" rel="noreferrer">
+                    <a href="https://github.com/TahaHabibullah/mocket" target="_blank" rel="noreferrer">
                         <img src={github} alt="" className="nav-bar-repo"/>
                     </a>
                 </div>
             </div>
         ) : (
             <div className="nav-bar">
-                <a href="/"><img src={logo} alt="" className="nav-bar-brand"/></a>
+                <a href="#" onClick={handleRootRedirect}><img src={logo} alt="" className="nav-bar-brand"/></a>
                 <div className="nav-bar-right">
                     <button className="nav-bar-login" onClick={handleLoginRedirect}>Log In</button>
                     <button className="nav-bar-register" onClick={handleRegisterRedirect}>Register</button>
-                    <a href="https://github.com/TahaHabibullah/" target="_blank" rel="noreferrer">
+                    <a href="https://github.com/TahaHabibullah/mocket" target="_blank" rel="noreferrer">
                         <img src={github} alt="" className="nav-bar-repo"/>
                     </a>
                 </div>
-                
             </div>
         )
     );

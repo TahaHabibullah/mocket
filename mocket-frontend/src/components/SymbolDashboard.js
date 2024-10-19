@@ -25,7 +25,7 @@ const SymbolDashboard = () => {
 
     useEffect(() => {
         callRestApi();
-    }, []);
+    }, [symbol]);
 
     useEffect(() => {
         if(marketOpen) {

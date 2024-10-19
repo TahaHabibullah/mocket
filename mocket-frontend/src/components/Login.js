@@ -35,7 +35,6 @@ const Login = () => {
             });
             localStorage.setItem('token', response.data.token);
             navigator("/dashboard");
-            window.location.reload();
         } catch (error) {
             setError("Failed to login.");
             console.error(error);
@@ -70,7 +69,6 @@ const Login = () => {
                 console.log(response.data);
                 localStorage.setItem('token', response.data.token);
                 navigator("/dashboard");
-                window.location.reload();
             }).catch(error => {
                 incrementAttempts();
                 const message = error.response.data;

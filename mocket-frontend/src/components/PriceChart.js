@@ -187,6 +187,11 @@ const PriceChart = ({ liveData, quoteData }) => {
         }
     }, [liveData]);
 
+    useEffect(() => {
+        setToggledIndex(0);
+        callRestApi();
+    }, [symbol])
+
     const callRestApi = async () => {
         var body;
         const start_date = getStartDate(toggledIndex);

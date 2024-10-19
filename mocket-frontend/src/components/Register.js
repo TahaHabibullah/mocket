@@ -30,7 +30,6 @@ const Register = () => {
             });
             localStorage.setItem('token', response.data.token);
             navigator("/dashboard");
-            window.location.reload();
         } catch (error) {
             setError("Failed to login.");
             console.error(error);

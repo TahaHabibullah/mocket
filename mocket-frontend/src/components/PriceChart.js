@@ -32,6 +32,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     const getToggledIndexRef = useRef();
     const getLabelsRef = useRef();
     const drawLabelRef = useRef();
+    const prevSymbol = useRef(symbol);
     const buttons = [
         { text: '1D' },
         { text: '1W' },
@@ -168,8 +169,19 @@ const PriceChart = ({ liveData, quoteData }) => {
     };
 
     useEffect (() => {
-        callRestApi();
-    }, [toggledIndex]);
+        if(prevSymbol.current !== symbol) {
+            if(toggledIndex === 0) {
+                callRestApi();
+            }
+            else {
+                setToggledIndex(0);
+            }
+            prevSymbol.current = symbol;
+        }
+        else {
+            callRestApi();
+        }
+    }, [toggledIndex, symbol]);
 
     useEffect(() => {
         if(data && toggledIndex === 0) {
@@ -186,11 +198,6 @@ const PriceChart = ({ liveData, quoteData }) => {
             }
         }
     }, [liveData]);
-
-    useEffect(() => {
-        setToggledIndex(0);
-        callRestApi();
-    }, [symbol])
 
     const callRestApi = async () => {
         var body;

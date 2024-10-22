@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:3000")
@@ -80,7 +81,7 @@ public class DBController {
     @GetMapping(DBConstant.GET_GRAPH)
     public List<GraphData> getGraphData(@RequestParam String id,
                                         @RequestParam String interval,
-                                        @RequestParam String start_date) throws TradeException {
+                                        @RequestParam String start_date) throws TradeException, ParseException {
         return userService.getGraphData(id, interval, start_date);
     }
 

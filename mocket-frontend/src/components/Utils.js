@@ -120,10 +120,17 @@ export function getStartDate(mode) {
 }
 
 export function parseLabel(label, mode) {
-    const date = new Date(label);
+    var date;
+    if(mode === 3) {
+        date = new Date(label + "T00:00:00");
+    }
+    else {
+        date = new Date(label);
+    }
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
+    const year = date.getFullYear();
     const month = monthNames[date.getMonth()];
     const day = date.getDate();
     var hours = date.getHours();
@@ -139,7 +146,7 @@ export function parseLabel(label, mode) {
     if(mode === 0)
         return `${hours}:${minutes} ${ampm}`;
     else if(mode === 3)
-        return `${month} ${day}`;
+        return `${month} ${day}, ${year}`;
     else
         return `${month} ${day} ${hours}:${minutes} ${ampm}`;
 }

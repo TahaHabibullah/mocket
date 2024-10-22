@@ -8,6 +8,7 @@ import com.taha.backendservice.model.price.GraphData;
 import com.taha.backendservice.model.price.OrderData;
 import com.taha.backendservice.model.quote.QuoteResponse;
 
+import java.text.ParseException;
 import java.util.List;
 
 public interface UserService {
@@ -27,6 +28,6 @@ public interface UserService {
     UserDTO updatePosition(String userId, String posId, PositionDTO p);
     List<Position> getSymPositions(String id, String symbol);
     List<QuoteResponse> getPosQuotes(String id) throws TradeException;
-    List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException;
+    List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException, ParseException;
     List<List<OrderData>> getOrderHist(String id) throws TradeException;
 }

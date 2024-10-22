@@ -283,7 +283,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException {
+    public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException, ParseException {
         User u = find(id);
         List<Position> positions = u.getPositions();
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
@@ -300,10 +300,15 @@ public class UserRepositoryImpl implements UserRepository {
             String symbol = p.getSymbol();
             if(!fetched.contains(symbol)) {
                 TwelveDataRequest request = new TwelveDataRequest(symbol, interval, start_date, "ASC");
-                priceData.put(symbol, tradeService.getPriceData(request));
+                TimeIntervalResponse data = tradeService.getPriceData(request).fillMissingData(interval);
+                if(interval.equals("1day")) {
+                    data = data.removeCloseDays();
+                }
+                priceData.put(symbol, data);
                 fetched.add(symbol);
             }
         }
+
         ArrayList<GraphData> result = new ArrayList<>();
         Map<String, Double> resMap = new TreeMap<>();
         for(Position p : positions) {
@@ -311,29 +316,17 @@ public class UserRepositoryImpl implements UserRepository {
             if(timeseries.getValues() == null) {
                 continue;
             }
-            Date opendt;
+            Date opendt = sdf.parse(p.getOpenTimestamp());
             Date closedt = null;
-            try {
-                opendt = sdf.parse(p.getOpenTimestamp());
-                if(p.getCloseTimestamp() != null) {
-                    closedt = sdf.parse(p.getCloseTimestamp());
-                }
+            if(p.getCloseTimestamp() != null) {
+                closedt = sdf.parse(p.getCloseTimestamp());
             }
-            catch (ParseException e){
-                e.printStackTrace();
-                continue;
-            }
+
             for(PriceData pd : timeseries.getValues()) {
-                Date datadt;
                 String datetime = pd.getDatetime();
+                Date datadt = sdf.parse(datetime);
                 double total = 0.0;
-                try {
-                    datadt = sdf.parse(datetime);
-                }
-                catch (ParseException e){
-                    e.printStackTrace();
-                    continue;
-                }
+
                 if(datadt.before(opendt)) {
                     if(p.isOpen()) {
                         total += p.getQuantity() * p.getBuy();

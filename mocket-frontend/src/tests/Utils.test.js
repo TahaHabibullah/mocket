@@ -177,8 +177,8 @@ describe("parseLabel", () => {
         .toBe("Aug 2 9:30 AM");
     });
     it("parses label for 1 year data", async () => {
-        expect(parseLabel("2024-08-02 09:30:00", 3))
-        .toBe("Aug 2");
+        expect(parseLabel("2024-08-02", 3))
+        .toBe("Aug 2, 2024");
     });
 });
 

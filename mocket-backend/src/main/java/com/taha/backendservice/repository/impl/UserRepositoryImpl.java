@@ -10,6 +10,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.taha.backendservice.exception.TradeException;
+import com.taha.backendservice.model.AlpacaRequest;
 import com.taha.backendservice.model.TwelveDataRequest;
 import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
@@ -289,7 +290,7 @@ public class UserRepositoryImpl implements UserRepository {
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
         ArrayList<String> fetched = new ArrayList<>();
         SimpleDateFormat sdf;
-        if(interval.equals("1day")) {
+        if(interval.equals("1Day")) {
             sdf = new SimpleDateFormat("yyyy-MM-dd");
         }
         else {
@@ -299,9 +300,9 @@ public class UserRepositoryImpl implements UserRepository {
         for(Position p : positions) {
             String symbol = p.getSymbol();
             if(!fetched.contains(symbol)) {
-                TwelveDataRequest request = new TwelveDataRequest(symbol, interval, start_date, "ASC");
-                TimeIntervalResponse data = tradeService.getPriceData(request).fillMissingData(interval);
-                if(interval.equals("1day")) {
+                AlpacaRequest request = new AlpacaRequest(symbol, interval, start_date, "asc");
+                TimeIntervalResponse data = tradeService.getPriceData(request).get(0).fillMissingData(interval);
+                if(interval.equals("1Day")) {
                     data = data.removeCloseDays();
                 }
                 priceData.put(symbol, data);

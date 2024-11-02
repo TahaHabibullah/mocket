@@ -15,4 +15,17 @@ public class PriceData implements Serializable {
     private String low;
     private String close;
     private String volume;
+
+    public PriceData() {
+
+    }
+
+    public PriceData(String open, String close, String high, String low, String volume, String datetime) {
+        this.open = open;
+        this.close = close;
+        this.high = high;
+        this.low = low;
+        this.volume = volume;
+        this.datetime = datetime;
+    }
 }

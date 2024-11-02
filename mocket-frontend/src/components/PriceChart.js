@@ -203,16 +203,16 @@ const PriceChart = ({ liveData, quoteData }) => {
         var body;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            body = {symbol: symbol, interval: "5min", start_date: quoteData.datetime, order: "ASC"};
+            body = {symbol: symbol, interval: "5Min", start_date: quoteData.datetime, order: "asc"};
         }
         else if(toggledIndex === 1) {
-            body = {symbol: symbol, interval: "15min", start_date: start_date, order: "ASC"};
+            body = {symbol: symbol, interval: "15Min", start_date: start_date, order: "asc"};
         }
         else if(toggledIndex === 2) {
-            body = {symbol: symbol, interval: "1h", start_date: start_date, order: "ASC"};
+            body = {symbol: symbol, interval: "1Hour", start_date: start_date, order: "asc"};
         }
         else {
-            body = {symbol: symbol, interval: "1day", start_date: start_date, order: "ASC"};
+            body = {symbol: symbol, interval: "1Day", start_date: start_date, order: "asc"};
         }
         return axios.post(restEndpoint, body)
         .then((response) => {
@@ -220,7 +220,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                 setError("API limit exceeded. Try again later.");
             }
             else {
-                const fullData = response.data.values;
+                const fullData = response.data[0].values;
                 const timeSeriesData = parseTimeSeriesData(fullData);
                 const timeSeriesLabels = parseTimeSeriesLabels(fullData);
                 if(toggledIndex === 0 && quoteData.is_market_open) {

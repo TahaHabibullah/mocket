@@ -176,16 +176,16 @@ const HomePriceChart = ({ prevClose, total }) => {
         var params;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            params = "&interval=5min&start_date=" + getLastBusinessDay();
+            params = "&interval=5Min&start_date=" + getLastBusinessDay();
         }
         else if(toggledIndex === 1) {
-            params = "&interval=15min&start_date=" + start_date;
+            params = "&interval=15Min&start_date=" + start_date;
         }
         else if(toggledIndex === 2) {
-            params = "&interval=1h&start_date=" + start_date;
+            params = "&interval=1Hour&start_date=" + start_date;
         }
         else {
-            params = "&interval=1day&start_date=" + start_date;
+            params = "&interval=1Day&start_date=" + start_date;
         }
         return axios.get(restEndpoint + user.id + params)
         .then((response) => {

@@ -25,13 +25,13 @@ public class TimeIntervalResponse implements Serializable {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         int minutes;
-        if(interval.equals("1day")) {
+        if(interval.equals("1Day")) {
             return this;
         }
-        else if(interval.equals("1h")) {
+        else if(interval.equals("1Hour")) {
             minutes = 60;
         }
-        else if(interval.equals("15min")) {
+        else if(interval.equals("15Min")) {
             minutes = 15;
         }
         else {

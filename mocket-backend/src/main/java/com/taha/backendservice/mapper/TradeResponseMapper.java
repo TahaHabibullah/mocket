@@ -60,8 +60,8 @@ public class TradeResponseMapper {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
         LocalTime time = LocalTime.parse(timeString, formatter);
-        LocalTime start = LocalTime.of(13, 29);
-        LocalTime end = LocalTime.of(20, 1);
+        LocalTime start = LocalTime.of(14, 29);
+        LocalTime end = LocalTime.of(21, 1);
 
         return time.isAfter(start) && time.isBefore(end);
     }

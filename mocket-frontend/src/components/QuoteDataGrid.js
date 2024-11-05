@@ -14,7 +14,7 @@ const QuoteDataGrid = ({ data }) => {
                 </div>
                 <div className="quote-data-grid-vdivider"/>
                 <div className="quote-data-grid-right">
-                    <QuoteDataTile title="Average Volume" data={parseVolume(data.average_volume)}/>
+                    <QuoteDataTile title="Avg. Volume" data={parseVolume(data.average_volume)}/>
                 </div>
             </div>
             <div className="quote-data-grid-item">

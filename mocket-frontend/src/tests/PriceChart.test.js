@@ -212,7 +212,7 @@ test("pressing interval buttons call api", async () => {
         "previous_close": "217.49001",
     }
 
-    axios.post.mockResolvedValue({ data: mockResponse });
+    axios.post.mockResolvedValue({ data: [mockResponse] });
     const { getByText } = await act(async () => render(<PriceChart liveData={217.96} quoteData={quote}/>));
 
     await waitFor(() => fireEvent.click(getByText("1W")));

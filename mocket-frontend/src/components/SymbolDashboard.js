@@ -22,6 +22,7 @@ const SymbolDashboard = () => {
     const [quoteData, setQuoteData] = useState(null);
     const [marketOpen, setMarketOpen] = useState(null);
     const [error, setError] = useState(null);
+    var source;
 
     useEffect(() => {
         callRestApi();
@@ -29,7 +30,10 @@ const SymbolDashboard = () => {
 
     useEffect(() => {
         if(marketOpen) {
-            const source = new SSE(liveEndpoint + symbol, {
+            if(source) {
+                source.close();
+            }
+            source = new SSE(liveEndpoint + symbol, {
                 headers: {
                     "Authorization": "Bearer " + localStorage.getItem('token')
                 }
@@ -49,7 +53,7 @@ const SymbolDashboard = () => {
                 source.close();
             }
         }
-    }, [marketOpen]);
+    }, [marketOpen, symbol]);
 
     const callRestApi = async () => {
         const body = {symbol};

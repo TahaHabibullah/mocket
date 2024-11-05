@@ -36,8 +36,12 @@ const SymbolSearch = ( {setResults} ) => {
             callRestApi(val);
         }
         else {
-            setResults([]);
+            setTimeout(() => setResults([]), 200);
         }
+    };
+
+    const handleBlur = () => {
+        setTimeout(() => setResults([]), 200);
     };
 
     return (
@@ -49,7 +53,7 @@ const SymbolSearch = ( {setResults} ) => {
             )}
             <div className="input-box">
                 <FaSearch id="search-icon"/>
-                <input placeholder="Search" onChange={handleChange}/>
+                <input placeholder="Search" onChange={handleChange} onBlur={handleBlur}/>
             </div>
         </div>
     );

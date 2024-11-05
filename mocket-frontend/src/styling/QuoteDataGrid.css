@@ -4,7 +4,7 @@
 }
 
 .quote-data-grid-header {
-    margin: 20px max(5vw, calc((100vw - 1600px) / 2)) 10px;
+    margin: 40px max(5vw, calc((100vw - 1600px) / 2)) 10px;
     font-size: 36px;
     color: white;
 }
@@ -40,7 +40,7 @@
 
 @media (max-width: 1320px) {
     .quote-data-grid-header {
-        margin: 20px 5% 0;
+        margin: 40px 5% 0;
         font-size: max(30px, calc(10px + 2vmin));
     }
     .quote-data-grid-divider {
@@ -66,6 +66,7 @@
         padding-bottom: 50px;
     }
     .quote-data-grid-header {
+        margin: 20px 5% 0;
         font-size: max(24px, calc(10px + 2vmin));
     }    
     .quote-data-grid-left {

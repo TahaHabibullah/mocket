@@ -23,10 +23,6 @@ const HomePriceChart = ({ prevClose, total }) => {
     const [labels, setLabels] = useState(null);
     const [toggledIndex, setToggledIndex] = useState(0);
     const [error, setError] = useState(null);
-    const setCurrDataRef = useRef();
-    const setCurrDiffRef = useRef();
-    const getPrevCloseRef = useRef();
-    const getTotalRef = useRef();
     const getDataRef = useRef();
     const getToggledIndexRef = useRef();
     const getLabelsRef = useRef();
@@ -39,11 +35,6 @@ const HomePriceChart = ({ prevClose, total }) => {
     ];
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
-
-    setCurrDataRef.current = setCurrData;
-    setCurrDiffRef.current = setCurrDiff;
-    getPrevCloseRef.current = prevClose;
-    getTotalRef.current = total;
     getDataRef.current = data;
     getToggledIndexRef.current = toggledIndex;
     getLabelsRef.current = labels;
@@ -51,10 +42,6 @@ const HomePriceChart = ({ prevClose, total }) => {
     const CustomTooltipPlugin = {
         id: 'custom-tooltip',
         beforeDraw: (chart) => {
-            const setCurrData = chart.config.options.setCurrDataRef.current;
-            const setCurrDiff = chart.config.options.setCurrDiffRef.current;
-            const prevClose = chart.config.options.getPrevCloseRef.current;
-            const total = chart.config.options.getTotalRef.current;
             const data = chart.config.options.getDataRef.current;
             const toggledIndex = chart.config.options.getToggledIndexRef.current;
             const labels = chart.config.options.getLabelsRef.current;
@@ -147,10 +134,6 @@ const HomePriceChart = ({ prevClose, total }) => {
             },
             maintainAspectRatio: false,
             responsive: true,
-            setCurrDataRef,
-            setCurrDiffRef,
-            getPrevCloseRef,
-            getTotalRef,
             getDataRef,
             getToggledIndexRef,
             getLabelsRef,

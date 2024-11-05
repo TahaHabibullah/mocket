@@ -24,10 +24,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     const [toggledIndex, setToggledIndex] = useState(0);
     const [liveIndex, setLiveIndex] = useState(0);
     const [error, setError] = useState(null);
-    const setCurrDataRef = useRef();
-    const setCurrDiffRef = useRef();
-    const getLiveDataRef = useRef();
-    const getQuoteDataRef = useRef();
+    const [tooltipActive, setTooltipActive] = useState(false);
     const getDataRef = useRef();
     const getToggledIndexRef = useRef();
     const getLabelsRef = useRef();
@@ -41,10 +38,6 @@ const PriceChart = ({ liveData, quoteData }) => {
     ];
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
-    setCurrDataRef.current = setCurrData;
-    setCurrDiffRef.current = setCurrDiff;
-    getLiveDataRef.current = liveData;
-    getQuoteDataRef.current = quoteData;
     getDataRef.current = data;
     getToggledIndexRef.current = toggledIndex;
     getLabelsRef.current = labels;
@@ -52,10 +45,6 @@ const PriceChart = ({ liveData, quoteData }) => {
     const CustomTooltipPlugin = {
         id: 'custom-tooltip',
         beforeDraw: (chart) => {
-            const setCurrData = chart.config.options.setCurrDataRef.current;
-            const setCurrDiff = chart.config.options.setCurrDiffRef.current;
-            const liveData = chart.config.options.getLiveDataRef.current;
-            const quoteData = chart.config.options.getQuoteDataRef.current;
             const data = chart.config.options.getDataRef.current;
             const toggledIndex = chart.config.options.getToggledIndexRef.current;
             const labels = chart.config.options.getLabelsRef.current;
@@ -71,6 +60,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                 const dataY = activePoint.element.$context.parsed.y;
                 setCurrData(dataY.toFixed(2));
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], dataY));
+                setTooltipActive(true);
                 
                 ctx.save();
                 ctx.beginPath();
@@ -95,6 +85,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             else {
                 setCurrData(liveData);
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], liveData));
+                setTooltipActive(false);
                 drawLabel.style.display = 'none';
             }
         },
@@ -147,10 +138,6 @@ const PriceChart = ({ liveData, quoteData }) => {
             spanGaps: true,
             maintainAspectRatio: false,
             responsive: true,
-            setCurrDataRef,
-            setCurrDiffRef,
-            getLiveDataRef,
-            getQuoteDataRef,
             getDataRef,
             getToggledIndexRef,
             getLabelsRef,
@@ -246,7 +233,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             ) : (
                 <div/>
             )}
-            <QuoteHeader live={currData} data={quoteData}/>
+            <QuoteHeader live={currData} data={quoteData} tooltipActive={tooltipActive}/>
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">
                 <Line 

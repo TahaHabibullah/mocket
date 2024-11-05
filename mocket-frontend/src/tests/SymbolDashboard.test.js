@@ -80,7 +80,7 @@ test("component renders all children correctly", async () => {
         expect(getByText(/Apple Inc/i)).toBeInTheDocument();
         expect(getByText(/BUY/i)).toBeInTheDocument();
         expect(getByText(/SELL/i)).toBeInTheDocument();
-        expect(getByText(/Average Volume/i)).toBeInTheDocument();
+        expect(getByText(/Avg. Volume/i)).toBeInTheDocument();
         expect(getByText(/41.58M/i)).toBeInTheDocument();
         expect(getByText(/1Y/i)).toBeInTheDocument();
         expect(container.querySelector(".quote-header-diff-green")).toBeInTheDocument();

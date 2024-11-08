@@ -22,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +73,32 @@ public class TradeServiceImpl implements TradeService {
         } catch(Exception e) {
             logger.error("Exception while calling Twelve Data API to fetch quote data: ", e);
             throw new TradeException("Exception while calling Twelve Data API to fetch quote data", e);
+        }
+    }
+
+    @Override
+    public List<QuoteResponse> getQuoteData(AlpacaRequest request) throws TradeException {
+        try {
+            request.setStart_date(LocalDate.now().minusYears(1).toString());
+            request.setInterval("1Day");
+            AlpacaHistoricalResponse alpacaHistoricalResponse = alpacaFeignClient.getHistoricalData(request.getStart_date(),
+                    request.getEnd_date(),
+                    request.getInterval(),
+                    request.getLimit(),
+                    request.getAdjustment(),
+                    request.getAsof(),
+                    request.getFeed(),
+                    request.getCurrency(),
+                    null,
+                    request.getOrder(),
+                    request.getSymbol(),
+                    alpacaKey,
+                    alpacaSecret).getBody();
+            logger.info("Response from Alpaca Markets /v2/stocks/bars API: " + mapper.writeValueAsString(alpacaHistoricalResponse));
+            return tradeResponseMapper.mapAlpacaHistoricalQuoteResponse(alpacaHistoricalResponse);
+        } catch(Exception e) {
+            logger.error("Exception while calling Alpaca Markets API to fetch ticker price data: ", e);
+            throw new TradeException("Exception while calling Alpaca Markets API to fetch ticker price data", e);
         }
     }
 

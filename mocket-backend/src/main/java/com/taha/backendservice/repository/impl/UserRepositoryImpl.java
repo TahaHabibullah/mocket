@@ -11,7 +11,6 @@ import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.AlpacaRequest;
-import com.taha.backendservice.model.TwelveDataRequest;
 import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
 import com.taha.backendservice.model.price.GraphData;
@@ -274,8 +273,8 @@ public class UserRepositoryImpl implements UserRepository {
             if(p.isOpen()) {
                 String symbol = p.getSymbol();
                 if(!fetched.contains(symbol)) {
-                    TwelveDataRequest request = new TwelveDataRequest(symbol);
-                    result.add(tradeService.getQuoteData(request));
+                    AlpacaRequest request = new AlpacaRequest(symbol);
+                    result.add(tradeService.getQuoteData(request).get(0));
                 }
                 fetched.add(symbol);
             }
@@ -284,7 +283,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException, ParseException {
+    public List<GraphData> getGraphData(String id, String interval, String start_date, String feed) throws TradeException, ParseException {
         User u = find(id);
         List<Position> positions = u.getPositions();
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
@@ -301,6 +300,7 @@ public class UserRepositoryImpl implements UserRepository {
             String symbol = p.getSymbol();
             if(!fetched.contains(symbol)) {
                 AlpacaRequest request = new AlpacaRequest(symbol, interval, start_date, "asc");
+                request.setFeed(feed);
                 TimeIntervalResponse data = tradeService.getPriceData(request).get(0).fillMissingData(interval);
                 if(interval.equals("1Day")) {
                     data = data.removeCloseDays();

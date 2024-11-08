@@ -81,8 +81,9 @@ public class DBController {
     @GetMapping(DBConstant.GET_GRAPH)
     public List<GraphData> getGraphData(@RequestParam String id,
                                         @RequestParam String interval,
-                                        @RequestParam String start_date) throws TradeException, ParseException {
-        return userService.getGraphData(id, interval, start_date);
+                                        @RequestParam String start_date,
+                                        @RequestParam(required = false) String feed) throws TradeException, ParseException {
+        return userService.getGraphData(id, interval, start_date, feed);
     }
 
     @GetMapping(DBConstant.GET_HIST)

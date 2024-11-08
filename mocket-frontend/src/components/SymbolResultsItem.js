@@ -7,7 +7,8 @@ const SymbolResultsItem = ( {name, symbol} ) => {
     const navigator = useNavigate();
 
     const handleRedirect = () => {
-        navigator("/stocks/" + symbol, {replace: true});
+        const state = { name: name, symbol: symbol };
+        navigator("/stocks/" + symbol, {state, replace: true});
     };
 
     return (

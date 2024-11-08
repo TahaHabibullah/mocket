@@ -23,12 +23,9 @@ const Home = () => {
         return axios.get(restEndpoint + user.id)
         .then((response) => {
             if(response.data.length > 0) {
-                if(checkQuoteListError(response.data)) {
-                    setError("API limit exceeded. Try again later.");
-                }
-                else {
-                    setQuotes(response.data);
-                }
+                setQuotes(response.data);
+            } else {
+                setError("Failed to fetch quote data. Try again later.");
             }
         }).catch(error => {
             setError("Failed to fetch from backend.");

@@ -12,6 +12,7 @@ import java.util.List;
 
 public interface TradeService {
     public QuoteResponse getQuoteData(TwelveDataRequest request) throws TradeException;
+    public List<QuoteResponse> getQuoteData(AlpacaRequest request) throws TradeException;
     public List<TimeIntervalResponse> getPriceData(AlpacaRequest request) throws TradeException;
     public SymbolSearchResponse searchTickers(SymbolSearchRequest request) throws TradeException;
     public String getLivePrice(AlpacaRequest request);

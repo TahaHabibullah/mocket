@@ -91,7 +91,6 @@ const HomePriceChart = ({ prevClose, total }) => {
                 activePoint.element.options.borderColor = '#ffffff';
             }
             else {
-                console.log(total);
                 setCurrData(total);
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? prevClose : data[0], total));
                 drawLabel.style.display = 'none';
@@ -176,10 +175,10 @@ const HomePriceChart = ({ prevClose, total }) => {
         var params;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            params = "&interval=5Min&start_date=" + getLastBusinessDay();
+            params = "&interval=5Min&feed=iex&start_date=" + getLastBusinessDay();
         }
         else if(toggledIndex === 1) {
-            params = "&interval=15Min&start_date=" + start_date;
+            params = "&interval=15Min&feed=iex&start_date=" + start_date;
         }
         else if(toggledIndex === 2) {
             params = "&interval=1Hour&start_date=" + start_date;

@@ -103,6 +103,29 @@ export function getPriceDiff(previous_close, currPrice) {
     return res;
 }
 
+export function isMarketOpen() {
+    const curr = new Date();
+
+    const options = {
+        timeZone: "America/New_York",
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+    };
+
+    const [hours, minutes] = curr.toLocaleString('en-US', options).split(":").map(Number);
+
+    const startHour = 9;
+    const startMinute = 30;
+    const endHour = 16;
+    const endMinute = 0;
+
+    const isMarketOpen = (hours > startHour || (hours === startHour && minutes >= startMinute)) &&
+                    (hours < endHour || (hours === endHour && minutes === endMinute));
+
+    return isMarketOpen;
+}
+
 export function getStartDate(mode) {
     const date = new Date();
     if(mode === 1)
@@ -354,15 +377,6 @@ export function getSymQuote(quoteList, symbol) {
         }
     }
     return null;
-}
-
-export function checkQuoteListError(quoteList) {
-    for(var i = 0; i < quoteList.length; i++) {
-        if(quoteList[i].timestamp === 0) {
-            return true;
-        }
-    }
-    return false;
 }
 
 export function validEmail(email) {

@@ -14,7 +14,7 @@ import "../styling/PriceChart.css";
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
-const PriceChart = ({ liveData, quoteData }) => {
+const PriceChart = ({ name, liveData, quoteData, isMarketOpen }) => {
     const restEndpoint = 'http://localhost:8080/trade-service/data/price';
     const { symbol } = useParams();
     const [data, setData] = useState(null);
@@ -206,10 +206,10 @@ const PriceChart = ({ liveData, quoteData }) => {
         var body;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            body = {symbol: symbol, interval: "5Min", start_date: quoteData.datetime, order: "asc"};
+            body = {symbol: symbol, interval: "5Min", start_date: quoteData.datetime, order: "asc", feed: "iex"};
         }
         else if(toggledIndex === 1) {
-            body = {symbol: symbol, interval: "15Min", start_date: start_date, order: "asc"};
+            body = {symbol: symbol, interval: "15Min", start_date: start_date, order: "asc", feed: "iex"};
         }
         else if(toggledIndex === 2) {
             body = {symbol: symbol, interval: "1Hour", start_date: start_date, order: "asc"};
@@ -226,7 +226,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                 const fullData = response.data[0].values;
                 const timeSeriesData = parseTimeSeriesData(fullData);
                 const timeSeriesLabels = parseTimeSeriesLabels(fullData);
-                if(toggledIndex === 0 && quoteData.is_market_open) {
+                if(toggledIndex === 0 && isMarketOpen) {
                     setLiveIndex(fullData.length);
                     setData(fillLiveList(timeSeriesData));
                     setLabels(fillLiveList(timeSeriesLabels));
@@ -241,7 +241,6 @@ const PriceChart = ({ liveData, quoteData }) => {
             console.log(error);
         })
     };
-
     return (
         <div>
             {error ? (
@@ -249,7 +248,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             ) : (
                 <div/>
             )}
-            <QuoteHeader live={currData} data={quoteData} tooltipActive={tooltipActive}/>
+            <QuoteHeader name={name} live={currData} data={quoteData} tooltipActive={tooltipActive}/>
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">
                 <Line 

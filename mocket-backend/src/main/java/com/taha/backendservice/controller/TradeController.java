@@ -27,7 +27,7 @@ public class TradeController {
     private TradeService tradeService;
 
     @PostMapping(value= TradeConstant.QUOTE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public QuoteResponse getQuoteData(@RequestBody TwelveDataRequest request) throws TradeException {
+    public List<QuoteResponse> getQuoteData(@RequestBody AlpacaRequest request) throws TradeException {
         return tradeService.getQuoteData(request);
     }
 

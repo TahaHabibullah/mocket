@@ -25,6 +25,10 @@ const PriceChart = ({ liveData, quoteData }) => {
     const [liveIndex, setLiveIndex] = useState(0);
     const [error, setError] = useState(null);
     const [tooltipActive, setTooltipActive] = useState(false);
+    const setCurrDataRef = useRef();
+    const setCurrDiffRef = useRef();
+    const getLiveDataRef = useRef();
+    const getQuoteDataRef = useRef();
     const getDataRef = useRef();
     const getToggledIndexRef = useRef();
     const getLabelsRef = useRef();
@@ -38,6 +42,10 @@ const PriceChart = ({ liveData, quoteData }) => {
     ];
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
+    setCurrDataRef.current = setCurrData;
+    setCurrDiffRef.current = setCurrDiff;
+    getLiveDataRef.current = liveData;
+    getQuoteDataRef.current = quoteData;
     getDataRef.current = data;
     getToggledIndexRef.current = toggledIndex;
     getLabelsRef.current = labels;
@@ -45,6 +53,10 @@ const PriceChart = ({ liveData, quoteData }) => {
     const CustomTooltipPlugin = {
         id: 'custom-tooltip',
         beforeDraw: (chart) => {
+            const setCurrData = chart.config.options.setCurrDataRef.current;
+            const setCurrDiff = chart.config.options.setCurrDiffRef.current;
+            const liveData = chart.config.options.getLiveDataRef.current;
+            const quoteData = chart.config.options.getQuoteDataRef.current;
             const data = chart.config.options.getDataRef.current;
             const toggledIndex = chart.config.options.getToggledIndexRef.current;
             const labels = chart.config.options.getLabelsRef.current;
@@ -138,10 +150,14 @@ const PriceChart = ({ liveData, quoteData }) => {
             spanGaps: true,
             maintainAspectRatio: false,
             responsive: true,
+            setCurrDataRef,
+            setCurrDiffRef,
+            getLiveDataRef,
+            getQuoteDataRef,
             getDataRef,
             getToggledIndexRef,
             getLabelsRef,
-            drawLabelRef,
+            drawLabelRef
         }
     };
 

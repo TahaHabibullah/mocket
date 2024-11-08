@@ -16,6 +16,7 @@ import com.taha.backendservice.model.search.SymbolData;
 import com.taha.backendservice.model.search.SymbolSearchRequest;
 import com.taha.backendservice.model.search.SymbolSearchResponse;
 import com.taha.backendservice.service.impl.TradeServiceImpl;
+import feign.Feign;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -95,6 +96,49 @@ public class TradeServiceImplTest {
         try {
             tradeService.getQuoteData(new TwelveDataRequest());
         } catch(Exception e) {
+            assertEquals(TradeException.class, e.getClass());
+        }
+    }
+
+    @Test
+    void testGetQuoteDataAlpaca() throws TradeException {
+        AlpacaHistoricalResponse feignResponse = new AlpacaHistoricalResponse();
+        when(alpacaFeignClient.getHistoricalData(any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any())).thenReturn(new ResponseEntity<>(feignResponse, HttpStatus.OK));
+        when(tradeResponseMapper.mapAlpacaHistoricalQuoteResponse(any())).thenReturn(Arrays.asList(new QuoteResponse()));
+        List<QuoteResponse> response = tradeService.getQuoteData(new AlpacaRequest());
+        assertNotNull(response);
+    }
+
+    @Test
+    void testGetQuoteDataAlpacaException() throws TradeException {
+        when(alpacaFeignClient.getHistoricalData(any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any())).thenThrow(FeignException.class);
+        try {
+            List<QuoteResponse> response = tradeService.getQuoteData(new AlpacaRequest());
+        } catch (Exception e) {
             assertEquals(TradeException.class, e.getClass());
         }
     }

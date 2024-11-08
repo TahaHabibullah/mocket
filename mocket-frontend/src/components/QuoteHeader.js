@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import "../styling/QuoteHeader.css"
 
-const QuoteHeader = ({ name, live, data, tooltipActive }) => {
-    const { symbol } = useParams();
+const QuoteHeader = ({ name, symbol, live, tooltipActive }) => {
     const [prevLive, setPrevLive] = useState(live);
     const [prevSymbol, setPrevSymbol] = useState(symbol);
 
@@ -33,7 +31,7 @@ const QuoteHeader = ({ name, live, data, tooltipActive }) => {
             <div className="quote-header-stock">
                 <div>
                     <div className="quote-header-stock-name">{name}</div>
-                    <div className="quote-header-stock-symbol">{data.symbol}</div>
+                    <div className="quote-header-stock-symbol">{symbol}</div>
                 </div>
             </div>
             <div id="price" className="quote-header-price">${live}</div>

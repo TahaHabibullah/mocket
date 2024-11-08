@@ -9,11 +9,18 @@ jest.mock("axios");
 jest.mock("react-chartjs-2", () => ({
     Line: () => null
 }));
-const mockUsedNavigate = jest.fn();
+const mockUseLocationValue = {
+    state: {
+        name: "Apple Inc"
+    }
+};
 jest.mock("react-router-dom", () => ({
    ...jest.requireActual("react-router-dom"),
-  useNavigate: () => mockUsedNavigate,
-  useParams: jest.fn()
+  useNavigate: () => jest.fn(),
+  useParams: jest.fn(),
+  useLocation: jest.fn().mockImplementation(() => {
+    return mockUseLocationValue
+  })
 }));
 
 test("component renders all children correctly", async () => {
@@ -37,7 +44,8 @@ test("component renders all children correctly", async () => {
         ]
     };
 
-    const mockResponse = {
+    const mockResponse = [
+        {
             "symbol": "AAPL",
             "name": "Apple Inc",
             "exchange": "NASDAQ",
@@ -65,7 +73,8 @@ test("component renders all children correctly", async () => {
             },
             "extended_timestamp": 0,
             "is_market_open": false
-    };
+        }
+    ];
 
     axios.post.mockResolvedValue({ data: mockResponse });
     const { container, getByPlaceholderText, getByText } = await act(async () => render(
@@ -74,7 +83,6 @@ test("component renders all children correctly", async () => {
         </UserContext.Provider>
     ));
 
-    await waitFor(() => {
         expect(axios.post).toHaveBeenCalled();
         expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
         expect(getByText(/Apple Inc/i)).toBeInTheDocument();
@@ -88,7 +96,6 @@ test("component renders all children correctly", async () => {
         expect(container.querySelector(".price-chart-divider")).toBeInTheDocument();
         expect(container.querySelector(".quote-data-grid-header")).toBeInTheDocument();
         expect(container.querySelector(".quote-data-grid-divider")).toBeInTheDocument();
-    });
 });
 
 test("alert shown when quote fetch fails, only nav bar renders", async () => {
@@ -160,11 +167,7 @@ test("alert shown when quote fetch returns empty, only nav bar renders", async (
         ]
     };
 
-    const mockResponse = {
-        "timestamp": 0,
-        "extended_timestamp": 0,
-        "is_market_open": false
-    };
+    const mockResponse = [];
 
     axios.post.mockResolvedValue({ data: mockResponse });
     const { container, getByPlaceholderText, getByText } = await act(async () => render(

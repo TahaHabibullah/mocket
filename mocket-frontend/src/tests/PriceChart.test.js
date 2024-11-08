@@ -59,7 +59,7 @@ test("component renders correctly", async () => {
     }
 
     axios.post.mockResolvedValue({ data: mockResponse });
-    const { container, getByText } = await act(async () => render(<PriceChart liveData={217.96} quoteData={quote}/>));
+    const { container, getByText } = await act(async () => render(<PriceChart name={"Apple Inc"} liveData={217.96} quoteData={quote}/>));
 
     await waitFor(() => {
         expect(axios.post).toHaveBeenCalled();
@@ -85,7 +85,7 @@ test("alert shown when fetch fails, only chart itself effected", async () => {
     }
 
     axios.post.mockRejectedValue(new Error("error"));
-    const { container, getByText } = await act(async () => render(<PriceChart liveData={217.96} quoteData={quote}/>));
+    const { container, getByText } = await act(async () => render(<PriceChart name={"Apple Inc"} liveData={217.96} quoteData={quote}/>));
 
     await waitFor(() => {
         expect(axios.post).toHaveBeenCalled();
@@ -116,7 +116,7 @@ test("alert shown when fetch returns empty, only chart itself effected", async (
     }
 
     axios.post.mockResolvedValue({ data: mockResponse });
-    const { container, getByText } = await act(async () => render(<PriceChart liveData={217.96} quoteData={quote}/>));
+    const { container, getByText } = await act(async () => render(<PriceChart name={"Apple Inc"} liveData={217.96} quoteData={quote}/>));
 
     await waitFor(() => {
         expect(axios.post).toHaveBeenCalled();
@@ -171,7 +171,7 @@ test("price diff changes color depending on gain/loss", async () => {
     }
 
     axios.post.mockResolvedValue({ data: mockResponse });
-    var { unmount, container, getByText } = render(<PriceChart liveData={217.96} quoteData={quote}/>);
+    var { unmount, container, getByText } = render(<PriceChart name={"Apple Inc"} liveData={217.96} quoteData={quote}/>);
     await waitFor(() => {
         expect(axios.post).toHaveBeenCalled();
         expect(getByText(/0.22%/i)).toBeInTheDocument();
@@ -213,7 +213,7 @@ test("pressing interval buttons call api", async () => {
     }
 
     axios.post.mockResolvedValue({ data: [mockResponse] });
-    const { getByText } = await act(async () => render(<PriceChart liveData={217.96} quoteData={quote}/>));
+    const { getByText } = await act(async () => render(<PriceChart name={"Apple Inc"} liveData={217.96} quoteData={quote}/>));
 
     await waitFor(() => fireEvent.click(getByText("1W")));
     await waitFor(() => fireEvent.click(getByText("1M")));

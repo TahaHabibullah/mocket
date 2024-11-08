@@ -248,7 +248,7 @@ const PriceChart = ({ name, liveData, quoteData, isMarketOpen }) => {
             ) : (
                 <div/>
             )}
-            <QuoteHeader name={name} live={currData} data={quoteData} tooltipActive={tooltipActive}/>
+            <QuoteHeader name={name} symbol={quoteData.symbol} live={currData} tooltipActive={tooltipActive}/>
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">
                 <Line 

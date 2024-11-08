@@ -8,7 +8,7 @@ test("component renders correctly", async () => {
         "name": "Apple Inc",
     };
 
-    const { getByText } = render(<QuoteHeader live={217.96} data={quote}/>);
+    const { getByText } = render(<QuoteHeader name={"Apple Inc"} symbol={"AAPL"} live={217.96} tooltipActive={false}/>);
         expect(getByText(/Apple Inc/i)).toBeInTheDocument();
         expect(getByText(/AAPL/i)).toBeInTheDocument();
         expect(getByText(/217.96/i)).toBeInTheDocument();

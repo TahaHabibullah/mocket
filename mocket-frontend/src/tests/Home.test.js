@@ -183,13 +183,7 @@ test("uses context user data, fails to fetch quote data, alert shown, does not r
             }
         ]
     };
-    const mockHomeResponse = [
-        {
-            "extended_timestamp": 0,
-            "is_market_open": false,
-            "timestamp": 0
-        }
-    ];
+    const mockHomeResponse = [];
     const mockOHResponse = [
         [
             {
@@ -256,7 +250,8 @@ test("uses context user data, fetches empty quote data, alert shown, does not re
             <Home/>
         </UserContext.Provider>
     ));
-    expect(getByText(/Error/i)).toBeInTheDocument();
+    const alerts = screen.getAllByText(/Error/i);
+    expect(alerts).toHaveLength(2);
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/2182.4/i)).toBeInTheDocument();

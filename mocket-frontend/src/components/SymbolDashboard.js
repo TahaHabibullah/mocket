@@ -17,16 +17,21 @@ const SymbolDashboard = () => {
     const { user } = useContext(UserContext);
     const liveEndpoint = 'http://localhost:8080/trade-service/live/price?symbol=';
     const restEndpoint = 'http://localhost:8080/trade-service/quote';
+    const tickerEndpoint = 'http://localhost:8080/trade-service/ticker/search';
     const { symbol } = useParams();
     const { state } = useLocation();
+    const [name, setName] = useState(null);
     const [liveData, setLiveData] = useState(null);
     const [quoteData, setQuoteData] = useState(null);
-    const marketOpen = isMarketOpen();
     const [error, setError] = useState(null);
+    const marketOpen = isMarketOpen();
     var source;
 
     useEffect(() => {
         callRestApi();
+        if(!state) {
+            callTickerNameApi();
+        }
     }, [symbol]);
 
     useEffect(() => {
@@ -60,7 +65,7 @@ const SymbolDashboard = () => {
         const body = {symbol};
         return axios.post(restEndpoint, body)
         .then((response) => {
-            if(response.data.timestamp === 0) {
+            if(response.data.length === 0) {
                 setError("API limit exceeded. Try again later.");
             }
             else {
@@ -73,6 +78,21 @@ const SymbolDashboard = () => {
         });
     };
 
+    const callTickerNameApi = async () => {
+        const body = {
+            "symbol": symbol, 
+            "country": "United States", 
+            "outputSize": 1
+        };
+        return axios.post(tickerEndpoint, body)
+        .then((response) => {
+            setName(response.data.data[0].instrument_name);
+        }).catch(error => {
+            setError("Failed to fetch ticker name from API.");
+            console.log(error);
+        });
+    }
+
     return (
         <div className="App">
             <MocketNavBar style="dashboard"/>
@@ -83,7 +103,7 @@ const SymbolDashboard = () => {
             )}
             {user && quoteData ? (
                 <div>
-                    <PriceChart name={state?.name} liveData={liveData} quoteData={quoteData} isMarketOpen={marketOpen}/>
+                    <PriceChart name={state ? state.name : name} liveData={liveData} quoteData={quoteData} isMarketOpen={marketOpen}/>
                     <TradeActions symbol={symbol} positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/>
                     {getSymPositions(getOpenPositions(user.positions), symbol).length > 0 ? (
                         <PositionsSummary positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/> 

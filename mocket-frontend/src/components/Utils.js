@@ -3,6 +3,28 @@ import { jwtDecode } from "jwt-decode";
 const regex = /^[a-zA-Z]+$/;
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+const daysOfWeek = [
+    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+];
+
+const year = new Date().getFullYear();
+const newYears = getObservedDate(new Date(year, 0, 1));
+const mlkDay = getSpecificDay(year, 0, 2, "Monday");
+const presidentsDay = getSpecificDay(year, 1, 2, "Monday");
+const memorialDay = getSpecificDay(year, 4, 3, "Monday");
+const juneteenth = getObservedDate(new Date(year, 5, 19));
+const independenceDay = getObservedDate(new Date(year, 6, 4));
+const laborDay = getSpecificDay(year, 8, 0, "Monday");
+const thanksgiving = getSpecificDay(year, 10, 3, "Thursday");
+const christmas = getObservedDate(new Date(year, 11, 25));
+const usHolidays = [newYears, mlkDay, presidentsDay, memorialDay, 
+    juneteenth, independenceDay, laborDay, thanksgiving, christmas];
+
+const independenceEve = new Date(year, 6, 3);
+const blackFriday = getSpecificDay(year, 10, 3, "Friday");
+const christmasEve = new Date(year, 11, 24);
+const halfDays = [independenceEve, blackFriday, christmasEve]
+
 function isAlpha(text) {
     return regex.test(text);
 }
@@ -103,6 +125,37 @@ export function getPriceDiff(previous_close, currPrice) {
     return res;
 }
 
+function getSpecificDay(year, month, week, dayOfWeek) {
+    const firstDay = new Date(year, month, 1);
+    const currDayOfWeek = firstDay.getDay();
+    const firstSelectedDayOfWeek = (daysOfWeek.indexOf(dayOfWeek) - currDayOfWeek + 7) % 7;
+    return new Date(year, month, 1 + firstSelectedDayOfWeek + (week * 7))
+}
+
+function getObservedDate(date) {
+    const newDate = new Date(date); 
+
+    if(daysOfWeek[date.getDay()] === "Saturday") {
+        newDate.setDate(newDate.getDate() - 1)
+    } else if(daysOfWeek[date.getDay()] === "Sunday") {
+        newDate.setDate(newDate.getDate() + 1)
+    }
+
+    return newDate
+}
+
+function isWeekend(date) {
+    return daysOfWeek[date.getDay()] === "Saturday" || daysOfWeek[date.getDay()] === "Sunday";
+}
+
+function isUSHoliday(date) {
+    return (date in usHolidays);
+}
+
+function isHalfDay(date) {
+    return !isWeekend(date) && (date in halfDays)
+}
+
 export function isMarketOpen() {
     const curr = new Date();
 
@@ -117,10 +170,11 @@ export function isMarketOpen() {
 
     const startHour = 9;
     const startMinute = 30;
-    const endHour = 16;
+    const endHour = !isHalfDay(curr) ? 16 : 13;
     const endMinute = 0;
-
-    const isMarketOpen = (hours > startHour || (hours === startHour && minutes >= startMinute)) &&
+    console.log("usHolidays...", usHolidays)
+    console.log("halfDays...", halfDays)
+    const isMarketOpen = !isWeekend(curr) && !isUSHoliday(curr) && (hours > startHour || (hours === startHour && minutes >= startMinute)) &&
                     (hours < endHour || (hours === endHour && minutes === endMinute));
 
     return isMarketOpen;

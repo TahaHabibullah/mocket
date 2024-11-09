@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.text.ParseException;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = {"${domain.http}", "${domain.https}"})
 @RestController
 @RequestMapping(DBConstant.DB_ROOT_URI)
 public class DBController {

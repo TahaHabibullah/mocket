@@ -19,7 +19,7 @@ test("dashboard nav bar and symbol search render correctly", async () => {
     const { container, getByPlaceholderText, getByText } = render(<MocketNavBar style={"dashboard"}/>);
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/Log Out/i)).toBeInTheDocument();
-    expect(container.querySelector(".nav-bar-brand")).toBeInTheDocument();
+    expect(container.querySelector(".nav-bar-brand-logo")).toBeInTheDocument();
     expect(container.querySelector(".nav-bar-repo")).toBeInTheDocument();
     expect(container.querySelector("#search-icon")).toBeInTheDocument();
 });
@@ -28,7 +28,7 @@ test("nav bar and symbol search render correctly", async () => {
     const { container, getByText } = render(<MocketNavBar style={"login"}/>);
     expect(getByText(/Log In/i)).toBeInTheDocument();
     expect(getByText(/Register/i)).toBeInTheDocument();
-    expect(container.querySelector(".nav-bar-brand")).toBeInTheDocument();
+    expect(container.querySelector(".nav-bar-brand-logo")).toBeInTheDocument();
     expect(container.querySelector(".nav-bar-repo")).toBeInTheDocument();
     expect(container.querySelector("#search-icon")).toBeNull();
 });

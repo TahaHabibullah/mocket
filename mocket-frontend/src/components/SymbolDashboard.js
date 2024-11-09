@@ -4,7 +4,6 @@ import { parsePrice, getOpenPositions, getSymPositions, isMarketOpen } from "./U
 import QuoteDataGrid from "./QuoteDataGrid";
 import PriceChart from "./PriceChart";
 import MocketNavBar from "./MocketNavBar";
-import PositionsSummary from "./PositionsSummary";
 import TradeActions from "./TradeActions";
 import Alert from "./Alert";
 import Footer from "./Footer";
@@ -105,17 +104,11 @@ const SymbolDashboard = () => {
                 <div>
                     <PriceChart name={state ? state.name : name} liveData={liveData} quoteData={quoteData} isMarketOpen={marketOpen}/>
                     <TradeActions symbol={symbol} positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/>
-                    {getSymPositions(getOpenPositions(user.positions), symbol).length > 0 ? (
-                        <PositionsSummary positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/> 
-                    ) : (
-                        <div/>
-                    )}
                     <QuoteDataGrid data={quoteData}/>
                 </div>
             ) : (
                 <div/>
             )}
-            <Footer/>
         </div>
     );
 };

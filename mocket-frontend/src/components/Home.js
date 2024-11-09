@@ -3,11 +3,9 @@ import MocketNavBar from "./MocketNavBar";
 import PositionsList from "./PositionsList";
 import HomePriceChart from "./HomePriceChart";
 import Alert from "./Alert";
-import Footer from "./Footer";
 import { UserContext } from "./UserContext";
 import { getOpenPositions, getPortfolioValue, 
-         getPortfolioPrevClose, getCombinedPositions, 
-         checkQuoteListError} from "./Utils";
+         getPortfolioPrevClose, getCombinedPositions } from "./Utils";
 import axios from "axios";
 import '../styling/App.css';
 import '../styling/Home.css';
@@ -24,8 +22,6 @@ const Home = () => {
         .then((response) => {
             if(response.data.length > 0) {
                 setQuotes(response.data);
-            } else {
-                setError("Failed to fetch quote data. Try again later.");
             }
         }).catch(error => {
             setError("Failed to fetch from backend.");
@@ -63,7 +59,6 @@ const Home = () => {
             ) : (
                 <div/>
             )}
-            <Footer/>
         </div>
     );
 };

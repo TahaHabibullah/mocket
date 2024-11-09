@@ -3,7 +3,7 @@ import { buyInputValid, parsePrice } from "./Utils";
 import Alert from "./Alert";
 import { UserContext } from "./UserContext";
 import axios from "axios";
-import "../styling/Buy.css"
+import "../styling/TradePanel.css"
 
 const Buy = ({ symbol, balance, live }) => {
     const restEndpoint = 'http://localhost:8080/database/user/addPos';
@@ -53,40 +53,40 @@ const Buy = ({ symbol, balance, live }) => {
                     <div/>
                 )}
             </div>
-            <div className="buy">
-                <div className="buy-header">
-                    <div className="buy-header-left">{symbol}</div>
-                    <div className="buy-header-right">${parsePrice(balance)} Available</div>
+            <div className="trade-panel">
+                <div className="trade-panel-header">
+                    <div className="trade-panel-header-left">{symbol}</div>
+                    <div className="trade-panel-header-right">${parsePrice(balance)} Available</div>
                 </div>
-                <div className="buy-divider"/>
-                <div className="buy-input-box">
-                    <div className="buy-input-label">Number of Shares</div>
+                <div className="trade-panel-divider"/>
+                <div className="trade-panel-input-box">
+                    <div className="trade-panel-input-label">Number of Shares</div>
                     <input 
                         id="buy-in" 
                         type="number" 
-                        className="buy-input" 
+                        className="trade-panel-input" 
                         placeholder="0" 
                         onChange={handleChange}
                     />
                 </div>
-                <div className="buy-divider"/>
-                <div className="buy-shares">
-                    <div className="buy-shares-label">Share Value</div>
-                    <div className="buy-shares-live">${live}</div>
+                <div className="trade-panel-divider"/>
+                <div className="trade-panel-shares">
+                    <div className="trade-panel-shares-label">Share Value</div>
+                    <div className="trade-panel-shares-live">${live}</div>
                 </div>
-                <div className="buy-divider"/>
-                <div className="buy-total">
-                    <div className="buy-total-label">Total Value</div>
-                    <div className="buy-total-live">${parsePrice(total)}</div>
+                <div className="trade-panel-divider"/>
+                <div className="trade-panel-total">
+                    <div className="trade-panel-total-label">Total Value</div>
+                    <div className="trade-panel-total-live">${parsePrice(total)}</div>
                 </div>
-                <div className="buy-divider"/>
+                <div className="trade-panel-divider"/>
                 <button 
                     id="buy" 
-                    className="buy-button" 
+                    className="trade-panel-button" 
                     disabled={btnDisabled || isLoading} 
                     onClick={handleClick}>
                         {isLoading ? (
-                            <div className="buy-loading-spinner"/>
+                            <div className="trade-panel-loading-spinner"/>
                         ) : (
                             'Trade'
                         )}

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
-import Footer from "./Footer";
 import { validEmail } from "./Utils";
 import "../styling/Login.css";
 import "../styling/Register.css";
@@ -141,7 +140,6 @@ const Register = () => {
                     </GoogleOAuthProvider>
                 </div>
             </div>
-            <Footer/>
         </div>
     );
 };

@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
-import Footer from "./Footer";
 import { validEmail } from "./Utils";
 import "../styling/ForgotPassword.css";
 import "../styling/App.css";
@@ -40,7 +39,6 @@ const ForgotPassword = () => {
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
-                console.log(message);
                 setButtonClass("error");
                 setTimeout(() => setButtonClass(""), 200);
             }).finally(() => {
@@ -90,7 +88,6 @@ const ForgotPassword = () => {
                     <div className="mocket-forgot-remembered-button" onClick={handleRedirect}>Login here</div>
                 </div>
             </div>
-            <Footer/>
         </div>
     );
 };

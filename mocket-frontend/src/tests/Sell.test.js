@@ -51,8 +51,8 @@ test("component renders correctly", async () => {
     expect(getByText(/10 Shares/i)).toBeInTheDocument();
     expect(getByText(/215.16/i)).toBeInTheDocument();
     expect(getByText(/Trade/i)).toBeInTheDocument();
-    expect(container.querySelector(".sell")).toBeInTheDocument();
-    expect(container.querySelector(".sell-input")).toBeInTheDocument();
+    expect(container.querySelector(".trade-panel")).toBeInTheDocument();
+    expect(container.querySelector(".trade-panel-input")).toBeInTheDocument();
 });
 
 test("executes successful sell trade to backend", async () => {

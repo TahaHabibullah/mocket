@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { useMediaQuery } from 'react-responsive';
 import Buy from "./Buy";
 import Sell from "./Sell";
+import PositionsSummary from "./PositionsSummary";
 import { UserContext } from "./UserContext";
 import "../styling/TradeActions.css"
 
@@ -89,19 +90,22 @@ const TradeActions = ({ symbol, positions, live }) => {
     return (
         <div>
             {positions.length > 0 ? (
-                <div className="trade-actions">
-                    <div className="trade-actions-buy">
-                        <button className="accordion left" onClick={() => {handleToggle(0)}}>BUY</button>
-                        <div data-testid="left" className="panel left">
-                            <Buy symbol={symbol} balance={user.balance} live={live}/>
+                <div>
+                    <div className="trade-actions">
+                        <div className="trade-actions-buy">
+                            <button className="accordion left" onClick={() => {handleToggle(0)}}>BUY</button>
+                            <div data-testid="left" className="panel left">
+                                <Buy symbol={symbol} balance={user.balance} live={live}/>
+                            </div>
+                        </div>
+                        <div className="trade-actions-sell">
+                            <button className="accordion right" onClick={() => {handleToggle(1)}}>SELL</button>
+                            <div data-testid="right" className="panel right">
+                                <Sell symbol={symbol} positions={positions} live={live}/>
+                            </div>
                         </div>
                     </div>
-                    <div className="trade-actions-sell">
-                        <button className="accordion right" onClick={() => {handleToggle(1)}}>SELL</button>
-                        <div data-testid="right" className="panel right">
-                            <Sell symbol={symbol} positions={positions} live={live}/>
-                        </div>
-                    </div>
+                    <PositionsSummary positions={positions} live={live}/>
                 </div>
             ) : (
                 <div className="trade-actions-buy-lone">

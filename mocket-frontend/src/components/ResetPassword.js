@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
-import Footer from "./Footer";
 import "../styling/ResetPassword.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
@@ -28,7 +27,6 @@ const ResetPassword = () => {
         }).catch(error => {
             const message = error.response.data;
             setError(message);
-            console.log(message);
         });
     };
 
@@ -60,7 +58,6 @@ const ResetPassword = () => {
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
-                console.log(message);
                 setButtonClass("error");
                 setTimeout(() => setButtonClass(""), 200);
             }).finally(() => {
@@ -113,7 +110,6 @@ const ResetPassword = () => {
             ) : (
                 <div/>
             )}
-            <Footer/>
         </div>
     );
 };

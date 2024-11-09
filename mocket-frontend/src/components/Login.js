@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Alert from "./Alert";
 import MocketNavBar from "./MocketNavBar";
-import Footer from "./Footer";
 import "../styling/Login.css";
 import "../styling/App.css";
 import "../styling/MocketNavBar.css";
@@ -66,14 +65,12 @@ const Login = () => {
             }
             axios.post(restEndpoint, body)
             .then((response) => {
-                console.log(response.data);
                 localStorage.setItem('token', response.data.token);
                 navigator("/dashboard");
             }).catch(error => {
                 incrementAttempts();
                 const message = error.response.data;
                 setError(message);
-                console.log(message);
                 setButtonClass("error");
                 setTimeout(() => setButtonClass(""), 200);
             }).finally(() => {
@@ -90,7 +87,6 @@ const Login = () => {
             }).catch(error => {
                 const message = error.response.data;
                 setError(message);
-                console.log(message);
             });
     };
 
@@ -207,7 +203,6 @@ const Login = () => {
                     </GoogleOAuthProvider>
                 </div>
             </div>
-            <Footer/>
         </div>
     );
 };

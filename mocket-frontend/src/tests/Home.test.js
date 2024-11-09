@@ -165,7 +165,7 @@ test("uses context user data, fetches quote data, does not render pos list", asy
     expect(screen.queryByText("Your Positions")).toBeNull();
 });
 
-test("uses context user data, fails to fetch quote data, alert shown, does not render pos list", async () => {
+test("uses context user data, fails to fetch quote data, alert shown from HomePriceChart, does not render pos list", async () => {
     const mockUser = {
         "id": "66a8957e631f435b8dcc2d43",
         "email": "test3@test.com",
@@ -204,15 +204,14 @@ test("uses context user data, fails to fetch quote data, alert shown, does not r
             <Home/>
         </UserContext.Provider>
     ));
-    const alerts = screen.getAllByText(/Error/i);
-    expect(alerts).toHaveLength(2);
+    expect(getByText(/API limit exceeded./i)).toBeInTheDocument();
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/2182.4/i)).toBeInTheDocument();
     expect(axios.get).toHaveBeenCalled();
 });
 
-test("uses context user data, fetches empty quote data, alert shown, does not render pos list", async () => {
+test("uses context user data, fetches empty quote data, alert shown from HomePriceChart, does not render pos list", async () => {
     const mockUser = {
         "id": "66a8957e631f435b8dcc2d43",
         "email": "test3@test.com",
@@ -250,8 +249,7 @@ test("uses context user data, fetches empty quote data, alert shown, does not re
             <Home/>
         </UserContext.Provider>
     ));
-    const alerts = screen.getAllByText(/Error/i);
-    expect(alerts).toHaveLength(2);
+    expect(getByText(/API limit exceeded./i)).toBeInTheDocument();
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/2182.4/i)).toBeInTheDocument();

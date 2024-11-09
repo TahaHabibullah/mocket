@@ -172,8 +172,6 @@ export function isMarketOpen() {
     const startMinute = 30;
     const endHour = !isHalfDay(curr) ? 16 : 13;
     const endMinute = 0;
-    console.log("usHolidays...", usHolidays)
-    console.log("halfDays...", halfDays)
     const isMarketOpen = !isWeekend(curr) && !isUSHoliday(curr) && (hours > startHour || (hours === startHour && minutes >= startMinute)) &&
                     (hours < endHour || (hours === endHour && minutes === endMinute));
 

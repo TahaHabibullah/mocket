@@ -1,74 +1,74 @@
-.sell {
+.trade-panel {
     display: grid;
     margin: 0;
     padding: 10px;
     font-size: calc(10px + 1vmin);
 }
 
-.sell-divider {
+.trade-panel-divider {
     background-color: #1c1c1c;
     height: 2px;
     width: 100%;
     margin: 10px 0;
 }
 
-.sell-header {
+.trade-panel-header {
     margin: 10px 0 0 0;
     display: inline-block;
 }
 
-.sell-header-left {
+.trade-panel-header-left {
     float: left;
 }
 
-.sell-header-right {
+.trade-panel-header-right {
     float: right;
 }
 
-.sell-input-box {
+.trade-panel-input-box {
     position: relative;
     display: inline-block;
     z-index: 5;
 }
 
-.sell-input-label {
+.trade-panel-input-label {
     float: left;
 }
 
-.sell-input {
+.trade-panel-input {
     float: right;
     text-align: right;
     width: 125px;
 }
 
-.sell-shares {
+.trade-panel-shares {
     display: inline-block;
 }
 
-.sell-shares-label {
+.trade-panel-shares-label {
     float: left;
 }
 
-.sell-shares-live {
+.trade-panel-shares-live {
     float: right;
 }
 
-.sell-total {
+.trade-panel-total {
     display: inline-block;
 }
 
-.sell-total-label {
+.trade-panel-total-label {
     float: left;
 }
 
-.sell-total-live {
+.trade-panel-total-live {
     float: right;
 }
 
-.sell-button {
+.trade-panel-button {
     position: relative;
-    background-color: black;
     cursor: pointer;
+    background-color: black;
     color: white;
     border-radius: 15px;
     border-color: #888888;
@@ -85,24 +85,24 @@
     z-index: 5;
 }
 
-.sell-button:disabled {
+.trade-panel-button:disabled {
     background-color: #444444;
     color: #cccccc;
 }
 
-.sell-button:hover {
+.trade-panel-button:hover {
     background-color: rgb(35, 138, 255);
     border-color: rgb(35, 138, 255);
     color: black;
 }
 
-.sell-button:disabled:hover {
+.trade-panel-button:disabled:hover {
     background-color: #444444;
     border-color: #888888;
     color: #aaaaaa;
 }
 
-.sell-loading-spinner {
+.trade-panel-loading-spinner {
     margin: 3px 0 0 5px;
     border: 4px solid rgba(0, 0, 0, 0.5);
     border-top: 4px solid white;
@@ -118,32 +118,33 @@
     100% { transform: rotate(360deg); }
 }
 
+
 @media (max-width: 1320px) {
-    .sell {
+    .trade-panel {
         font-size: 2vmin;
     }
 
-    .sell-divider {
+    .trade-panel-divider {
         height: 1px;
     }
 
-    .sell-button {
+    .trade-panel-button {
         font-size: 1.5vmin;
         height: max(25px, 3vmin);
     }
 }
 
 @media (max-width: 767px) {
-    .sell {
+    .trade-panel {
         font-size: calc(8px + 1vmin);
     }
 
-    .sell-button {
+    .trade-panel-button {
         font-size: calc(6px + 1vmin);
         margin: 5px 0;
     }
 
-    .sell-input {
+    .trade-panel-input {
         width: 75px;
     }
 }

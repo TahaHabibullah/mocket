@@ -9,6 +9,4 @@ public interface AuthConstant {
     public final String FORGOT_PASS = "/forgot-password";
     public final String RESET_PASS = "/reset-password";
     public final String CHECK_TOKEN = "/check-token";
-    public final String VERIFICATION_URL =  "http://localhost:3000/verify-email?token=";
-    public final String RESET_PASS_URL =  "http://localhost:3000/reset-password?token=";
 }

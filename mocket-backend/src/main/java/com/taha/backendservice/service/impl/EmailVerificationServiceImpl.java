@@ -29,12 +29,16 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
     private EncryptionUtils encryptionUtils;
     @Value("${mocket.verification.email}")
     private String fromEmail;
+    @Value("${mocket.verification.url}")
+    private String verifyUrl;
+    @Value("${mocket.reset.url}")
+    private String resetPasswordUrl;
     @Value("${mocket.privacy.policy}")
     private String privacyPolicy;
 
     @Override
     public void sendVerification(String to, String token) throws MessagingException {
-        String verificationUrl = AuthConstant.VERIFICATION_URL + token;
+        String verificationUrl = verifyUrl + token;
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());
@@ -61,7 +65,7 @@ public class EmailVerificationServiceImpl implements EmailVerificationService {
 
     @Override
     public void sendForgotPass(String to, String token) throws MessagingException {
-        String resetUrl = AuthConstant.RESET_PASS_URL + token;
+        String resetUrl = resetPasswordUrl + token;
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED,
                 StandardCharsets.UTF_8.name());

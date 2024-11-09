@@ -74,15 +74,15 @@ public class TradeResponseMapper {
             timeIntervalResponse.setMeta(meta);
             List<PriceData> priceDataList = new ArrayList<>();
             for(AlpacaBarResponse barObj : alpacaHistoricalResponse.getValues().get(symbol)) {
-                if(interval.equals("1Day") || isTimeValid(barObj.getDatetime())) {
-                    PriceData priceData = new PriceData(String.valueOf(barObj.getOpen()),
-                            String.valueOf(barObj.getClose()),
-                            String.valueOf(barObj.getHigh()),
-                            String.valueOf(barObj.getLow()),
-                            String.valueOf(barObj.getVolume()),
-                            interval.equals("1Day") ? barObj.getDatetime().substring(0, barObj.getDatetime().indexOf('T')) : convertTime(barObj.getDatetime()));
-                    priceDataList.add(priceData);
-                }
+                if(interval.equals("1Hour") && !isMarketOpen(barObj.getDatetime()))
+                    continue;
+                PriceData priceData = new PriceData(String.valueOf(barObj.getOpen()),
+                        String.valueOf(barObj.getClose()),
+                        String.valueOf(barObj.getHigh()),
+                        String.valueOf(barObj.getLow()),
+                        String.valueOf(barObj.getVolume()),
+                        interval.equals("1Day") ? barObj.getDatetime().substring(0, barObj.getDatetime().indexOf('T')) : convertTime(barObj.getDatetime()));
+                priceDataList.add(priceData);
             }
             timeIntervalResponse.setValues(priceDataList);
             timeIntervalResponseList.add(timeIntervalResponse);
@@ -98,15 +98,24 @@ public class TradeResponseMapper {
         return lastWeekday;
     }
 
-    private boolean isTimeValid(String datetime) {
-        String timeString = datetime.substring(datetime.indexOf('T') + 1, datetime.indexOf('Z'));
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private boolean isMarketOpen(String datetime) {
+        String datetimeString = datetime.replace("T", " ").replace("Z", "");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
-        LocalTime time = LocalTime.parse(timeString, formatter);
-        LocalTime start = LocalTime.of(14, 29);
-        LocalTime end = LocalTime.of(21, 1);
+        LocalDateTime localDateTime = LocalDateTime.parse(datetimeString, formatter);
+        ZonedDateTime sourceTime = localDateTime.atZone(ZoneId.of("UTC"));
+        ZonedDateTime targetTime = sourceTime.withZoneSameInstant(ZoneId.of("America/New_York"));
 
-        return time.isAfter(start) && time.isBefore(end);
+        int hour = targetTime.getHour();
+        int minute = targetTime.getMinute();
+
+        int startHour = 9;
+        int startMinute = 0;
+        int endHour = 16;
+        int endMinute = 0;
+
+        return ((hour == startHour && minute >= startMinute) || hour > startHour) &&
+            ((hour == endHour && minute == endMinute) || hour < endHour);
     }
 
     private String convertTime(String datetime) {
@@ -119,5 +128,4 @@ public class TradeResponseMapper {
 
         return targetTime.format(formatter);
     }
-
 }

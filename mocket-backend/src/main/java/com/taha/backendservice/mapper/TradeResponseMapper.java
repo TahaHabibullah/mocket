@@ -74,7 +74,7 @@ public class TradeResponseMapper {
             timeIntervalResponse.setMeta(meta);
             List<PriceData> priceDataList = new ArrayList<>();
             for(AlpacaBarResponse barObj : alpacaHistoricalResponse.getValues().get(symbol)) {
-                if(interval.equals("1Hour") && !isMarketOpen(barObj.getDatetime()))
+                if(!interval.equals("1Day") && !isMarketOpen(barObj.getDatetime()))
                     continue;
                 PriceData priceData = new PriceData(String.valueOf(barObj.getOpen()),
                         String.valueOf(barObj.getClose()),
@@ -110,7 +110,7 @@ public class TradeResponseMapper {
         int minute = targetTime.getMinute();
 
         int startHour = 9;
-        int startMinute = 0;
+        int startMinute = 30;
         int endHour = 16;
         int endMinute = 0;
 

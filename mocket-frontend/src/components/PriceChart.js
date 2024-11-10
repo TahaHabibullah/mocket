@@ -205,11 +205,12 @@ const PriceChart = ({ name, liveData, quoteData, isMarketOpen }) => {
     const callRestApi = async () => {
         var body;
         const start_date = getStartDate(toggledIndex);
+        const feed = isMarketOpen ? "iex" : undefined
         if(toggledIndex === 0) {
-            body = {symbol: symbol, interval: "5Min", start_date: quoteData.datetime, order: "asc", feed: "iex"};
+            body = {symbol: symbol, interval: "5Min", start_date: quoteData.datetime, order: "asc", feed: feed};
         }
         else if(toggledIndex === 1) {
-            body = {symbol: symbol, interval: "15Min", start_date: start_date, order: "asc", feed: "iex"};
+            body = {symbol: symbol, interval: "15Min", start_date: start_date, order: "asc", feed: feed};
         }
         else if(toggledIndex === 2) {
             body = {symbol: symbol, interval: "1Hour", start_date: start_date, order: "asc"};

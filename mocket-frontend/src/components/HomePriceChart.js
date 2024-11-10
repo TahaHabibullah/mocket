@@ -82,7 +82,7 @@ const HomePriceChart = ({ prevClose, total }) => {
     
                 const chartRect = chart.canvas.getBoundingClientRect();
                 drawLabel.style.left = `${chartRect.left + x}px`;
-                drawLabel.style.top = `calc(${chartRect.top-12}px - 0.5vmin)`;
+                drawLabel.style.top = `calc(${chart.canvas.offsetTop-12}px - 0.5vmin)`;
                 drawLabel.textContent = parseLabel(labels[dataX], toggledIndex);
                 drawLabel.style.display = 'block';
     

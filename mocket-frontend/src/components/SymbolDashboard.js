@@ -6,7 +6,6 @@ import PriceChart from "./PriceChart";
 import MocketNavBar from "./MocketNavBar";
 import TradeActions from "./TradeActions";
 import Alert from "./Alert";
-import Footer from "./Footer";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 import { SSE } from 'sse.js';

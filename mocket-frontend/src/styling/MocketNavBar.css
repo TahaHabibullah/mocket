@@ -174,7 +174,7 @@
         width: max(50px, 15vw);
         height: max(20px, 5vmin);
         border-width: 1px;
-        font-size: calc(6px + 1vmin);
+        font-size: calc(4px + 1vmin);
     }
 
     .nav-bar-login {

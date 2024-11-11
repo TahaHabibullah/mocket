@@ -12,6 +12,7 @@ const Sell = ({ symbol, positions, live }) => {
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [buttonClass, setButtonClass] = useState("");
     const handleChange = (e) => {
         const val = e.target.value;
         if(sellInputValid(val, getTotalShares(positions))) {
@@ -34,9 +35,13 @@ const Sell = ({ symbol, positions, live }) => {
         return axios.put(restEndpoint, body)
         .then((response) => {
             refetch();
+            setButtonClass("success");
+            setTimeout(() => setButtonClass(""), 200);
         }).catch(error => {
             setError("Failed to send data to backend.");
             console.log(error);
+            setButtonClass("error");
+            setTimeout(() => setButtonClass(""), 200);
         }).finally(() => {
             setIsLoading(false);
         });
@@ -80,7 +85,7 @@ const Sell = ({ symbol, positions, live }) => {
                 <div className="trade-panel-divider"/>
                 <button 
                     id="sell" 
-                    className="trade-panel-button" 
+                    className={`trade-panel-button ${buttonClass}`}
                     disabled={btnDisabled || isLoading} 
                     onClick={handleClick}>
                         {isLoading ? (

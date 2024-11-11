@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useMediaQuery } from 'react-responsive';
 import Buy from "./Buy";
 import Sell from "./Sell";
@@ -10,8 +10,8 @@ const TradeActions = ({ symbol, positions, live }) => {
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
     const { user } = useContext(UserContext);
-    var buyOpen = false;
-    var sellOpen = false;
+    const [buyOpen, setBuyOpen] = useState(false);
+    const [sellOpen, setSellOpen] = useState(false);
     var acc = document.getElementsByClassName("accordion");
 
     const handleToggle = (index) => {
@@ -42,7 +42,7 @@ const TradeActions = ({ symbol, positions, live }) => {
                 panel.style.maxHeight = panel.scrollHeight + "px";
                 panel.style.borderWidth = "1px";
             }
-            buyOpen = !buyOpen
+            setBuyOpen(!buyOpen);
         }
         else {
             if(sellOpen) {
@@ -69,7 +69,7 @@ const TradeActions = ({ symbol, positions, live }) => {
                 panel.style.maxHeight = panel.scrollHeight + "px";
                 panel.style.borderWidth = "1px";
             }
-            sellOpen = !sellOpen;
+            setSellOpen(!sellOpen);
         }
     };
 

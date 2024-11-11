@@ -85,21 +85,30 @@
     z-index: 5;
 }
 
+.trade-panel-button:hover {
+    background-color: rgb(35, 138, 255);
+    border-color: black;
+    color: black;
+}
+
 .trade-panel-button:disabled {
     background-color: #444444;
     color: #cccccc;
 }
 
-.trade-panel-button:hover {
-    background-color: rgb(35, 138, 255);
-    border-color: rgb(35, 138, 255);
-    color: black;
-}
-
 .trade-panel-button:disabled:hover {
-    background-color: #444444;
+    cursor: default;
+    background-color: #333333;
     border-color: #888888;
     color: #aaaaaa;
+}
+
+.trade-panel-button.success {
+    background-color: #28a745;
+}
+
+.trade-panel-button.error {
+    background-color: #dc3545;
 }
 
 .trade-panel-loading-spinner {
@@ -130,7 +139,13 @@
 
     .trade-panel-button {
         font-size: 1.5vmin;
-        height: max(25px, 3vmin);
+        height: max(35px, 3vmin);
+    }
+
+    .trade-panel-loading-spinner {
+        margin: 3px 0 0 5px;
+        width: 1.25vmin;
+        height: 1.25vmin;
     }
 }
 
@@ -140,11 +155,20 @@
     }
 
     .trade-panel-button {
+        height: max(25px, 3vmin);
         font-size: calc(6px + 1vmin);
         margin: 5px 0;
     }
 
     .trade-panel-input {
         width: 75px;
+    }
+
+    .trade-panel-loading-spinner {
+        margin: 2px 0 0 5px;
+        border: 2px solid rgba(0, 0, 0, 0.5);
+        border-top: 2px solid white;
+        width: max(8px, 1.5vmin);
+        height: max(8px, 1.5vmin);
     }
 }

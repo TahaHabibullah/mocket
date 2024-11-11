@@ -80,6 +80,11 @@
 }
 
 @media (max-width: 767px) { 
+    .alert {
+        left: 15%;
+        right: 15%;
+    }
+
     .alert-type {
         height: 30px;
     }

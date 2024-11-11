@@ -84,7 +84,7 @@ const TradeActions = ({ symbol, positions, live }) => {
             panel.style.maxHeight = panel.scrollHeight + "px";
             panel.style.borderWidth = "1px";
         }
-        buyOpen = !buyOpen;
+        setBuyOpen(!buyOpen);
     };
 
     return (

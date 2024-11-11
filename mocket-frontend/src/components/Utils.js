@@ -372,13 +372,12 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
         for(var j = 0; j < positions.length; j++) {
             if(quotes[i].symbol === positions[j].symbol) {
                 const openTimestamp = moment(positions[j].openTimestamp, "YYYY-MM-DD HH:mm:ss");
-                if(openTimestamp.isAfter(open)) {
+                if(openTimestamp.isAfter(open) || !isMarketOpen()) {
                     result += positions[j].quantity * quotes[i].close;
                 }
                 else {
                     result += positions[j].quantity * quotes[i].previous_close;
                 }
-                
             }
         }
     }

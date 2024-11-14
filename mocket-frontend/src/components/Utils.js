@@ -366,14 +366,16 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
         return parsePrice(balance);
     }
     const moment = require("moment");
-    const open = moment().set({hour: 9, minute: 30, second: 0, millisecond: 0});
+    const curr = moment(new Date()).tz("America/New_York")
+    const open = moment(curr).set({hour: 9, minute: 30, second: 0, millisecond: 0});
     var result = balance;
+    console.log(positions);
     for(var i = 0; i < quotes.length; i++) {
         for(var j = 0; j < positions.length; j++) {
             if(quotes[i].symbol === positions[j].symbol) {
                 const openTimestamp = moment(positions[j].openTimestamp, "YYYY-MM-DD HH:mm:ss");
-                if(openTimestamp.isAfter(open) && isMarketOpen()) {
-                    result += positions[j].quantity * quotes[i].close;
+                if(openTimestamp.isAfter(open)) {
+                    result += positions[j].quantity * positions[j].buy;
                 }
                 else {
                     result += positions[j].quantity * quotes[i].previous_close;

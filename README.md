@@ -11,13 +11,15 @@
 ## Key Features
 
 - Paper Trading: Users can simulate buying and selling stocks with virtual currency.
+- Full user authentication: Secure login system utilizing JWT for session management, email verification for account validation, and OAuth 2.0 integration to allow social logins.
 - Real-time Market Data: Fetches live price data for a realistic trading experience.
 - Price Charts: Allows the user to view live and historical price data of a ticker to observe trends and track their own progress on their dashboard.
 - Responsive Design: Application is easily accessible to use on both desktop and mobile devices.
 
 ## Technologies and Resources Used
 
-- TwelveData APIs: Consumed to fetch all trade data including both historical and real-time prices.
+- Alpaca Market APIs: Consumed to fetch all trade data including both historical and real-time prices.
+- TwelveData APIs: Fetching symbols though the search bar.
 - AWS EC2 and S3: Utilized to deploy both frontend and backend microservices as well as store project assets.
 - CSS: Enabled the ability create a fully custom user interface.
 - Mockito and Jest: Allowed for the creation of more effective unit tests for the backend and frontend respectively.

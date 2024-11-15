@@ -3,7 +3,7 @@ import { sellInputValid, getTotalShares, parsePrice } from "./Utils";
 import Alert from "./Alert";
 import { UserContext } from "./UserContext";
 import axios from "axios";
-import "../styling/Sell.css";
+import "../styling/TradePanel.css";
 
 const Sell = ({ symbol, positions, live }) => {
     const restEndpoint = '/database/user/closePos';
@@ -11,6 +11,8 @@ const Sell = ({ symbol, positions, live }) => {
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+    const [buttonClass, setButtonClass] = useState("");
     const handleChange = (e) => {
         const val = e.target.value;
         if(sellInputValid(val, getTotalShares(positions))) {
@@ -23,6 +25,7 @@ const Sell = ({ symbol, positions, live }) => {
     }
 
     const handleClick = async () => {
+        setIsLoading(true);
         const body = {
             userId: user.id,
             symbol: symbol,
@@ -32,58 +35,68 @@ const Sell = ({ symbol, positions, live }) => {
         return axios.put(restEndpoint, body)
         .then((response) => {
             refetch();
+            setButtonClass("success");
+            setTimeout(() => setButtonClass(""), 200);
         }).catch(error => {
             setError("Failed to send data to backend.");
             console.log(error);
-        })
-    }
+            setButtonClass("error");
+            setTimeout(() => setButtonClass(""), 200);
+        }).finally(() => {
+            setIsLoading(false);
+        });
+    };
 
     return (
         <div>
             <div>
                 {error ? (
-                    <Alert message={error} style={"error"} setError={setError}/>
+                    <Alert message={error} style={"error"} setAlert={setError}/>
                 ) : (
                     <div/>
                 )}
             </div>
-            <div className="sell">
-                <div className="sell-header">
-                    <div className="sell-header-left">{symbol}</div>
-                    <div className="sell-header-right">{getTotalShares(positions)} Shares Available</div>
+            <div className="trade-panel">
+                <div className="trade-panel-header">
+                    <div className="trade-panel-header-left">{symbol}</div>
+                    <div className="trade-panel-header-right">{getTotalShares(positions)} Shares Available</div>
                 </div>
-                <div className="sell-divider"/>
-                <div className="sell-input-box">
-                    <div className="sell-input-label">Number of Shares</div>
+                <div className="trade-panel-divider"/>
+                <div className="trade-panel-input-box">
+                    <div className="trade-panel-input-label">Number of Shares</div>
                     <input 
                         id="sell-in"
                         type="number" 
-                        className="sell-input" 
+                        className="trade-panel-input" 
                         placeholder="0" 
                         onChange={handleChange}
                     />
                 </div>
-                <div className="sell-divider"/>
-                <div className="sell-shares">
-                    <div className="sell-shares-label">Share Value</div>
-                    <div className="sell-shares-live">${live}</div>
+                <div className="trade-panel-divider"/>
+                <div className="trade-panel-shares">
+                    <div className="trade-panel-shares-label">Share Value</div>
+                    <div className="trade-panel-shares-live">${live}</div>
                 </div>
-                <div className="sell-divider"/>
-                <div className="sell-total">
-                    <div className="sell-total-label">Total Value</div>
-                    <div className="sell-total-live">${parsePrice(total)}</div>
+                <div className="trade-panel-divider"/>
+                <div className="trade-panel-total">
+                    <div className="trade-panel-total-label">Total Value</div>
+                    <div className="trade-panel-total-live">${parsePrice(total)}</div>
                 </div>
-                <div className="sell-divider"/>
+                <div className="trade-panel-divider"/>
                 <button 
                     id="sell" 
-                    className="sell-button" 
-                    disabled={btnDisabled} 
+                    className={`trade-panel-button ${buttonClass}`}
+                    disabled={btnDisabled || isLoading} 
                     onClick={handleClick}>
-                    Trade
+                        {isLoading ? (
+                            <div className="trade-panel-loading-spinner"/>
+                        ) : (
+                            'Trade'
+                        )}
                 </button>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Sell;

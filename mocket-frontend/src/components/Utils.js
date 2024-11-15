@@ -1,4 +1,29 @@
+import { jwtDecode } from "jwt-decode";
+
 const regex = /^[a-zA-Z]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const daysOfWeek = [
+    "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"
+];
+
+const year = new Date().getFullYear();
+const newYears = getObservedDate(new Date(year, 0, 1));
+const mlkDay = getSpecificDay(year, 0, 2, "Monday");
+const presidentsDay = getSpecificDay(year, 1, 2, "Monday");
+const memorialDay = getSpecificDay(year, 4, 3, "Monday");
+const juneteenth = getObservedDate(new Date(year, 5, 19));
+const independenceDay = getObservedDate(new Date(year, 6, 4));
+const laborDay = getSpecificDay(year, 8, 0, "Monday");
+const thanksgiving = getSpecificDay(year, 10, 3, "Thursday");
+const christmas = getObservedDate(new Date(year, 11, 25));
+const usHolidays = [newYears, mlkDay, presidentsDay, memorialDay, 
+    juneteenth, independenceDay, laborDay, thanksgiving, christmas];
+
+const independenceEve = new Date(year, 6, 3);
+const blackFriday = getSpecificDay(year, 10, 3, "Friday");
+const christmasEve = new Date(year, 11, 24);
+const halfDays = [independenceEve, blackFriday, christmasEve]
 
 function isAlpha(text) {
     return regex.test(text);
@@ -7,10 +32,31 @@ function isAlpha(text) {
 export function truncateOutput(text) {
     if(!text)
         return "";
-    else if(text.length < 23)
-        return text;
-    else
-        return text.substring(0, 20) + "...";
+
+    if(window.innerWidth < 767) {
+        if(text.length < 18) {
+            return text;
+        }
+        else {
+            return text.substring(0, 20) + "...";
+        }
+    }
+    else if(window.innerWidth < 1320) {
+        if(text.length < 23) {
+            return text;
+        }
+        else {
+            return text.substring(0, 20) + "...";
+        }
+    }
+    else { 
+        if(text.length < 33) {
+            return text;
+        }
+        else {
+            return text.substring(0, 30) + "...";
+        }
+    }
 }
 
 export function parsePrice(text) {
@@ -39,9 +85,9 @@ export function parseVolume(vol) {
 
 export function checkInput(text) {
     if(text.length < 1 || !isAlpha(text))
-        return '1';
+        return false;
     else
-        return text;
+        return true;
 }
 
 export function parseTimeSeriesData(data) {
@@ -79,6 +125,59 @@ export function getPriceDiff(previous_close, currPrice) {
     return res;
 }
 
+function getSpecificDay(year, month, week, dayOfWeek) {
+    const firstDay = new Date(year, month, 1);
+    const currDayOfWeek = firstDay.getDay();
+    const firstSelectedDayOfWeek = (daysOfWeek.indexOf(dayOfWeek) - currDayOfWeek + 7) % 7;
+    return new Date(year, month, 1 + firstSelectedDayOfWeek + (week * 7))
+}
+
+function getObservedDate(date) {
+    const newDate = new Date(date); 
+
+    if(daysOfWeek[date.getDay()] === "Saturday") {
+        newDate.setDate(newDate.getDate() - 1)
+    } else if(daysOfWeek[date.getDay()] === "Sunday") {
+        newDate.setDate(newDate.getDate() + 1)
+    }
+
+    return newDate
+}
+
+function isWeekend(date) {
+    return daysOfWeek[date.getDay()] === "Saturday" || daysOfWeek[date.getDay()] === "Sunday";
+}
+
+function isUSHoliday(date) {
+    return (date in usHolidays);
+}
+
+function isHalfDay(date) {
+    return !isWeekend(date) && (date in halfDays)
+}
+
+export function isMarketOpen() {
+    const curr = new Date();
+
+    const options = {
+        timeZone: "America/New_York",
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+    };
+
+    const [hours, minutes] = curr.toLocaleString('en-US', options).split(":").map(Number);
+
+    const startHour = 9;
+    const startMinute = 30;
+    const endHour = !isHalfDay(curr) ? 16 : 13;
+    const endMinute = 0;
+    const isMarketOpen = !isWeekend(curr) && !isUSHoliday(curr) && (hours > startHour || (hours === startHour && minutes >= startMinute)) &&
+                    (hours < endHour || (hours === endHour && minutes === endMinute));
+
+    return isMarketOpen;
+}
+
 export function getStartDate(mode) {
     const date = new Date();
     if(mode === 1)
@@ -96,10 +195,17 @@ export function getStartDate(mode) {
 }
 
 export function parseLabel(label, mode) {
-    const date = new Date(label);
+    var date;
+    if(mode === 3) {
+        date = new Date(label + "T00:00:00");
+    }
+    else {
+        date = new Date(label);
+    }
     const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
                         "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     
+    const year = date.getFullYear();
     const month = monthNames[date.getMonth()];
     const day = date.getDate();
     var hours = date.getHours();
@@ -115,7 +221,7 @@ export function parseLabel(label, mode) {
     if(mode === 0)
         return `${hours}:${minutes} ${ampm}`;
     else if(mode === 3)
-        return `${month} ${day}`;
+        return `${month} ${day}, ${year}`;
     else
         return `${month} ${day} ${hours}:${minutes} ${ampm}`;
 }
@@ -260,19 +366,20 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
         return parsePrice(balance);
     }
     const moment = require("moment");
-    const open = moment().set({hour: 9, minute: 30, second: 0, millisecond: 0});
+    const curr = moment(new Date()).tz("America/New_York")
+    const open = moment(curr).set({hour: 9, minute: 30, second: 0, millisecond: 0});
     var result = balance;
+    console.log(positions);
     for(var i = 0; i < quotes.length; i++) {
         for(var j = 0; j < positions.length; j++) {
             if(quotes[i].symbol === positions[j].symbol) {
                 const openTimestamp = moment(positions[j].openTimestamp, "YYYY-MM-DD HH:mm:ss");
                 if(openTimestamp.isAfter(open)) {
-                    result += positions[j].quantity * quotes[i].close;
+                    result += positions[j].quantity * positions[j].buy;
                 }
                 else {
                     result += positions[j].quantity * quotes[i].previous_close;
                 }
-                
             }
         }
     }
@@ -325,11 +432,25 @@ export function getSymQuote(quoteList, symbol) {
     return null;
 }
 
-export function checkQuoteListError(quoteList) {
-    for(var i = 0; i < quoteList.length; i++) {
-        if(quoteList[i].timestamp === 0) {
-            return true;
-        }
+export function validEmail(email) {
+    return String(email).toLowerCase().match(emailRegex);
+}
+
+export function expiredToken() {
+    const currTime = Date.now() / 1000;
+    const token = localStorage.getItem('token');
+    if(token === null) {
+        return true;
     }
-    return false;
+    const decoded = jwtDecode(token);
+    if(decoded.exp < currTime) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+export function getUserId(token) {
+    return jwtDecode(token).sub;
 }

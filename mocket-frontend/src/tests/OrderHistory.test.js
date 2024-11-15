@@ -1,5 +1,5 @@
 import React, { act } from "react";
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import axios from 'axios';
 import OrderHistory from '../components/OrderHistory.js';
 
@@ -7,13 +7,15 @@ jest.mock("axios");
 
 test("component renders correctly", async () => {
     const mockResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            }
+        ] 
     ];
 
     axios.get.mockResolvedValue({ data: mockResponse });
@@ -28,20 +30,22 @@ test("component renders correctly", async () => {
 
 test("component renders both buy and sell tiles correctly", async () => {
     const mockResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        },
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 218.24,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:45"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            },
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 218.24,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:45"
+            } 
+        ]
     ];
 
     axios.get.mockResolvedValue({ data: mockResponse });
@@ -53,6 +57,42 @@ test("component renders both buy and sell tiles correctly", async () => {
     expect(getByText(/Sell Price/i)).toBeInTheDocument();
     const value = screen.getAllByText(/2182.40/i);
     expect(value).toHaveLength(2);
+});
+
+test("component renders multiple pages correctly", async () => {
+    const mockResponse = [
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            },
+        ],
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 218.24,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:45"
+            } 
+        ]
+    ];
+
+    axios.get.mockResolvedValue({ data: mockResponse });
+    const { container, getByText } = await act( async () => render(<OrderHistory id={0}/>));
+    expect(container.querySelector(".order-history-accordion")).toBeInTheDocument();
+    expect(container.querySelector(".order-history-divider")).toBeInTheDocument();
+    expect(container.querySelector(".order-history-panel")).toBeInTheDocument();
+    expect(getByText(/AAPL/i)).toBeInTheDocument();
+    expect(getByText(/218.24/i)).toBeInTheDocument();
+    expect(getByText(/2182.40/i)).toBeInTheDocument();
+    expect(getByText(/1 of 2/i)).toBeInTheDocument();
+    expect(screen.queryByText("Sell Price")).toBeNull();
+    fireEvent.click(getByText(">"));
+    expect(screen.queryByText("Sell Price")).toBeInTheDocument();
 });
 
 test("fetch results in error, does not render", async () => {

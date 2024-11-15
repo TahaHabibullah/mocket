@@ -7,7 +7,7 @@ const QuoteDataTile = ({ title, data }) => {
             <div className="quote-tile-title">{title}</div>
             <div className="quote-tile-data">{data}</div>
         </div>
-    )
-}
+    );
+};
 
 export default QuoteDataTile;

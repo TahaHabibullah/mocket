@@ -27,6 +27,22 @@
     font-size: 36px;
 }
 
+.greenflash {
+    animation: greenflash 1s linear 1;
+}
+
+.redflash {
+    animation: redflash 1s linear 1;
+}
+
+@keyframes greenflash {
+    50% { color: #a2faba; }
+}
+
+@keyframes redflash {
+    50% { color: #faa2a2; }
+}
+
 @media (max-width: 1320px) {
     .quote-header-stock-name {
         margin: 3vmin 5% 0px;

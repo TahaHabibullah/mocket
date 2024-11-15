@@ -1,32 +1,46 @@
 package com.taha.backendservice.model.db;
 
-import com.taha.backendservice.service.impl.UserServiceImpl;
-import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
+import org.bson.types.ObjectId;
+
+import java.util.*;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.ZoneId;
-import java.util.List;
-import java.util.Objects;
 
 public class User {
     private ObjectId id;
     private String email;
+    private String password;
     private double balance;
     private List<Position> positions;
+    private boolean verified;
+    private int failedLoginAttempts;
+    private boolean locked;
+    private Date lockTime;
+
+    private Set<Role> roles = new HashSet<>();
 
     public User() {}
 
-    private final static Logger logger = LoggerFactory.getLogger(User.class);
-
-    public User(ObjectId id, String email, double balance, List<Position> positions) {
+    public User(ObjectId id,
+                String email,
+                String password,
+                double balance,
+                List<Position> positions,
+                boolean verified,
+                int failedLoginAttempts,
+                boolean locked,
+                Date lockTime) {
         this.id = id;
         this.email = email;
+        this.password = password;
         this.balance = balance;
         this.positions = positions;
+        this.verified = verified;
+        this.failedLoginAttempts = failedLoginAttempts;
+        this.locked = locked;
+        this.lockTime = lockTime;
     }
     public void closePosition(String symbol, int quantity, double price) {
         List<Position> sympos = getSymPositions(symbol);
@@ -103,6 +117,13 @@ public class User {
         this.email = email;
     }
 
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public double getBalance() {
         return balance;
     }
@@ -116,6 +137,25 @@ public class User {
     public void setPositions(List<Position> positions) {
         this.positions = positions;
     }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
+
+    public boolean isVerified() { return verified; }
+    public void setVerified(boolean verified) { this.verified = verified; }
+
+    public int getFailedLoginAttempts() { return failedLoginAttempts; }
+    public void setFailedLoginAttempts(int failedLoginAttempts) { this.failedLoginAttempts = failedLoginAttempts; }
+
+    public boolean isLocked() { return locked; }
+    public void setLocked(boolean locked) { this.locked = locked; }
+
+    public Date getLockTime() { return lockTime; }
+    public void setLockTime(Date lockTime) { this.lockTime = lockTime; }
 
     @Override
     public String toString() {

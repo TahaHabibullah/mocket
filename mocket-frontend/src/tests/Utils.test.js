@@ -46,14 +46,14 @@ describe("parseVolume", () => {
 });
 
 describe("checkInput", () => {
-    it("returns 1 for empty string", async () => {
-        expect(checkInput("")).toBe("1");
+    it("returns false for empty string", async () => {
+        expect(checkInput("")).toBe(false);
     });
-    it("returns 1 for non-alphabetical string", async () => {
-        expect(checkInput("-34gasdfg-3498")).toBe("1");
+    it("returns false for non-alphabetical string", async () => {
+        expect(checkInput("-34gasdfg-3498")).toBe(false);
     });
-    it("returns input for passing string", async () => {
-        expect(checkInput("test")).toBe("test");
+    it("returns true for passing string", async () => {
+        expect(checkInput("test")).toBe(true);
     });
 });
 
@@ -177,8 +177,8 @@ describe("parseLabel", () => {
         .toBe("Aug 2 9:30 AM");
     });
     it("parses label for 1 year data", async () => {
-        expect(parseLabel("2024-08-02 09:30:00", 3))
-        .toBe("Aug 2");
+        expect(parseLabel("2024-08-02", 3))
+        .toBe("Aug 2, 2024");
     });
 });
 
@@ -747,39 +747,17 @@ describe("getSymQuote", () => {
     });
 });
 
-describe("checkQuoteListError", () => {
-    it("returns false when timestamp is not zero", async () => {
-        const quotes = [
-            {
-                "symbol": "NVDA",
-                "close": "108.43000",
-                "previous_close": "106.56000",
-                "timestamp": 1722605400
-            },
-            {
-                "symbol": "AAPL",
-                "close": "222.22",
-                "previous_close": "220.20000",
-                "timestamp": 1722605400
-            }
-        ];
-
-        expect(checkQuoteListError(quotes)).toBe(false);
+describe("validEmail", () => {
+    it("returns true for valid email pattern", async () => {
+        expect(validEmail("test@test.com")).toBeTruthy();
     });
-    it("returns true when at least one timestamp is zero", async () => {
-        const quotes = [
-            {
-                "symbol": "NVDA",
-                "close": "108.43000",
-                "previous_close": "106.56000",
-            },
-            {
-                "extended_timestamp": 0,
-                "is_market_open": false,
-                "timestamp": 0
-            }
-        ];
-
-        expect(checkQuoteListError(quotes)).toBe(true);
+    it("returns false for invalid email pattern 1", async () => {
+        expect(validEmail("kajsdbf")).toBeNull();
+    });
+    it("returns false for invalid email pattern 2", async () => {
+        expect(validEmail("kajsdbf@asdf")).toBeNull();
+    });
+    it("returns false for invalid email pattern 3", async () => {
+        expect(validEmail("kajsdbf@asdf.")).toBeNull();
     });
 });

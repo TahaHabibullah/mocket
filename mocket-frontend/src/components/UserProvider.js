@@ -1,36 +1,42 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { UserContext } from "./UserContext";
 import axios from "axios";
 import Alert from "./Alert";
+import { getUserId } from "./Utils";
 
 const UserProvider = ({ children }) => {
-    const restEndpoint = `/database/user/${process.env.REACT_APP_USER}`
+    const restEndpoint = '/database/user/';
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
+    const token = localStorage.getItem('token');
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
     const callRestApi = async () => {
-        axios.get(restEndpoint)
+        axios.get(restEndpoint + getUserId(token))
         .then((response) => {
             setUser(response.data);
         }).catch(error => {
             setError("Failed to fetch from backend.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     useEffect(() => {
-        callRestApi();
-    }, [])
+        if(token) {
+            callRestApi();
+        }
+    }, []);
 
     return (
         <UserContext.Provider value={{user, refetch: callRestApi}}>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}
             {children}
         </UserContext.Provider>
     );
-}
+};
 
 export { UserProvider };

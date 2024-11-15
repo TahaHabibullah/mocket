@@ -1,15 +1,22 @@
 package com.taha.backendservice;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taha.backendservice.client.TradeDataFeignClient;
+import com.taha.backendservice.client.AlpacaFeignClient;
+import com.taha.backendservice.client.TwelveDataFeignClient;
 import com.taha.backendservice.exception.TradeException;
+import com.taha.backendservice.mapper.TradeResponseMapper;
+import com.taha.backendservice.model.AlpacaRequest;
 import com.taha.backendservice.model.TwelveDataRequest;
+import com.taha.backendservice.model.alpaca.AlpacaBarResponse;
+import com.taha.backendservice.model.alpaca.AlpacaHistoricalResponse;
+import com.taha.backendservice.model.alpaca.AlpacaLatestResponse;
 import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.model.search.SymbolData;
 import com.taha.backendservice.model.search.SymbolSearchRequest;
 import com.taha.backendservice.model.search.SymbolSearchResponse;
 import com.taha.backendservice.service.impl.TradeServiceImpl;
+import feign.Feign;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,6 +26,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import java.sql.Time;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -32,14 +40,20 @@ public class TradeServiceImplTest {
     private TradeServiceImpl tradeService;
 
     @Mock
-    private TradeDataFeignClient tradeDataFeignClient;
+    private TwelveDataFeignClient twelveDataFeignClient;
+
+    @Mock
+    private AlpacaFeignClient alpacaFeignClient;
+
+    @Mock
+    private TradeResponseMapper tradeResponseMapper;
 
     @Mock
     private ObjectMapper mapper;
 
     @BeforeEach
     void init() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
@@ -47,7 +61,7 @@ public class TradeServiceImplTest {
         QuoteResponse feignResponse = new QuoteResponse();
         String symbol = "INTC";
         feignResponse.setSymbol(symbol);
-        when(tradeDataFeignClient.getQuoteData(any(),
+        when(twelveDataFeignClient.getQuoteData(any(),
                 any(),
                 any(),
                 any(),
@@ -66,7 +80,7 @@ public class TradeServiceImplTest {
 
     @Test
     void testExceptionGetQuoteData() {
-        when(tradeDataFeignClient.getQuoteData(any(),
+        when(twelveDataFeignClient.getQuoteData(any(),
                 any(),
                 any(),
                 any(),
@@ -87,16 +101,9 @@ public class TradeServiceImplTest {
     }
 
     @Test
-    void testGetPriceData() throws TradeException {
-        TimeIntervalResponse feignResponse = new TimeIntervalResponse();
-        String status = "success";
-        feignResponse.setStatus(status);
-        when(tradeDataFeignClient.getLivePriceData(any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
+    void testGetQuoteDataAlpaca() throws TradeException {
+        AlpacaHistoricalResponse feignResponse = new AlpacaHistoricalResponse();
+        when(alpacaFeignClient.getHistoricalData(any(),
                 any(),
                 any(),
                 any(),
@@ -109,18 +116,14 @@ public class TradeServiceImplTest {
                 any(),
                 any(),
                 any())).thenReturn(new ResponseEntity<>(feignResponse, HttpStatus.OK));
-        TimeIntervalResponse response = tradeService.getPriceData(new TwelveDataRequest());
-        assertEquals(status, response.getStatus());
+        when(tradeResponseMapper.mapAlpacaHistoricalQuoteResponse(any())).thenReturn(Arrays.asList(new QuoteResponse()));
+        List<QuoteResponse> response = tradeService.getQuoteData(new AlpacaRequest());
+        assertNotNull(response);
     }
 
     @Test
-    void testExceptionGetPriceData() {
-        when(tradeDataFeignClient.getLivePriceData(any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
+    void testGetQuoteDataAlpacaException() throws TradeException {
+        when(alpacaFeignClient.getHistoricalData(any(),
                 any(),
                 any(),
                 any(),
@@ -134,7 +137,74 @@ public class TradeServiceImplTest {
                 any(),
                 any())).thenThrow(FeignException.class);
         try {
-            tradeService.getPriceData(new TwelveDataRequest());
+            List<QuoteResponse> response = tradeService.getQuoteData(new AlpacaRequest());
+        } catch (Exception e) {
+            assertEquals(TradeException.class, e.getClass());
+        }
+    }
+
+    @Test
+    void testGetPriceData() throws TradeException {
+        AlpacaHistoricalResponse feignResponse = new AlpacaHistoricalResponse();
+        feignResponse.setValues(new HashMap<>());
+        when(alpacaFeignClient.getHistoricalData(any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any())).thenReturn(new ResponseEntity<>(feignResponse, HttpStatus.OK));
+        when(tradeResponseMapper.mapAlpacaHistoricalResponse(any(), any())).thenReturn(new ArrayList<>());
+        List<TimeIntervalResponse> response = tradeService.getPriceData(new AlpacaRequest());
+        assertNotNull(response);
+    }
+
+    @Test
+    void testGetPriceDataList() throws TradeException {
+        AlpacaHistoricalResponse feignResponse = buildHistoricalResponse();
+        feignResponse.setNextPageToken("token");
+        AlpacaHistoricalResponse secondFeignResponse = buildHistoricalResponse();
+        when(alpacaFeignClient.getHistoricalData(any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any())).thenReturn(new ResponseEntity<>(feignResponse, HttpStatus.OK)).thenReturn(new ResponseEntity<>(secondFeignResponse, HttpStatus.OK));
+        when(tradeResponseMapper.mapAlpacaHistoricalResponse(any(), any())).thenReturn(new ArrayList<>());
+        List<TimeIntervalResponse> response = tradeService.getPriceData(new AlpacaRequest());
+        assertNotNull(response);
+    }
+
+    @Test
+    void testExceptionGetPriceData() {
+        when(alpacaFeignClient.getHistoricalData(any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any(),
+                any())).thenThrow(FeignException.class);
+        try {
+            tradeService.getPriceData(new AlpacaRequest());
         } catch(Exception e) {
             assertEquals(TradeException.class, e.getClass());
         }
@@ -148,7 +218,7 @@ public class TradeServiceImplTest {
         symbolData.setCountry("USA");
         List<SymbolData> symbolDataList = Arrays.asList(symbolData);
         feignResponse.setData(symbolDataList);
-        when(tradeDataFeignClient.searchSymbol(any(),
+        when(twelveDataFeignClient.searchSymbol(any(),
                 any(),
                 any())).thenReturn(new ResponseEntity<>(feignResponse, HttpStatus.OK));
         SymbolSearchRequest request = new SymbolSearchRequest();
@@ -160,7 +230,7 @@ public class TradeServiceImplTest {
 
     @Test
     void testExceptionSearchTickers() throws TradeException {
-        when(tradeDataFeignClient.searchSymbol(any(),
+        when(twelveDataFeignClient.searchSymbol(any(),
                 any(),
                 any())).thenThrow(FeignException.class);
         try {
@@ -172,38 +242,46 @@ public class TradeServiceImplTest {
 
     @Test
     void testGetLivePrice() {
-        Map<String, String> feignResponse = new HashMap();
-        feignResponse.put("price", "value");
-        when(tradeDataFeignClient.getLivePrice(any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
+        AlpacaLatestResponse feignResponse = new AlpacaLatestResponse();
+        feignResponse.setTrades(new HashMap<>());
+        when(alpacaFeignClient.getLiveTradePrice(any(),
                 any(),
                 any(),
                 any(),
                 any())).thenReturn(new ResponseEntity<>(feignResponse, HttpStatus.OK));
-        String response = tradeService.getLivePrice(new TwelveDataRequest());
+        String response = tradeService.getLivePrice(new AlpacaRequest());
         assertNotNull(response);
     }
 
     @Test
     void testExceptionGetLivePrice() {
-        when(tradeDataFeignClient.getLivePrice(any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
+        when(alpacaFeignClient.getLiveTradePrice(any(),
                 any(),
                 any(),
                 any(),
                 any())).thenThrow(FeignException.class);
         try {
-            tradeService.getLivePrice(new TwelveDataRequest());
+            tradeService.getLivePrice(new AlpacaRequest());
         } catch(Exception e) {
             assertEquals(FeignException.class, e.getClass());
         }
+    }
+
+    private AlpacaHistoricalResponse buildHistoricalResponse() {
+        AlpacaHistoricalResponse response = new AlpacaHistoricalResponse();
+        Map<String, List<AlpacaBarResponse>> values = new HashMap<>();
+
+        AlpacaBarResponse barResponse = new AlpacaBarResponse();
+        barResponse.setClose(1.1);
+        barResponse.setDatetime("11-01-2024T00:00:00Z");
+        barResponse.setHigh(2.2);
+        barResponse.setLow(0.0);
+        barResponse.setOpen(1.0);
+        barResponse.setVolume(123);
+        List<AlpacaBarResponse> alpacaBarResponseList = Arrays.asList(barResponse);
+
+        values.put("ticker", alpacaBarResponseList);
+        response.setValues(values);
+        return response;
     }
 }

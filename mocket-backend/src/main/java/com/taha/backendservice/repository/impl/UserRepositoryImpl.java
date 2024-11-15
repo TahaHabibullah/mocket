@@ -10,7 +10,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.FindOneAndReplaceOptions;
 import com.mongodb.client.model.ReplaceOneModel;
 import com.taha.backendservice.exception.TradeException;
-import com.taha.backendservice.model.TwelveDataRequest;
+import com.taha.backendservice.model.AlpacaRequest;
 import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
 import com.taha.backendservice.model.price.GraphData;
@@ -19,6 +19,7 @@ import com.taha.backendservice.model.price.PriceData;
 import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.repository.UserRepository;
+import com.taha.backendservice.security.EncryptionUtils;
 import com.taha.backendservice.service.TradeService;
 import org.bson.BsonDocument;
 import org.bson.types.ObjectId;
@@ -28,8 +29,8 @@ import static com.mongodb.client.model.Filters.in;
 import static com.mongodb.client.model.ReturnDocument.AFTER;
 
 import jakarta.annotation.PostConstruct;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.text.ParseException;
@@ -45,10 +46,12 @@ public class UserRepositoryImpl implements UserRepository {
                                                                            .writeConcern(WriteConcern.MAJORITY)
                                                                            .build();
     private final MongoClient client;
-
-    private final static Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
     private MongoCollection<User> userCollection;
     private TradeService tradeService;
+    @Autowired
+    private EncryptionUtils encryptionUtils;
+    @Value("${mocket.login.lock.duration}")
+    private long duration;
     public UserRepositoryImpl(MongoClient client, TradeService tradeService) {
         this.client = client;
         this.tradeService = tradeService;
@@ -61,7 +64,6 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User user) {
-        user.setId(new ObjectId());
         userCollection.insertOne(user);
         return user;
     }
@@ -80,6 +82,38 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User find(String id) {
         return userCollection.find(eq("_id", new ObjectId(id))).first();
+    }
+
+    @Override
+    public Optional<User> findById(String id) {
+        return Optional.of(userCollection.find(eq("_id", new ObjectId(id))).first());
+    }
+
+    @Override
+    public Boolean existsById(String id) {
+        if(userCollection.find(eq("_id", new ObjectId(id))).first() != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    @Override
+    public Optional<User> findByEmail(String email) {
+        String encrypted = encryptionUtils.encrypt(email);
+        return Optional.of(userCollection.find(eq("email", encrypted)).first());
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        String encrypted = encryptionUtils.encrypt(email);
+        if(userCollection.find(eq("email", encrypted)).first() != null) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     @Override
@@ -116,6 +150,73 @@ public class UserRepositoryImpl implements UserRepository {
             return clientSession.withTransaction(() ->
                    userCollection.deleteMany(clientSession, new BsonDocument()).getDeletedCount(), txnOptions);
         }
+    }
+
+    @Override
+    public User verifyUser(String id) {
+        User u = find(id);
+        u.setVerified(true);
+        return update(u);
+    }
+
+    @Override
+    public User changePassword(String id, String newPassword) {
+        User u = find(id);
+        u.setPassword(newPassword);
+        return update(u);
+    }
+
+    @Override
+    public User incrementLoginFails(String email) {
+        User u = findByEmail(email).get();
+        if(u.isLocked()) {
+            u.setLockTime(new Date());
+        }
+        else if(u.getFailedLoginAttempts() == 5)  {
+            u.setLocked(true);
+            u.setLockTime(new Date());
+        }
+        else {
+            u.setFailedLoginAttempts(u.getFailedLoginAttempts() + 1);
+        }
+        return update(u);
+    }
+
+    @Override
+    public int checkUserStatus(String email) {
+        if(existsByEmail(email)) {
+            User u = findByEmail(email).get();
+            if(u.getPassword() == null) {
+                return 2;
+            }
+            if(u.isLocked()) {
+                long lockTime = u.getLockTime().getTime();
+                long currTime = System.currentTimeMillis();
+                if(currTime - lockTime >= duration) {
+                    u.setLocked(false);
+                    u.setFailedLoginAttempts(0);
+                    u.setLockTime(null);
+                    update(u);
+                    return 1;
+                }
+                else {
+                    return 0;
+                }
+            }
+            else {
+                return 1;
+            }
+        }
+        else {
+            return -1;
+        }
+    }
+
+    @Override
+    public User clearLoginFails(String id) {
+        User u = find(id);
+        u.setFailedLoginAttempts(0);
+        return update(u);
     }
 
     @Override
@@ -172,8 +273,8 @@ public class UserRepositoryImpl implements UserRepository {
             if(p.isOpen()) {
                 String symbol = p.getSymbol();
                 if(!fetched.contains(symbol)) {
-                    TwelveDataRequest request = new TwelveDataRequest(symbol);
-                    result.add(tradeService.getQuoteData(request));
+                    AlpacaRequest request = new AlpacaRequest(symbol);
+                    result.add(tradeService.getQuoteData(request).get(0));
                 }
                 fetched.add(symbol);
             }
@@ -182,13 +283,13 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException {
+    public List<GraphData> getGraphData(String id, String interval, String start_date, String feed) throws TradeException, ParseException {
         User u = find(id);
         List<Position> positions = u.getPositions();
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
         ArrayList<String> fetched = new ArrayList<>();
         SimpleDateFormat sdf;
-        if(interval.equals("1day")) {
+        if(interval.equals("1Day")) {
             sdf = new SimpleDateFormat("yyyy-MM-dd");
         }
         else {
@@ -198,11 +299,17 @@ public class UserRepositoryImpl implements UserRepository {
         for(Position p : positions) {
             String symbol = p.getSymbol();
             if(!fetched.contains(symbol)) {
-                TwelveDataRequest request = new TwelveDataRequest(symbol, interval, start_date, "ASC");
-                priceData.put(symbol, tradeService.getPriceData(request));
+                AlpacaRequest request = new AlpacaRequest(symbol, interval, start_date, "asc");
+                request.setFeed(feed);
+                TimeIntervalResponse data = tradeService.getPriceData(request).get(0).fillMissingData(interval);
+                if(interval.equals("1Day")) {
+                    data = data.removeCloseDays();
+                }
+                priceData.put(symbol, data);
                 fetched.add(symbol);
             }
         }
+
         ArrayList<GraphData> result = new ArrayList<>();
         Map<String, Double> resMap = new TreeMap<>();
         for(Position p : positions) {
@@ -210,29 +317,17 @@ public class UserRepositoryImpl implements UserRepository {
             if(timeseries.getValues() == null) {
                 continue;
             }
-            Date opendt;
+            Date opendt = sdf.parse(p.getOpenTimestamp());
             Date closedt = null;
-            try {
-                opendt = sdf.parse(p.getOpenTimestamp());
-                if(p.getCloseTimestamp() != null) {
-                    closedt = sdf.parse(p.getCloseTimestamp());
-                }
+            if(p.getCloseTimestamp() != null) {
+                closedt = sdf.parse(p.getCloseTimestamp());
             }
-            catch (ParseException e){
-                e.printStackTrace();
-                continue;
-            }
+
             for(PriceData pd : timeseries.getValues()) {
-                Date datadt;
                 String datetime = pd.getDatetime();
+                Date datadt = sdf.parse(datetime);
                 double total = 0.0;
-                try {
-                    datadt = sdf.parse(datetime);
-                }
-                catch (ParseException e){
-                    e.printStackTrace();
-                    continue;
-                }
+
                 if(datadt.before(opendt)) {
                     if(p.isOpen()) {
                         total += p.getQuantity() * p.getBuy();
@@ -258,19 +353,32 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<OrderData> getOrderHist(String id) {
+    public List<List<OrderData>> getOrderHist(String id) {
         User u = find(id);
-        List<OrderData> result = new ArrayList<>();
+        List<OrderData> list = new ArrayList<>();
         List<Position> positions = u.getPositions();
         for(Position p : positions) {
             OrderData temp = new OrderData(p.getSymbol(), p.getOpenTimestamp(), p.getBuy(), p.getQuantity());
-            result.add(temp);
+            list.add(temp);
             if(!p.isOpen()) {
                 temp = new OrderData(p.getSymbol(), p.getCloseTimestamp(), p.getBuy(), p.getSell(), p.getQuantity());
-                result.add(temp);
+                list.add(temp);
             }
         }
-        Collections.sort(result, (o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+        Collections.sort(list, (o1, o2) -> o2.getTimestamp().compareTo(o1.getTimestamp()));
+
+        List<List<OrderData>> result = new ArrayList<>();
+        List<OrderData> temp = new ArrayList<>();
+        for(int i = 0; i < list.size(); i++) {
+            if(i == 0 || i % 10 != 0) {
+                temp.add(list.get(i));
+            }
+            else {
+                result.add(temp);
+                temp = new ArrayList<>();
+            }
+        }
+        result.add(temp);
         return result;
     }
 

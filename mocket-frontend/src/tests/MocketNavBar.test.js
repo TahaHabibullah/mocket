@@ -15,12 +15,22 @@ jest.mock("react-router-dom", () => ({
   useNavigate: () => mockUsedNavigate,
 }));
 
-test("nav bar and symbol search render correctly", async () => {
-    const { container, getByPlaceholderText } = render(<MocketNavBar/>);
+test("dashboard nav bar and symbol search render correctly", async () => {
+    const { container, getByPlaceholderText, getByText } = render(<MocketNavBar style={"dashboard"}/>);
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
-    expect(container.querySelector(".nav-bar-brand")).toBeInTheDocument();
+    expect(getByText(/Log Out/i)).toBeInTheDocument();
+    expect(container.querySelector(".nav-bar-brand-logo")).toBeInTheDocument();
     expect(container.querySelector(".nav-bar-repo")).toBeInTheDocument();
     expect(container.querySelector("#search-icon")).toBeInTheDocument();
+});
+
+test("nav bar and symbol search render correctly", async () => {
+    const { container, getByText } = render(<MocketNavBar style={"login"}/>);
+    expect(getByText(/Log In/i)).toBeInTheDocument();
+    expect(getByText(/Register/i)).toBeInTheDocument();
+    expect(container.querySelector(".nav-bar-brand-logo")).toBeInTheDocument();
+    expect(container.querySelector(".nav-bar-repo")).toBeInTheDocument();
+    expect(container.querySelector("#search-icon")).toBeNull();
 });
 
 test("fetch from symbol search causes results list to display", async () => {
@@ -43,7 +53,7 @@ test("fetch from symbol search causes results list to display", async () => {
     };
 
     axios.post.mockResolvedValue(mockResponse);
-    const { container, getByPlaceholderText, getByText } = render(<MocketNavBar/>);
+    const { container, getByPlaceholderText, getByText } = render(<MocketNavBar style={"dashboard"}/>);
     expect(container.querySelector(".results-list")).toBeNull();
     await waitFor(() => fireEvent.change(getByPlaceholderText("Search"), {target: {value: "something"}}));
     expect(axios.post).toHaveBeenCalledTimes(1);

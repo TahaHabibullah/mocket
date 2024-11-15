@@ -1,7 +1,8 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { useMediaQuery } from 'react-responsive';
 import Buy from "./Buy";
 import Sell from "./Sell";
+import PositionsSummary from "./PositionsSummary";
 import { UserContext } from "./UserContext";
 import "../styling/TradeActions.css"
 
@@ -9,8 +10,8 @@ const TradeActions = ({ symbol, positions, live }) => {
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
     const { user } = useContext(UserContext);
-    var buyOpen = false;
-    var sellOpen = false;
+    const [buyOpen, setBuyOpen] = useState(false);
+    const [sellOpen, setSellOpen] = useState(false);
     var acc = document.getElementsByClassName("accordion");
 
     const handleToggle = (index) => {
@@ -41,7 +42,7 @@ const TradeActions = ({ symbol, positions, live }) => {
                 panel.style.maxHeight = panel.scrollHeight + "px";
                 panel.style.borderWidth = "1px";
             }
-            buyOpen = !buyOpen
+            setBuyOpen(!buyOpen);
         }
         else {
             if(sellOpen) {
@@ -68,9 +69,9 @@ const TradeActions = ({ symbol, positions, live }) => {
                 panel.style.maxHeight = panel.scrollHeight + "px";
                 panel.style.borderWidth = "1px";
             }
-            sellOpen = !sellOpen;
+            setSellOpen(!sellOpen);
         }
-    }
+    };
 
     const handleToggleLone = () => {
         var panel = acc[0].nextElementSibling;
@@ -83,25 +84,28 @@ const TradeActions = ({ symbol, positions, live }) => {
             panel.style.maxHeight = panel.scrollHeight + "px";
             panel.style.borderWidth = "1px";
         }
-        buyOpen = !buyOpen;
-    }
+        setBuyOpen(!buyOpen);
+    };
 
     return (
         <div>
             {positions.length > 0 ? (
-                <div className="trade-actions">
-                    <div className="trade-actions-buy">
-                        <button className="accordion left" onClick={() => {handleToggle(0)}}>BUY</button>
-                        <div data-testid="left" className="panel left">
-                            <Buy symbol={symbol} balance={user.balance} live={live}/>
+                <div>
+                    <div className="trade-actions">
+                        <div className="trade-actions-buy">
+                            <button className="accordion left" onClick={() => {handleToggle(0)}}>BUY</button>
+                            <div data-testid="left" className="panel left">
+                                <Buy symbol={symbol} balance={user.balance} live={live}/>
+                            </div>
+                        </div>
+                        <div className="trade-actions-sell">
+                            <button className="accordion right" onClick={() => {handleToggle(1)}}>SELL</button>
+                            <div data-testid="right" className="panel right">
+                                <Sell symbol={symbol} positions={positions} live={live}/>
+                            </div>
                         </div>
                     </div>
-                    <div className="trade-actions-sell">
-                        <button className="accordion right" onClick={() => {handleToggle(1)}}>SELL</button>
-                        <div data-testid="right" className="panel right">
-                            <Sell symbol={symbol} positions={positions} live={live}/>
-                        </div>
-                    </div>
+                    <PositionsSummary positions={positions} live={live}/>
                 </div>
             ) : (
                 <div className="trade-actions-buy-lone">
@@ -112,7 +116,7 @@ const TradeActions = ({ symbol, positions, live }) => {
                 </div>
             )}
         </div>
-    )
-}
+    );
+};
 
 export default TradeActions;

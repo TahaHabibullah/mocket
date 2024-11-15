@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.List;
 
 @Service
@@ -127,13 +128,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<GraphData> getGraphData(String id, String interval, String start_date) throws TradeException {
+    public List<GraphData> getGraphData(String id, String interval, String start_date, String feed) throws TradeException, ParseException {
         logger.info("Retrieving graph data for user with id=" + id);
-        return userRepository.getGraphData(id, interval, start_date);
+        return userRepository.getGraphData(id, interval, start_date, feed);
     }
 
     @Override
-    public List<OrderData> getOrderHist(String id) throws TradeException {
+    public List<List<OrderData>> getOrderHist(String id) throws TradeException {
         logger.info("Retrieving order history for user with id=" + id);
         return userRepository.getOrderHist(id);
     }

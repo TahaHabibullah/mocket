@@ -7,7 +7,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Data
-@JsonInclude(JsonInclude.Include.NON_EMPTY)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class QuoteResponse implements Serializable {
     private static final long serialVersionUID = -30098676091186539L;
     private String symbol;
@@ -36,4 +36,21 @@ public class QuoteResponse implements Serializable {
     private String extended_percent_change;
     private String extended_price;
     private long extended_timestamp;
+
+    public QuoteResponse() {
+
+    }
+
+    public QuoteResponse(String symbol, String open, String high, String low, String previous_close, String close, String average_volume, String volume, FiftyTwoWeek fifty_two_week, String datetime) {
+        this.symbol = symbol;
+        this.open = open;
+        this.high = high;
+        this.low = low;
+        this.previous_close = previous_close;
+        this.close = close;
+        this.average_volume = average_volume;
+        this.volume = volume;
+        this.fifty_two_week = fifty_two_week;
+        this.datetime = datetime;
+    }
 }

@@ -1,15 +1,31 @@
 .App {
-  background-color: black;
-  min-height: 100vh;
-  font-size: calc(10px + 2vmin);
+    background-color: black;
+    min-height: 100vh;
+    font-size: calc(10px + 2vmin);
 }
 
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 input[type=number] {
-  -moz-appearance: textfield;
+    -moz-appearance: textfield;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+}
+  
+::-webkit-scrollbar-track {
+    background: #1c1c1c;
+}
+  
+::-webkit-scrollbar-thumb {
+    background: #888888;
+}
+  
+::-webkit-scrollbar-thumb:hover {
+    background: #555555;
 }

@@ -9,7 +9,7 @@ const PositionsTile = ({ data, quoteData }) => {
     const getDataStyle = () => {
         return parseFloat(quoteData.close) > parseFloat(quoteData.previous_close) ? 
         "positions-tile-data green" : "positions-tile-data red";
-    }
+    };
     
     return (
         <div className="positions-tile" onClick={() => navigator("/stocks/" + data.symbol, {replace: true})}>
@@ -18,7 +18,7 @@ const PositionsTile = ({ data, quoteData }) => {
             <div className="positions-tile-shares">{data.quantity} Shares</div>
             <div className={getDataStyle()}>${parsePrice(quoteData.close)}</div>
         </div>
-    )
-}
+    );
+};
 
 export default PositionsTile;

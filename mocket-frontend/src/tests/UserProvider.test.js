@@ -3,11 +3,27 @@ import { render, screen } from '@testing-library/react';
 import axios from 'axios';
 import '@testing-library/jest-dom';
 import { UserProvider } from "../components/UserProvider";
+import * as Utils from "../components/Utils";
 
 jest.mock('axios');
 
 afterEach(() => {
     jest.clearAllMocks();
+});
+
+beforeEach(() => {
+    axios.defaults = {
+        headers: {
+          common: {}
+        }
+      };
+    axios.defaults.headers.common['Authorization'] = "test";
+
+    jest.spyOn(Storage.prototype, 'getItem').mockImplementation((key) => {
+        return "test";
+    });
+
+    jest.spyOn(Utils, 'getUserId').mockImplementation(() => "test");
 });
 
 test("fetches user data", async () => {
@@ -28,7 +44,6 @@ test("fetches user data", async () => {
             }
         ]
     }
-
     axios.get.mockResolvedValue({ data: mockResponse });
     await act( async () => render(<UserProvider/>));
     expect(axios.get).toHaveBeenCalledTimes(1);

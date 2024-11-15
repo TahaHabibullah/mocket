@@ -1,19 +1,32 @@
 .nav-bar {
-    list-style-type: none;
     margin: 0;
     padding: 10px 0;
     width: 100%;
     height: 60px;
-    display: flex;
-    align-items: center;
+    display: inline-block;
 }
 
-.nav-bar-brand {
+.nav-bar-left {
+    float: left;
+    display: flex;
+    width: 75%;
+}
+
+.nav-bar-right {
+    float: right;
+    display: flex;
+}
+
+.nav-bar-brand-logo {
     width: 240px;
     height: 60px;
     margin: 0px 5vw;
-    text-decoration: none;
-    float: left;
+}
+
+.nav-bar-brand-icon {
+    width: 40px;
+    height: 35px;
+    margin: 0px 5vw;
 }
 
 .nav-bar-brand:hover {
@@ -21,12 +34,10 @@
 }
 
 .nav-bar-repo {
-    margin: 10px 20px 0px -15vw;
+    margin: 10px 20px 0px 0;
     width: 45px;
     height: 45px;
-    text-decoration: none;
     float: right;
-    color: #dddddd;
 }
 
 .nav-bar-repo:hover {
@@ -36,34 +47,149 @@
 .nav-bar-search {
     width: 100%;
     padding-top: 10px;
-    align-self: normal;
+}
+
+.nav-bar-logout {
+    margin: 10px 20px 0 0;
+    float: right;
+    width: 150px;
+    height: 3rem;
+    color: white;
+    background-color: black;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 2px;
+    transition: 0.3s;
+    font-size: 20px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+}
+
+.nav-bar-logout:hover {
+    color: black;
+    border-color: black;
+    background-color: rgb(35, 138, 255);
+}
+
+.nav-bar-login {
+    margin: 10px 20px 0 0;
+    float: right;
+    width: 150px;
+    height: 3rem;
+    color: white;
+    background-color: black;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 2px;
+    transition: 0.3s;
+    font-size: 20px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+}
+
+.nav-bar-login:hover {
+    border-color: #888888;
+    background-color: #222222;
+}
+
+.nav-bar-register {
+    margin: 10px 20px 0 0;
+    float: right;
+    width: 150px;
+    height: 3rem;
+    color: black;
+    background-color: rgb(35, 138, 255);
+    border-radius: 15px;
+    border-color: rgb(24, 95, 177);
+    border-style: solid;
+    border-width: 2px;
+    transition: 0.3s;
+    font-size: 20px;
+    font-family: "Inter", sans-serif;
+    cursor: pointer;
+}
+
+.nav-bar-register:hover {
+    color: black;
+    border-color: black;
+    background-color: rgb(29, 114, 212);
 }
 
 @media (max-width: 1320px) {
     .nav-bar-brand {
-        margin: 0px 3vw;
-        width: max(120px, 12vw);
-        height: max(30px, 3vw);
+        margin: 5px 3vw;
     }
     
     .nav-bar-repo {
-        margin: 10px 10px 0px 0px;
-        font-size: calc(6px + 2vmin);
-        height: max(20px, 3vw);
-        width: max(20px, 3vw);
+        margin: 1.4vmin 10px 0px 0px;
     }
-    
+
     .nav-bar-search {
-        padding-top: calc(22px - 0.8vmin);
+        padding-top: 20px;
+    }
+
+    .nav-bar-logout {
+        margin: 20px 15px 0 0;
+        width: 12vw;
+        height: 4vmin;
+        font-size: calc(6px + 1vmin);
+    }
+
+    .nav-bar-login {
+        margin: 18px 10px 0 0;
+        width: 12vw;
+        height: 4vmin;
+        font-size: calc(6px + 1vmin);
+    }
+
+    .nav-bar-register {
+        margin: 18px 10px 0 0;
+        width: 12vw;
+        height: 4vmin;
+        font-size: calc(6px + 1vmin);
     }
 }
 
 @media (max-width: 767px) {
     .nav-bar-brand {
-        margin: 0px calc(10px + 1vw);
+        margin: 2px calc(10px + 1vw);
+        width: max(120px, 18vw);
+        height: max(30px, 4.5vw);
     }
     
     .nav-bar-repo {
-        margin: 0px 5px 0px 0px;
+        margin: 2.5vmin 5px 0px 0px;
+        height: max(20px, 3.5vw);
+        width: max(20px, 3.5vw);
+    }
+
+    .nav-bar-search {
+        padding-top: 8px;
+    }
+
+    .nav-bar-logout {
+        margin: 10px 5px 0 0;
+        width: max(50px, 15vw);
+        height: max(20px, 5vmin);
+        border-width: 1px;
+        font-size: calc(4px + 1vmin);
+    }
+
+    .nav-bar-login {
+        margin: 10px 5px 0 0;
+        width: max(50px, 15vw);
+        height: max(20px, 5vmin);
+        border-width: 1px;
+        font-size: calc(6px + 1vmin);
+    }
+
+    .nav-bar-register {
+        margin: 10px 5px 0 0;
+        width: max(50px, 15vw);
+        height: max(20px, 5vmin);
+        border-width: 1px;
+        font-size: calc(6px + 1vmin);
     }
 }

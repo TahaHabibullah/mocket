@@ -13,8 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @CrossOrigin(origins = {"${domain.http}", "${domain.https}"})
@@ -30,12 +32,14 @@ public class DBController {
 
     @PostMapping(DBConstant.USER)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public UserDTO postUser(@RequestBody UserDTO userDTO) {
         return userService.save(userDTO);
     }
 
     @PostMapping(DBConstant.USERS)
     @ResponseStatus(HttpStatus.CREATED)
+    @PreAuthorize("hasRole('ADMIN')")
     public List<UserDTO> postUsers(@RequestBody List<UserDTO> usersDTO) {
         return userService.saveAll(usersDTO);
     }
@@ -59,6 +63,7 @@ public class DBController {
     }
 
     @GetMapping(DBConstant.GET_COUNT)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long getCount() {
         return userService.count();
     }
@@ -76,37 +81,43 @@ public class DBController {
     @GetMapping(DBConstant.GET_GRAPH)
     public List<GraphData> getGraphData(@RequestParam String id,
                                         @RequestParam String interval,
-                                        @RequestParam String start_date) throws TradeException {
-        return userService.getGraphData(id, interval, start_date);
+                                        @RequestParam String start_date,
+                                        @RequestParam(required = false) String feed) throws TradeException, ParseException {
+        return userService.getGraphData(id, interval, start_date, feed);
     }
 
     @GetMapping(DBConstant.GET_HIST)
-    public List<OrderData> getOrderHist(@RequestParam String id) throws TradeException {
+    public List<List<OrderData>> getOrderHist(@RequestParam String id) throws TradeException {
         return userService.getOrderHist(id);
     }
 
     @DeleteMapping(DBConstant.USER)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long deleteUsers() {
         return userService.deleteAll();
     }
 
     @DeleteMapping(DBConstant.GET_USER)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long deleteUser(@PathVariable String id) {
         return userService.delete(id);
     }
 
     @DeleteMapping(DBConstant.GET_USERS)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long deleteUsers(@PathVariable String ids) {
         List<String> listIds = List.of(ids.split(","));
         return userService.deleteAll(listIds);
     }
 
     @PutMapping(DBConstant.USER)
+    @PreAuthorize("hasRole('ADMIN')")
     public UserDTO putUser(@RequestBody UserDTO userDTO) {
         return userService.update(userDTO);
     }
 
     @PutMapping(DBConstant.USERS)
+    @PreAuthorize("hasRole('ADMIN')")
     public Long putUsers(@RequestBody List<UserDTO> usersDTO) {
         return userService.update(usersDTO);
     }

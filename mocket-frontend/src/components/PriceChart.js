@@ -14,7 +14,7 @@ import "../styling/PriceChart.css";
 ChartJS.register(annotationPlugin);
 ChartJS.register(...registerables);
 
-const PriceChart = ({ liveData, quoteData }) => {
+const PriceChart = ({ name, liveData, quoteData, isMarketOpen }) => {
     const restEndpoint = '/trade-service/data/price';
     const { symbol } = useParams();
     const [data, setData] = useState(null);
@@ -24,6 +24,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     const [toggledIndex, setToggledIndex] = useState(0);
     const [liveIndex, setLiveIndex] = useState(0);
     const [error, setError] = useState(null);
+    const [tooltipActive, setTooltipActive] = useState(false);
     const setCurrDataRef = useRef();
     const setCurrDiffRef = useRef();
     const getLiveDataRef = useRef();
@@ -32,6 +33,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     const getToggledIndexRef = useRef();
     const getLabelsRef = useRef();
     const drawLabelRef = useRef();
+    const prevSymbol = useRef(symbol);
     const buttons = [
         { text: '1D' },
         { text: '1W' },
@@ -70,6 +72,7 @@ const PriceChart = ({ liveData, quoteData }) => {
                 const dataY = activePoint.element.$context.parsed.y;
                 setCurrData(dataY.toFixed(2));
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], dataY));
+                setTooltipActive(true);
                 
                 ctx.save();
                 ctx.beginPath();
@@ -83,7 +86,7 @@ const PriceChart = ({ liveData, quoteData }) => {
     
                 const chartRect = chart.canvas.getBoundingClientRect();
                 drawLabel.style.left = `${chartRect.left + x}px`;
-                drawLabel.style.top = `calc(${chartRect.top-12}px - 0.5vmin)`;
+                drawLabel.style.top = `calc(${chart.canvas.offsetTop-12}px - 0.5vmin)`;
                 drawLabel.textContent = parseLabel(labels[dataX], toggledIndex);
                 drawLabel.style.display = 'block';
     
@@ -94,6 +97,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             else {
                 setCurrData(liveData);
                 setCurrDiff(getPriceDiff(toggledIndex === 0 ? quoteData.previous_close : data[0], liveData));
+                setTooltipActive(false);
                 drawLabel.style.display = 'none';
             }
         },
@@ -153,23 +157,34 @@ const PriceChart = ({ liveData, quoteData }) => {
             getDataRef,
             getToggledIndexRef,
             getLabelsRef,
-            drawLabelRef,
+            drawLabelRef
         }
     };
 
     const handleToggle = (i) => {
         setToggledIndex(i);
-    }
+    };
     const getButtonStyle = (i) => {
         return i === toggledIndex ? 'price-chart-interval-button-toggled' : 'price-chart-interval-button-untoggled';
-    }
+    };
     const getDiffStyle = () => {
         return currDiff[0] === '+' ? 'quote-header-diff-green' : 'quote-header-diff-red'
-    }
+    };
 
     useEffect (() => {
-        callRestApi();
-    }, [toggledIndex]);
+        if(prevSymbol.current !== symbol) {
+            if(toggledIndex === 0) {
+                callRestApi();
+            }
+            else {
+                setToggledIndex(0);
+            }
+            prevSymbol.current = symbol;
+        }
+        else {
+            callRestApi();
+        }
+    }, [toggledIndex, symbol]);
 
     useEffect(() => {
         if(data && toggledIndex === 0) {
@@ -185,22 +200,23 @@ const PriceChart = ({ liveData, quoteData }) => {
                 setLiveIndex(liveIndex < 78 ? liveIndex + 1 : 77);
             }
         }
-    }, [liveData])
+    }, [liveData]);
 
     const callRestApi = async () => {
         var body;
         const start_date = getStartDate(toggledIndex);
+        const feed = isMarketOpen ? "iex" : undefined
         if(toggledIndex === 0) {
-            body = {symbol: symbol, interval: "5min", start_date: quoteData.datetime, order: "ASC"};
+            body = {symbol: symbol, interval: "5Min", start_date: quoteData.datetime, order: "asc", feed: feed};
         }
         else if(toggledIndex === 1) {
-            body = {symbol: symbol, interval: "15min", start_date: start_date, order: "ASC"};
+            body = {symbol: symbol, interval: "15Min", start_date: start_date, order: "asc", feed: feed};
         }
         else if(toggledIndex === 2) {
-            body = {symbol: symbol, interval: "1h", start_date: start_date, order: "ASC"};
+            body = {symbol: symbol, interval: "1Hour", start_date: start_date, order: "asc"};
         }
         else {
-            body = {symbol: symbol, interval: "1day", start_date: start_date, order: "ASC"};
+            body = {symbol: symbol, interval: "1Day", start_date: start_date, order: "asc"};
         }
         return axios.post(restEndpoint, body)
         .then((response) => {
@@ -208,10 +224,10 @@ const PriceChart = ({ liveData, quoteData }) => {
                 setError("API limit exceeded. Try again later.");
             }
             else {
-                const fullData = response.data.values;
+                const fullData = response.data[0].values;
                 const timeSeriesData = parseTimeSeriesData(fullData);
                 const timeSeriesLabels = parseTimeSeriesLabels(fullData);
-                if(toggledIndex === 0 && quoteData.is_market_open) {
+                if(toggledIndex === 0 && isMarketOpen) {
                     setLiveIndex(fullData.length);
                     setData(fillLiveList(timeSeriesData));
                     setLabels(fillLiveList(timeSeriesLabels));
@@ -225,16 +241,15 @@ const PriceChart = ({ liveData, quoteData }) => {
             setError("Failed to fetch data from API.");
             console.log(error);
         })
-    }
-
+    };
     return (
         <div>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}
-            <QuoteHeader live={currData} data={quoteData}/>
+            <QuoteHeader name={name} symbol={quoteData.symbol} live={currData} tooltipActive={tooltipActive}/>
             <div className={getDiffStyle()}>{currDiff}</div>
             <div className="price-chart">
                 <Line 
@@ -279,7 +294,7 @@ const PriceChart = ({ liveData, quoteData }) => {
             </div>
             <div className="price-chart-divider"/>
         </div>
-    )
-}
+    );
+};
 
 export default PriceChart;

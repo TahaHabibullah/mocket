@@ -1,29 +1,44 @@
 .alert {
     position: absolute;
-    left: 30%;
-    right: 30%;
     top: 10px;
     display: inline-block;
-    margin: 0;
+    left: 25%;
+    right: 25%;
     padding: 0;
     z-index: 15;
 }
 
-.alert-error {
+.alert-type {
     height: 50px;
     box-shadow: 0px 0px 10px 10px #171717;
     border-radius: 15px;
     border-width: 3px;
-    border-color: rgba(255, 70, 70, 0.5);
     border-style: solid;
+}
+
+.alert-type.error {
+    border-color: rgba(255, 70, 70, 0.5);
     background-color: #fd7066;
     color: white;
+}
+
+.alert-type.warning {
+    border-color: gold;
+    background-color: #f8df70;
+    color: black;
+}
+
+.alert-type.success {
+    border-color: rgb(73, 184, 63);
+    background-color: #81ff87;
+    color: black;
 }
 
 .alert-message {
     padding: 0.5rem 20px;
     font-size: 24px;
     float: left;
+    align-items: center;
 }
 
 .alert-dismiss {
@@ -44,42 +59,43 @@
 
 @media (max-width: 1320px) {
     .alert {
+        top: 20px;
         left: 20%;
         right: 20%;
     }
-    
-    .alert-error {
-        height: 50px;
-    }
-    
-    .alert-message {
-        padding: 0.55rem 0 0 20px;
-        font-size: 20px;
-    }
-    
-    .alert-dismiss {
-        padding: 0.55rem 10px 0 0;
-        font-size: 20px;
-    }
-}
 
-@media (max-width: 767px) {
-    .alert {
-        left: 10%;
-        right: 10%;
-    }
-    
-    .alert-error {
+    .alert-type {
         height: 40px;
     }
     
     .alert-message {
-        padding: 0.6rem 0 0 10px;
-        font-size: 12px;
+        padding: 0.5rem 0 0 10px;
+        font-size: 18px;
     }
     
     .alert-dismiss {
-        padding: 0.6rem 10px 0 0;
-        font-size: 12px;
+        padding: 0.5rem 10px 0 10px;
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 767px) { 
+    .alert {
+        left: 15%;
+        right: 15%;
+    }
+
+    .alert-type {
+        height: 30px;
+    }
+    
+    .alert-message {
+        padding: 0.55rem 0 0 10px;
+        font-size: 10px;
+    }
+    
+    .alert-dismiss {
+        padding: 0.55rem 10px 0 0;
+        font-size: 10px;
     }
 }

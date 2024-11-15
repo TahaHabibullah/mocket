@@ -80,13 +80,15 @@ test("uses context user data, fetches quote data, renders all children", async (
         }
     ];
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            }
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });
@@ -126,20 +128,22 @@ test("uses context user data, fetches quote data, does not render pos list", asy
     };
 
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        },
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 218.24,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:45"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            },
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 218.24,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:45"
+            }   
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });
@@ -161,7 +165,7 @@ test("uses context user data, fetches quote data, does not render pos list", asy
     expect(screen.queryByText("Your Positions")).toBeNull();
 });
 
-test("uses context user data, fails to fetch quote data, alert shown, does not render pos list", async () => {
+test("uses context user data, fails to fetch quote data, alert shown from HomePriceChart, does not render pos list", async () => {
     const mockUser = {
         "id": "66a8957e631f435b8dcc2d43",
         "email": "test3@test.com",
@@ -179,21 +183,17 @@ test("uses context user data, fails to fetch quote data, alert shown, does not r
             }
         ]
     };
-    const mockHomeResponse = [
-        {
-            "extended_timestamp": 0,
-            "is_market_open": false,
-            "timestamp": 0
-        }
-    ];
+    const mockHomeResponse = [];
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            }
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });
@@ -204,15 +204,14 @@ test("uses context user data, fails to fetch quote data, alert shown, does not r
             <Home/>
         </UserContext.Provider>
     ));
-    const alerts = screen.getAllByText(/Error/i);
-    expect(alerts).toHaveLength(2);
+    expect(getByText(/API limit exceeded./i)).toBeInTheDocument();
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/2182.4/i)).toBeInTheDocument();
     expect(axios.get).toHaveBeenCalled();
 });
 
-test("uses context user data, fetches empty quote data, alert shown, does not render pos list", async () => {
+test("uses context user data, fetches empty quote data, alert shown from HomePriceChart, does not render pos list", async () => {
     const mockUser = {
         "id": "66a8957e631f435b8dcc2d43",
         "email": "test3@test.com",
@@ -231,13 +230,15 @@ test("uses context user data, fetches empty quote data, alert shown, does not re
         ]
     };
     const mockOHResponse = [
-        {
-            "buy": 218.24,
-            "quantity": 10,
-            "sell": 0,
-            "symbol": "AAPL",
-            "timestamp": "2024-07-30 03:44:35"
-        }
+        [
+            {
+                "buy": 218.24,
+                "quantity": 10,
+                "sell": 0,
+                "symbol": "AAPL",
+                "timestamp": "2024-07-30 03:44:35"
+            }
+        ]
     ];
 
     axios.get.mockResolvedValueOnce({ data: [] });
@@ -248,7 +249,7 @@ test("uses context user data, fetches empty quote data, alert shown, does not re
             <Home/>
         </UserContext.Provider>
     ));
-    expect(getByText(/Error/i)).toBeInTheDocument();
+    expect(getByText(/API limit exceeded./i)).toBeInTheDocument();
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/2182.4/i)).toBeInTheDocument();

@@ -12,9 +12,10 @@ const PositionsList = ({ positions, quoteList }) => {
                     <PositionsTile data={value} quoteData={getSymQuote(quoteList, key)}/>
                 </div>
             );
-        })
+        });
         return list;
-    }
+    };
+
     return (
         <div className="positions-list">
             <div className="positions-list-header">Your Positions</div>
@@ -22,8 +23,7 @@ const PositionsList = ({ positions, quoteList }) => {
             {renderList()}
         </div>
         
-    )
-    
-}
+    );
+};
 
 export default PositionsList;

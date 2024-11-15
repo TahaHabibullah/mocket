@@ -10,7 +10,11 @@ const SymbolSearch = ( {setResults} ) => {
     const [error, setError] = useState(null);
 
     const callRestApi = async (symbol) => {
-        const body = {symbol: symbol, country: "United States", outputsize: 10}
+        const body = {
+            "symbol": symbol, 
+            "country": "United States", 
+            "outputSize": 10
+        }
         return axios.post(restEndpoint, body)
         .then((response) => {
             if(response.data.status === "error") {
@@ -22,28 +26,37 @@ const SymbolSearch = ( {setResults} ) => {
         }).catch(error => {
             setError("Failed to fetch search results.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     const handleChange = (e) => {
         e.preventDefault();
-        const val = checkInput(e.target.value);
-        callRestApi(val);
-    }
+        const val = e.target.value;
+        if(checkInput(val)) {
+            callRestApi(val);
+        }
+        else {
+            setTimeout(() => setResults([]), 200);
+        }
+    };
+
+    const handleBlur = () => {
+        setTimeout(() => setResults([]), 200);
+    };
 
     return (
         <div>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}
             <div className="input-box">
                 <FaSearch id="search-icon"/>
-                <input placeholder="Search" onChange={handleChange}/>
+                <input placeholder="Search" onChange={handleChange} onBlur={handleBlur}/>
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default SymbolSearch;

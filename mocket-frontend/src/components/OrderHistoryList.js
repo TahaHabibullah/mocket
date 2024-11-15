@@ -19,7 +19,7 @@ const OrderHistoryList = ({ hist }) => {
                 )
             })}
         </div>
-    )
-}
+    );
+};
 
 export default OrderHistoryList;

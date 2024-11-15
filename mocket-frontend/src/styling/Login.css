@@ -1,0 +1,267 @@
+.mocket-login {
+    position: absolute;
+    justify-content: center;
+    top: 20%;
+    left: max(5vw, calc((100vw - 600px) / 2));
+    display: grid;
+    width: 600px;
+    background-color: black;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 1px;
+    box-shadow: 0px 0px 8px #444444;
+    color: white;
+}
+
+.mocket-login-header {
+    text-align: center;
+    padding: 2rem;
+    font-size: 36px;
+}
+
+.mocket-login-input-box {
+    margin-bottom: 15px;
+    background-color: black;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 1px;
+    height: 3rem;
+    width: 500px;
+    box-shadow: 0px 0px 8px #1c1c1c;
+    display: flex;
+    align-items: center;
+}
+
+.mocket-login-input {
+    background-color: transparent;
+    border: none;
+    height: 100%;
+    font-size: calc(10px + 1vmin);
+    width: 100%;
+    padding: 0 15px;
+}
+
+.mocket-login-button {
+    position: relative;
+    background-color: black;
+    cursor: pointer;
+    color: white;
+    border-radius: 15px;
+    border-color: #888888;
+    border-style: solid;
+    border-width: 2px;
+    font-size: 24px;
+    font-weight: bold;
+    transition: 0.3s;
+    justify-self: center;
+    width: 100%;
+    height: 60px;
+    text-align: center;
+    margin: 10px 0;
+    z-index: 5;
+}
+
+.mocket-login-button:hover {
+    color: black;
+    background-color: rgb(35, 138, 255);
+    border-color: black;
+}
+
+.mocket-login-button:disabled {
+    color: #cccccc;
+    background-color: #1c1c1c;
+    border-color: #888888;
+}
+
+.mocket-login-button.success {
+    background-color: #28a745;
+}
+
+.mocket-login-button.error {
+    background-color: #dc3545;
+}
+
+.mocket-login-newuser {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    font-size: 16px;
+}
+
+.mocket-login-newuser-button {
+    margin-left: 8px;
+    text-decoration: underline;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.mocket-login-forgot-button {
+    width: fit-content;
+    display: flex;
+    margin-bottom: 10px;
+    font-size: 16px;
+    text-decoration: underline;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+.mocket-login-newuser-button:hover {
+    color: rgb(0, 228, 0);
+}
+
+.mocket-login-forgot-button:hover {
+    color: rgb(255, 255, 35);
+}
+
+.mocket-login-or {
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+}
+
+.mocket-login-or-header {
+    font-size: 16px;
+}
+
+.mocket-login-or-divider {
+    margin: 0 10px;
+    background-color: #1c1c1c;
+    height: 1px;
+    width: 50%;
+}
+
+.mocket-login-social {
+    width: 100%;
+    margin-bottom: 20px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
+
+.login-loading-spinner {
+    margin-top: 5px;
+    border: 4px solid rgba(0, 0, 0, 0.5);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 1320px) {
+    .mocket-login {
+        left: max(5vw, calc((100vw - 600px) / 2));
+    }
+    .mocket-login-header {
+        text-align: center;
+        padding: 2rem;
+        font-size: 36px;
+    }
+    
+    .mocket-login-input-box {
+        margin-bottom: 15px;
+        background-color: black;
+        border-radius: 15px;
+        border-color: #888888;
+        border-style: solid;
+        border-width: 1px;
+        height: 3rem;
+        width: 500px;
+        box-shadow: 0px 0px 8px #1c1c1c;
+        display: flex;
+        align-items: center;
+    }
+    
+    .mocket-login-input {
+        background-color: transparent;
+        border: none;
+        height: 100%;
+        font-size: calc(10px + 1vmin);
+        width: 100%;
+        padding: 0 15px;
+    }
+}
+
+@media (max-width: 767px) {
+    .mocket-login {
+        left: max(5vw, calc((100vw - 300px) / 2));
+        width: 300px;
+    }
+    .mocket-login-header {
+        padding: 2rem 0 10px 0;
+        font-size: 24px;
+    }
+    
+    .mocket-login-input-box {
+        margin-bottom: 8px;
+        border-radius: 8px;
+        height: 1.5rem;
+        width: 250px;
+    }
+    
+    .mocket-login-input {
+        padding: 0 10px;
+    }
+
+    .mocket-login-button {
+        border-radius: 15px;
+        font-size: 16px;
+        width: 100%;
+        height: 30px;
+        margin: 10px 0;
+    }
+
+    .mocket-login-forgot-button {
+        font-size: 10px;
+        margin-bottom: 5px;
+    }
+    
+    .mocket-login-newuser {
+        font-size: 10px;
+    }
+    
+    .mocket-login-newuser-button {
+        margin-left: 4px;
+    }
+
+    .mocket-login-or {
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .mocket-login-or-header {
+        font-size: 10px;
+    }
+    
+    .mocket-login-or-divider {
+        margin: 0 5px;
+        background-color: #1c1c1c;
+        height: 1px;
+        width: 50%;
+    }
+    
+    .mocket-login-social {
+        width: 100%;
+        margin-bottom: 20px;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .login-loading-spinner {
+        border: 3px solid rgba(0, 0, 0, 0.5);
+        border-top: 3px solid white;
+        margin-top: 4px;
+        width: 10px;
+        height: 10px;
+    }
+}

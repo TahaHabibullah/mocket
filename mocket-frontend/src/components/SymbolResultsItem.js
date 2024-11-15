@@ -7,16 +7,16 @@ const SymbolResultsItem = ( {name, symbol} ) => {
     const navigator = useNavigate();
 
     const handleRedirect = () => {
-        navigator("/stocks/" + symbol, {replace: true})
-        window.location.reload();
-    }
+        const state = { name: name, symbol: symbol };
+        navigator("/stocks/" + symbol, {state, replace: true});
+    };
 
     return (
         <div className="result-item" onClick={handleRedirect}>
             <div className="result-item-name">{truncateOutput(name)}</div>
             <div className="result-item-sym">{symbol}</div>
         </div>
-    )
-}
+    );
+};
 
 export default SymbolResultsItem;

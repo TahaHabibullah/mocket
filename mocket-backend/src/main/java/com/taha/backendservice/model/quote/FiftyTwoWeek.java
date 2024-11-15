@@ -16,4 +16,13 @@ public class FiftyTwoWeek implements Serializable {
     private String low_change_percent;
     private String high_change_percent;
     private String range;
+
+    public FiftyTwoWeek() {
+
+    }
+
+    public FiftyTwoWeek(String low, String high) {
+        this.low = low;
+        this.high = high;
+    }
 }

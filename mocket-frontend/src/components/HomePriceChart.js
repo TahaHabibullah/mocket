@@ -39,7 +39,6 @@ const HomePriceChart = ({ prevClose, total }) => {
     ];
     const isTablet = useMediaQuery({ minWidth: 768, maxWidth: 1320 });
     const isMobile = useMediaQuery({ maxWidth: 767 });
-
     setCurrDataRef.current = setCurrData;
     setCurrDiffRef.current = setCurrDiff;
     getPrevCloseRef.current = prevClose;
@@ -83,7 +82,7 @@ const HomePriceChart = ({ prevClose, total }) => {
     
                 const chartRect = chart.canvas.getBoundingClientRect();
                 drawLabel.style.left = `${chartRect.left + x}px`;
-                drawLabel.style.top = `calc(${chartRect.top-12}px - 0.5vmin)`;
+                drawLabel.style.top = `calc(${chart.canvas.offsetTop-12}px - 0.5vmin)`;
                 drawLabel.textContent = parseLabel(labels[dataX], toggledIndex);
                 drawLabel.style.display = 'block';
     
@@ -154,19 +153,19 @@ const HomePriceChart = ({ prevClose, total }) => {
             getDataRef,
             getToggledIndexRef,
             getLabelsRef,
-            drawLabelRef,
+            drawLabelRef
         }
     };
 
     const handleToggle = (i) => {
         setToggledIndex(i);
-    }
+    };
     const getButtonStyle = (i) => {
         return i === toggledIndex ? 'price-chart-interval-button-toggled' : 'price-chart-interval-button-untoggled';
-    }
+    };
     const getDiffStyle = () => {
         return currDiff[0] === '+' ? 'quote-header-diff-green' : 'quote-header-diff-red'
-    }
+    };
 
     useEffect (() => {
         callRestApi();
@@ -176,16 +175,16 @@ const HomePriceChart = ({ prevClose, total }) => {
         var params;
         const start_date = getStartDate(toggledIndex);
         if(toggledIndex === 0) {
-            params = "&interval=5min&start_date=" + getLastBusinessDay();
+            params = "&interval=5Min&start_date=" + getLastBusinessDay();
         }
         else if(toggledIndex === 1) {
-            params = "&interval=15min&start_date=" + start_date;
+            params = "&interval=15Min&start_date=" + start_date;
         }
         else if(toggledIndex === 2) {
-            params = "&interval=1h&start_date=" + start_date;
+            params = "&interval=1Hour&start_date=" + start_date;
         }
         else {
-            params = "&interval=1day&start_date=" + start_date;
+            params = "&interval=1Day&start_date=" + start_date;
         }
         return axios.get(restEndpoint + user.id + params)
         .then((response) => {
@@ -200,13 +199,13 @@ const HomePriceChart = ({ prevClose, total }) => {
         }).catch(error => {
             setError("Failed to fetch data from API.");
             console.log(error);
-        })
-    }
+        });
+    };
 
     return (
         <div>
             {error ? (
-                <Alert message={error} style={"error"} setError={setError}/>
+                <Alert message={error} style={"error"} setAlert={setError}/>
             ) : (
                 <div/>
             )}
@@ -257,7 +256,7 @@ const HomePriceChart = ({ prevClose, total }) => {
             </div>
             <div className="price-chart-divider"/>
         </div>
-    )
-}
+    );
+};
 
 export default HomePriceChart;

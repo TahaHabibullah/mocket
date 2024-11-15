@@ -1,6 +1,5 @@
 package com.taha.backendservice.service.impl;
 
-import com.taha.backendservice.constants.AuthConstant;
 import com.taha.backendservice.security.EncryptionUtils;
 import com.taha.backendservice.service.EmailVerificationService;
 import jakarta.mail.MessagingException;

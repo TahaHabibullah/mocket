@@ -16,7 +16,7 @@ const ForgotPassword = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [buttonClass, setButtonClass] = useState("");
     const navigator = useNavigate();
-    const restEndpoint = 'http://localhost:8080/auth/forgot-password';
+    const restEndpoint = '/auth/forgot-password';
 
     const handleSubmit = async (e) => {
         e.preventDefault();

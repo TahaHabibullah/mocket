@@ -16,8 +16,8 @@ const ResetPassword = () => {
     const [buttonClass, setButtonClass] = useState("");
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-    const checkEndpoint = 'http://localhost:8080/auth/check-token';
-    const restEndpoint = 'http://localhost:8080/auth/reset-password';
+    const checkEndpoint = '/auth/check-token';
+    const restEndpoint = '/auth/reset-password';
 
     const callRestApi = () => {
         const body = { token }

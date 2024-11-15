@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.taha.backendservice.model.db.Position;
 import com.taha.backendservice.model.db.User;
 import org.bson.types.ObjectId;
 import org.springframework.security.core.GrantedAuthority;

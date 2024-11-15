@@ -5,7 +5,7 @@ import OrderHistoryList from "./OrderHistoryList.js";
 import "../styling/OrderHistory.css";
 
 const OrderHistory = ({ id }) => {
-    const restEndpoint = 'http://localhost:8080/database/user/getHist?id=';
+    const restEndpoint = '/database/user/getHist?id=';
     const [error, setError] = useState(null);
     const [orderHist, setOrderHist] = useState(null);
     const [curr, setCurr] = useState(1);

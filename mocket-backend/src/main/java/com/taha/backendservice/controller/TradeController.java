@@ -2,7 +2,6 @@ package com.taha.backendservice.controller;
 
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.model.AlpacaRequest;
-import com.taha.backendservice.model.TwelveDataRequest;
 import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.QuoteResponse;
 import com.taha.backendservice.model.search.SymbolSearchRequest;

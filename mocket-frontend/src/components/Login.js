@@ -22,9 +22,9 @@ const Login = () => {
     const [buttonClass, setButtonClass] = useState("");
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
-    const restEndpoint = 'http://localhost:8080/auth/login';
-    const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
-    const verificationEndpoint = 'http://localhost:8080/auth/verify-email';
+    const restEndpoint = '/auth/login';
+    const googleLoginEndpoint = '/auth/social-login/google';
+    const verificationEndpoint = '/auth/verify-email';
     const navigator = useNavigate();
 
     const handleGoogleLogin = async (googleResp) => {

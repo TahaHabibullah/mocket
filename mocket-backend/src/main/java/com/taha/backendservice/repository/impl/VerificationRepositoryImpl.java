@@ -15,7 +15,6 @@ import com.taha.backendservice.service.EmailVerificationService;
 import jakarta.annotation.PostConstruct;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.encrypt.TextEncryptor;
 import org.springframework.stereotype.Repository;
 
 import java.util.Calendar;

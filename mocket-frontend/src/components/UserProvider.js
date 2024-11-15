@@ -5,7 +5,7 @@ import Alert from "./Alert";
 import { getUserId } from "./Utils";
 
 const UserProvider = ({ children }) => {
-    const restEndpoint = 'http://localhost:8080/database/user/';
+    const restEndpoint = '/database/user/';
     const [user, setUser] = useState(null);
     const [error, setError] = useState(null);
     const token = localStorage.getItem('token');

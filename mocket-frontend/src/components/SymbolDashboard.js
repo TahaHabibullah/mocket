@@ -13,9 +13,9 @@ import '../styling/App.css';
 
 const SymbolDashboard = () => {
     const { user } = useContext(UserContext);
-    const liveEndpoint = 'http://localhost:8080/trade-service/live/price?symbol=';
-    const restEndpoint = 'http://localhost:8080/trade-service/quote';
-    const tickerEndpoint = 'http://localhost:8080/trade-service/ticker/search';
+    const liveEndpoint = '/trade-service/live/price?symbol=';
+    const restEndpoint = '/trade-service/quote';
+    const tickerEndpoint = '/trade-service/ticker/search';
     const { symbol } = useParams();
     const { state } = useLocation();
     const [name, setName] = useState(null);

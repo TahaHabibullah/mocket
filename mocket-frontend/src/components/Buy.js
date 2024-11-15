@@ -6,7 +6,7 @@ import axios from "axios";
 import "../styling/TradePanel.css"
 
 const Buy = ({ symbol, balance, live }) => {
-    const restEndpoint = 'http://localhost:8080/database/user/addPos';
+    const restEndpoint = '/database/user/addPos';
     const { user, refetch } = useContext(UserContext);
     const [btnDisabled, setBtnDisabled] = useState(true);
     const [total, setTotal] = useState(0);

@@ -18,8 +18,8 @@ const Register = () => {
     const [success, setSuccess] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [buttonClass, setButtonClass] = useState("");
-    const restEndpoint = 'http://localhost:8080/auth/register';
-    const googleLoginEndpoint = 'http://localhost:8080/auth/social-login/google';
+    const restEndpoint = '/auth/register';
+    const googleLoginEndpoint = '/auth/social-login/google';
     const navigator = useNavigate();
 
     const handleGoogleLogin = async (googleResp) => {

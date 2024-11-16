@@ -15,7 +15,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
 public class TimeIntervalResponse implements Serializable {
     private static final long serialVersionUID = 5450237265103037720L;
-    private Meta meta;
+    private String symbol;
     private List<PriceData> values;
     private String status;
 

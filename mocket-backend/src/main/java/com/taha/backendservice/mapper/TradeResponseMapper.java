@@ -2,7 +2,6 @@ package com.taha.backendservice.mapper;
 
 import com.taha.backendservice.model.alpaca.AlpacaBarResponse;
 import com.taha.backendservice.model.alpaca.AlpacaHistoricalResponse;
-import com.taha.backendservice.model.price.Meta;
 import com.taha.backendservice.model.price.PriceData;
 import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.FiftyTwoWeek;
@@ -49,14 +48,16 @@ public class TradeResponseMapper {
         return quoteResponseList;
     }
 
-    public AlpacaHistoricalResponse joinAlpacaHistoricalResponses(List<AlpacaHistoricalResponse> alpacaHistoricalResponseList) {
+    public AlpacaHistoricalResponse joinAlpacaHistoricalResponses(List<AlpacaHistoricalResponse> alpacaHistoricalResponseList, String symbols) {
         AlpacaHistoricalResponse combinedResponse = new AlpacaHistoricalResponse();
+        List<String> symbolList = Arrays.asList(symbols.split(","));
 
         Map<String, List<AlpacaBarResponse>> values = new HashMap<>();
-        for(String symbol : alpacaHistoricalResponseList.get(0).getValues().keySet()) {
+        for(String symbol : symbolList) {
             List<AlpacaBarResponse> priceList = new ArrayList<>();
             for(AlpacaHistoricalResponse alpacaHistoricalResponse : alpacaHistoricalResponseList) {
-                priceList.addAll(alpacaHistoricalResponse.getValues().get(symbol));
+                if(alpacaHistoricalResponse.getValues().keySet().contains(symbol))
+                    priceList.addAll(alpacaHistoricalResponse.getValues().get(symbol));
             }
             values.put(symbol, priceList);
         }
@@ -69,9 +70,7 @@ public class TradeResponseMapper {
 
         for(String symbol : alpacaHistoricalResponse.getValues().keySet()) {
             TimeIntervalResponse timeIntervalResponse = new TimeIntervalResponse();
-            Meta meta = new Meta();
-            meta.setSymbol(symbol);
-            timeIntervalResponse.setMeta(meta);
+            timeIntervalResponse.setSymbol(symbol);
             List<PriceData> priceDataList = new ArrayList<>();
             for(AlpacaBarResponse barObj : alpacaHistoricalResponse.getValues().get(symbol)) {
                 if(!interval.equals("1Day") && !isMarketOpen(barObj.getDatetime()))

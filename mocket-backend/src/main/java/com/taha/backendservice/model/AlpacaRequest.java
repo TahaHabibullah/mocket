@@ -14,7 +14,7 @@ public class AlpacaRequest  implements Serializable {
     private String start_date;
     private String end_date;
     private String interval;
-    private String limit;
+    private String limit = "10000";
     private String adjustment;
     private String asof;
     private String feed;

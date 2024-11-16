@@ -6,7 +6,6 @@ import com.taha.backendservice.client.TwelveDataFeignClient;
 import com.taha.backendservice.exception.TradeException;
 import com.taha.backendservice.mapper.TradeResponseMapper;
 import com.taha.backendservice.model.AlpacaRequest;
-import com.taha.backendservice.model.TwelveDataRequest;
 import com.taha.backendservice.model.alpaca.AlpacaBarResponse;
 import com.taha.backendservice.model.alpaca.AlpacaHistoricalResponse;
 import com.taha.backendservice.model.alpaca.AlpacaLatestResponse;
@@ -16,7 +15,6 @@ import com.taha.backendservice.model.search.SymbolData;
 import com.taha.backendservice.model.search.SymbolSearchRequest;
 import com.taha.backendservice.model.search.SymbolSearchResponse;
 import com.taha.backendservice.service.impl.TradeServiceImpl;
-import feign.Feign;
 import feign.FeignException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +24,6 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.sql.Time;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -54,50 +51,6 @@ public class TradeServiceImplTest {
     @BeforeEach
     void init() {
         MockitoAnnotations.openMocks(this);
-    }
-
-    @Test
-    void testGetQuoteData() throws TradeException {
-        QuoteResponse feignResponse = new QuoteResponse();
-        String symbol = "INTC";
-        feignResponse.setSymbol(symbol);
-        when(twelveDataFeignClient.getQuoteData(any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any())).thenReturn(new ResponseEntity<>(feignResponse, HttpStatus.OK));
-        QuoteResponse response = tradeService.getQuoteData(new TwelveDataRequest());
-        assertEquals(symbol, response.getSymbol());
-    }
-
-    @Test
-    void testExceptionGetQuoteData() {
-        when(twelveDataFeignClient.getQuoteData(any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any(),
-                any())).thenThrow(FeignException.class);
-        try {
-            tradeService.getQuoteData(new TwelveDataRequest());
-        } catch(Exception e) {
-            assertEquals(TradeException.class, e.getClass());
-        }
     }
 
     @Test

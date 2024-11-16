@@ -36,6 +36,7 @@ import org.springframework.stereotype.Repository;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -267,18 +268,12 @@ public class UserRepositoryImpl implements UserRepository {
     public List<QuoteResponse> getPosQuotes(String id) throws TradeException {
         User u = find(id);
         List<Position> positions = u.getPositions();
-        ArrayList<QuoteResponse> result = new ArrayList<>();
-        ArrayList<String> fetched = new ArrayList<>();
-        for(Position p : positions) {
-            if(p.isOpen()) {
-                String symbol = p.getSymbol();
-                if(!fetched.contains(symbol)) {
-                    AlpacaRequest request = new AlpacaRequest(symbol);
-                    result.add(tradeService.getQuoteData(request).get(0));
-                }
-                fetched.add(symbol);
-            }
-        }
+        Set<String> fetched = positions.stream()
+                .filter(Position::isOpen)
+                .map(Position::getSymbol)
+                .collect(Collectors.toSet());
+        AlpacaRequest request = new AlpacaRequest(String.join(",", fetched));
+        List<QuoteResponse> result = tradeService.getQuoteData(request);
         return result;
     }
 
@@ -287,7 +282,9 @@ public class UserRepositoryImpl implements UserRepository {
         User u = find(id);
         List<Position> positions = u.getPositions();
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
-        ArrayList<String> fetched = new ArrayList<>();
+        Set<String> fetched = positions.stream()
+                .map(Position::getSymbol)
+                .collect(Collectors.toSet());
         SimpleDateFormat sdf;
         if(interval.equals("1Day")) {
             sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -296,18 +293,15 @@ public class UserRepositoryImpl implements UserRepository {
             sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         }
 
-        for(Position p : positions) {
-            String symbol = p.getSymbol();
-            if(!fetched.contains(symbol)) {
-                AlpacaRequest request = new AlpacaRequest(symbol, interval, start_date, "asc");
-                request.setFeed(feed);
-                TimeIntervalResponse data = tradeService.getPriceData(request).get(0).fillMissingData(interval);
-                if(interval.equals("1Day")) {
-                    data = data.removeCloseDays();
-                }
-                priceData.put(symbol, data);
-                fetched.add(symbol);
+        AlpacaRequest request = new AlpacaRequest(String.join(",", fetched), interval, start_date, "asc");
+        request.setFeed(feed);
+        List<TimeIntervalResponse> data = tradeService.getPriceData(request);
+        for(TimeIntervalResponse response : data) {
+            response.fillMissingData(interval);
+            if(interval.equals("1Day")) {
+                response.removeCloseDays();
             }
+            priceData.put(response.getSymbol(), response);
         }
 
         ArrayList<GraphData> result = new ArrayList<>();

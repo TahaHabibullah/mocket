@@ -187,7 +187,7 @@ const PriceChart = ({ name, liveData, quoteData, isMarketOpen }) => {
     }, [toggledIndex, symbol]);
 
     useEffect(() => {
-        if(data && toggledIndex === 0) {
+        if(data && toggledIndex === 0 && isMarketOpen) {
             const currTime = truncateTime(getCurrTime());
             const prevTime = labels[liveIndex-1];
             var dataCopy = [...data];
@@ -242,6 +242,7 @@ const PriceChart = ({ name, liveData, quoteData, isMarketOpen }) => {
             console.log(error);
         })
     };
+
     return (
         <div>
             {error ? (

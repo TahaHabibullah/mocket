@@ -268,6 +268,8 @@ public class UserRepositoryImpl implements UserRepository {
     public List<QuoteResponse> getPosQuotes(String id) throws TradeException {
         User u = find(id);
         List<Position> positions = u.getPositions();
+        if(positions.isEmpty())
+            return new ArrayList<>();
         Set<String> fetched = positions.stream()
                 .filter(Position::isOpen)
                 .map(Position::getSymbol)
@@ -281,6 +283,8 @@ public class UserRepositoryImpl implements UserRepository {
     public List<GraphData> getGraphData(String id, String interval, String start_date, String feed) throws TradeException, ParseException {
         User u = find(id);
         List<Position> positions = u.getPositions();
+        if(positions.isEmpty())
+            return new ArrayList<>();
         Map<String, TimeIntervalResponse> priceData = new HashMap<>();
         Set<String> fetched = positions.stream()
                 .map(Position::getSymbol)

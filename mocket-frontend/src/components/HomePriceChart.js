@@ -189,7 +189,7 @@ const HomePriceChart = ({ prevClose, total }) => {
         return axios.get(restEndpoint + user.id + params)
         .then((response) => {
             if(response.data.length < 1 && user.positions.length > 0) {
-                setError("API limit exceeded. Try again later.");
+                setError("Failed to fetch data from API.");
             }
             else {
                 const fullData = response.data;

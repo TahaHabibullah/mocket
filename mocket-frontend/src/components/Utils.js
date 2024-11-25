@@ -369,7 +369,6 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
     const curr = moment(new Date()).tz("America/New_York")
     const open = moment(curr).set({hour: 9, minute: 30, second: 0, millisecond: 0});
     var result = balance;
-    console.log(positions);
     for(var i = 0; i < quotes.length; i++) {
         for(var j = 0; j < positions.length; j++) {
             if(quotes[i].symbol === positions[j].symbol) {

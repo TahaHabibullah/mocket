@@ -220,8 +220,8 @@ const PriceChart = ({ name, liveData, quoteData, isMarketOpen }) => {
         }
         return axios.post(restEndpoint, body)
         .then((response) => {
-            if(response.data.status === "error") {
-                setError("API limit exceeded. Try again later.");
+            if(response.data.length === 0) {
+                setError("Failed to fetch data from API.");
             }
             else {
                 const fullData = response.data[0].values;

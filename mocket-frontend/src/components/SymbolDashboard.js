@@ -64,7 +64,8 @@ const SymbolDashboard = () => {
         return axios.post(restEndpoint, body)
         .then((response) => {
             if(response.data.length === 0) {
-                setError("API limit exceeded. Try again later.");
+                setError("Failed to fetch data from API.");
+                setQuoteData(null);
             }
             else {
                 setQuoteData(response.data[0]);
@@ -72,6 +73,7 @@ const SymbolDashboard = () => {
             }
         }).catch(error => {
             setError("Failed to fetch data from API.");
+            setQuoteData(null);
             console.log(error);
         });
     };
@@ -101,7 +103,7 @@ const SymbolDashboard = () => {
             )}
             {user && quoteData ? (
                 <div>
-                    <PriceChart name={state ? state.name && error : name} liveData={liveData} quoteData={quoteData} isMarketOpen={marketOpen}/>
+                    <PriceChart name={state ? state.name : name} liveData={liveData} quoteData={quoteData} isMarketOpen={marketOpen}/>
                     <TradeActions symbol={symbol} positions={getSymPositions(getOpenPositions(user.positions), symbol)} live={liveData}/>
                     <QuoteDataGrid data={quoteData}/>
                 </div>

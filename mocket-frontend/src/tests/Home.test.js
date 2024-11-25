@@ -204,7 +204,7 @@ test("uses context user data, fails to fetch quote data, alert shown from HomePr
             <Home/>
         </UserContext.Provider>
     ));
-    expect(getByText(/API limit exceeded./i)).toBeInTheDocument();
+    expect(getByText(/Failed to fetch data from API./i)).toBeInTheDocument();
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/2182.4/i)).toBeInTheDocument();
@@ -249,7 +249,7 @@ test("uses context user data, fetches empty quote data, alert shown from HomePri
             <Home/>
         </UserContext.Provider>
     ));
-    expect(getByText(/API limit exceeded./i)).toBeInTheDocument();
+    expect(getByText(/Failed to fetch data from API./i)).toBeInTheDocument();
     expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
     expect(getByText(/20000/i)).toBeInTheDocument();
     expect(getByText(/2182.4/i)).toBeInTheDocument();

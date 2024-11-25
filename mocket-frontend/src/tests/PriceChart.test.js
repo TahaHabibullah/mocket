@@ -120,7 +120,7 @@ test("alert shown when fetch returns empty, only chart itself effected", async (
 
     await waitFor(() => {
         expect(axios.post).toHaveBeenCalled();
-        expect(getByText(/API limit exceeded. Try again later./i)).toBeInTheDocument();
+        expect(getByText(/Failed to fetch data from API./i)).toBeInTheDocument();
         expect(getByText(/Apple Inc/i)).toBeInTheDocument();
         expect(getByText(/217.96/i)).toBeInTheDocument();
         expect(getByText(/0.22%/i)).toBeInTheDocument();

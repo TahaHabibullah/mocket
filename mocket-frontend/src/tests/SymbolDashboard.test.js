@@ -179,7 +179,7 @@ test("alert shown when quote fetch returns empty, only nav bar renders", async (
     await waitFor(() => {
         expect(axios.post).toHaveBeenCalled();
         expect(getByPlaceholderText(/Search/i)).toBeInTheDocument();
-        expect(getByText(/API limit exceeded. Try again later./i)).toBeInTheDocument();
+        expect(getByText(/Failed to fetch data from API./i)).toBeInTheDocument();
         const buy = screen.queryByText("BUY");
         const sell = screen.queryByText("SELL");
         const stats = screen.queryByText("Average Volume");

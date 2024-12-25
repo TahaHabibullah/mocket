@@ -129,7 +129,7 @@ function getSpecificDay(year, month, week, dayOfWeek) {
     const firstDay = new Date(year, month, 1);
     const currDayOfWeek = firstDay.getDay();
     const firstSelectedDayOfWeek = (daysOfWeek.indexOf(dayOfWeek) - currDayOfWeek + 7) % 7;
-    return new Date(year, month, 1 + firstSelectedDayOfWeek + (week * 7))
+    return new Date(year, month, 1 + firstSelectedDayOfWeek + (week * 7)).toDateString();
 }
 
 function getObservedDate(date) {
@@ -141,7 +141,7 @@ function getObservedDate(date) {
         newDate.setDate(newDate.getDate() + 1)
     }
 
-    return newDate
+    return newDate.toDateString();
 }
 
 function isWeekend(date) {
@@ -149,11 +149,11 @@ function isWeekend(date) {
 }
 
 function isUSHoliday(date) {
-    return (date in usHolidays);
+    return usHolidays.includes(date);
 }
 
 function isHalfDay(date) {
-    return !isWeekend(date) && (date in halfDays)
+    return !isWeekend(date) && halfDays.includes(date);
 }
 
 export function isMarketOpen() {
@@ -172,7 +172,7 @@ export function isMarketOpen() {
     const startMinute = 30;
     const endHour = !isHalfDay(curr) ? 16 : 13;
     const endMinute = 0;
-    const isMarketOpen = !isWeekend(curr) && !isUSHoliday(curr) && (hours > startHour || (hours === startHour && minutes >= startMinute)) &&
+    const isMarketOpen = !isWeekend(curr) && !isUSHoliday(curr.toDateString()) && (hours > startHour || (hours === startHour && minutes >= startMinute)) &&
                     (hours < endHour || (hours === endHour && minutes === endMinute));
 
     return isMarketOpen;

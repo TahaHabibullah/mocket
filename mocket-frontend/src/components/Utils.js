@@ -386,7 +386,10 @@ export function getPortfolioPrevClose(positions, balance, quotes) {
 }
 
 export function getLastBusinessDay() {
-    const date = new Date(getCurrTime());
+    var date = new Date(getCurrTime());
+    while(usHolidays.includes(date.toDateString())) {
+        date.setDate(date.getDate() - 1);
+    }
     if(date.getHours() < 9) {
         date.setDate(date.getDate() - 1);
     }

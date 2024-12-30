@@ -6,14 +6,18 @@ import com.taha.backendservice.model.price.PriceData;
 import com.taha.backendservice.model.price.TimeIntervalResponse;
 import com.taha.backendservice.model.quote.FiftyTwoWeek;
 import com.taha.backendservice.model.quote.QuoteResponse;
+import com.taha.backendservice.util.TimeUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.*;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Component
 public class TradeResponseMapper {
+
+    @Autowired
+    private TimeUtil timeUtil;
 
     public List<QuoteResponse> mapAlpacaHistoricalQuoteResponse(AlpacaHistoricalResponse alpacaHistoricalResponse) {
         List<QuoteResponse> quoteResponseList = new ArrayList<>();
@@ -27,7 +31,7 @@ public class TradeResponseMapper {
             boolean dateFound = false;
             for(int i = 0; i < alpacaHistoricalResponse.getValues().get(symbol).size(); i++) {
                 closes.add(alpacaHistoricalResponse.getValues().get(symbol).get(i).getClose());
-                if((alpacaHistoricalResponse.getValues().get(symbol).get(i).getDatetime()).contains(findLastWeekday(LocalDate.now().minusMonths(1)).toString())) {
+                if((alpacaHistoricalResponse.getValues().get(symbol).get(i).getDatetime()).contains(timeUtil.findLastWeekday(LocalDate.now().minusMonths(1)).toString())) {
                     lastMonthBars = new ArrayList<>(alpacaHistoricalResponse.getValues().get(symbol).subList(i, alpacaHistoricalResponse.getValues().get(symbol).size()));
                     dateFound = true;
                 }
@@ -73,58 +77,19 @@ public class TradeResponseMapper {
             timeIntervalResponse.setSymbol(symbol);
             List<PriceData> priceDataList = new ArrayList<>();
             for(AlpacaBarResponse barObj : alpacaHistoricalResponse.getValues().get(symbol)) {
-                if(!interval.equals("1Day") && !isMarketOpen(barObj.getDatetime()))
+                if(!interval.equals("1Day") && !timeUtil.isMarketOpen(barObj.getDatetime()))
                     continue;
                 PriceData priceData = new PriceData(String.valueOf(barObj.getOpen()),
                         String.valueOf(barObj.getClose()),
                         String.valueOf(barObj.getHigh()),
                         String.valueOf(barObj.getLow()),
                         String.valueOf(barObj.getVolume()),
-                        interval.equals("1Day") ? barObj.getDatetime().substring(0, barObj.getDatetime().indexOf('T')) : convertTime(barObj.getDatetime()));
+                        interval.equals("1Day") ? barObj.getDatetime().substring(0, barObj.getDatetime().indexOf('T')) : timeUtil.convertTime(barObj.getDatetime()));
                 priceDataList.add(priceData);
             }
             timeIntervalResponse.setValues(priceDataList);
             timeIntervalResponseList.add(timeIntervalResponse);
         }
         return timeIntervalResponseList;
-    }
-
-    private LocalDate findLastWeekday(LocalDate date) {
-        LocalDate lastWeekday = date;
-        while (lastWeekday.getDayOfWeek() == DayOfWeek.SATURDAY || lastWeekday.getDayOfWeek() == DayOfWeek.SUNDAY) {
-            lastWeekday = lastWeekday.minusDays(1);
-        }
-        return lastWeekday;
-    }
-
-    private boolean isMarketOpen(String datetime) {
-        String datetimeString = datetime.replace("T", " ").replace("Z", "");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime localDateTime = LocalDateTime.parse(datetimeString, formatter);
-        ZonedDateTime sourceTime = localDateTime.atZone(ZoneId.of("UTC"));
-        ZonedDateTime targetTime = sourceTime.withZoneSameInstant(ZoneId.of("America/New_York"));
-
-        int hour = targetTime.getHour();
-        int minute = targetTime.getMinute();
-
-        int startHour = 9;
-        int startMinute = 30;
-        int endHour = 16;
-        int endMinute = 0;
-
-        return ((hour == startHour && minute >= startMinute) || hour > startHour) &&
-            ((hour == endHour && minute == endMinute) || hour < endHour);
-    }
-
-    private String convertTime(String datetime) {
-        String datetimeString = datetime.replace("T", " ").replace("Z", "");
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-        LocalDateTime localDateTime = LocalDateTime.parse(datetimeString, formatter);
-        ZonedDateTime sourceTime = localDateTime.atZone(ZoneId.of("UTC"));
-        ZonedDateTime targetTime = sourceTime.withZoneSameInstant(ZoneId.of("America/New_York"));
-
-        return targetTime.format(formatter);
     }
 }
